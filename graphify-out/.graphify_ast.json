@@ -1,0 +1,2814 @@
+{
+  "nodes": [
+    {
+      "id": "mcp",
+      "label": ".mcp.json",
+      "file_type": "code",
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "metadata": {
+        "mcp_kind": "mcp_config_file"
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "mcp_mcp_server_redteam_soc",
+      "label": "redteam-soc",
+      "file_type": "code",
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "metadata": {
+        "mcp_kind": "mcp_server"
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "mcp_command_python3",
+      "label": "python3",
+      "file_type": "code",
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "metadata": {
+        "mcp_kind": "mcp_command"
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "mcp_mcp_server_burp",
+      "label": "burp",
+      "file_type": "code",
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "metadata": {
+        "mcp_kind": "mcp_server"
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "mcp_command_java",
+      "label": "java",
+      "file_type": "code",
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "metadata": {
+        "mcp_kind": "mcp_command"
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive",
+      "label": "thehive.py",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "label": "HiveAlerter",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L11",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "alerter",
+      "label": "Alerter",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_hivealerter_lookup_field",
+      "label": ".lookup_field()",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L17",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_hivealerter_load_observable_artifacts",
+      "label": ".load_observable_artifacts()",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_hivealerter_load_custom_fields",
+      "label": ".load_custom_fields()",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L54",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_hivealerter_load_tags",
+      "label": ".load_tags()",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L69",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_hivealerter_load_args",
+      "label": ".load_args()",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L81",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_hivealerter_alert",
+      "label": ".alert()",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L100",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_hivealerter_get_info",
+      "label": ".get_info()",
+      "file_type": "code",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L196",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_rationale_12",
+      "label": "Use matched data to create alerts containing observables in an instance of…",
+      "file_type": "rationale",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L12",
+      "_origin": "ast"
+    },
+    {
+      "id": "configs_elk_elastalert_patches_thehive_rationale_18",
+      "label": "Populates a field with values depending on the contents of the Elastalert match…",
+      "file_type": "rationale",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server",
+      "label": "server.py",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_extract_host",
+      "label": "_extract_host()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L74",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_assert_in_scope",
+      "label": "_assert_in_scope()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L87",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_kali_run",
+      "label": "_kali_run()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L122",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tool",
+      "label": "tool",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_nmap_scan",
+      "label": "nmap_scan()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L152",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_run_sqlmap",
+      "label": "run_sqlmap()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L167",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_run_hydra",
+      "label": "run_hydra()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L181",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_http_request",
+      "label": "http_request()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L208",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_http_json_bruteforce",
+      "label": "http_json_bruteforce()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L233",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_run_nikto",
+      "label": "run_nikto()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L272",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_run_gobuster",
+      "label": "run_gobuster()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L292",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_netexec_enum",
+      "label": "netexec_enum()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L308",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_smb_enum",
+      "label": "smb_enum()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L327",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_dump_secrets",
+      "label": "dump_secrets()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L341",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_wmi_exec",
+      "label": "wmi_exec()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L356",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_psexec",
+      "label": "psexec()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L371",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_winrm_exec",
+      "label": "winrm_exec()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L387",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_ssh_exec",
+      "label": "ssh_exec()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L406",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_linpeas_scan",
+      "label": "linpeas_scan()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L423",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_msf_generate_payload",
+      "label": "msf_generate_payload()",
+      "file_type": "code",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L446",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_75",
+      "label": "Pull a bare host out of a URL, host:port, or plain IP/hostname.",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L75",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_88",
+      "label": "Raise ValueError unless `target` is a permitted lab victim. Returns the…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L88",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_123",
+      "label": "Execute `command` on the Kali VM via SSH and return combined stdout/stderr.…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L123",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_153",
+      "label": "Run an nmap scan against a lab target (port/service discovery, recon). target:…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L153",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_168",
+      "label": "Run sqlmap against a lab web URL to test for SQL injection. url: full target…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L168",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_183",
+      "label": "Run a hydra brute-force against a lab service. target: lab IP/host. service:…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L183",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_210",
+      "label": "Send a single raw HTTP request via curl — a generic escape hatch for testing…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L210",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_236",
+      "label": "Send a rapid burst of requests against a JSON API endpoint, substituting each…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L236",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_273",
+      "label": "Run a nikto web-server vulnerability scan against a lab target. Maps to web-…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L273",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_294",
+      "label": "Directory/endpoint enumeration with gobuster against a lab web URL. url: base…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L294",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_310",
+      "label": "Enumerate a Windows lab host with netexec (nxc). target: lab Windows IP/host.…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L310",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_328",
+      "label": "Enumerate SMB shares/users on a lab Windows host (enum4linux-style overview).…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L328",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_342",
+      "label": "Attempt remote credential dumping via impacket-secretsdump (SAM/LSA).…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L342",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_358",
+      "label": "Execute a command on a lab Windows host over WMI (impacket-wmiexec, one-shot).…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L358",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_373",
+      "label": "Execute a command on a lab Windows host via impacket-psexec (creates a…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L373",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_388",
+      "label": "Execute a command on a lab Windows host over WinRM (via nxc, one-shot). Maps to…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L388",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_407",
+      "label": "SSH into a lab Linux host and run a command (as an attacker with creds). Maps…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L407",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_424",
+      "label": "Run LinPEAS privilege-escalation enumeration on a lab Linux host. Pipes LinPEAS…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L424",
+      "_origin": "ast"
+    },
+    {
+      "id": "redteam_mcp_server_rationale_448",
+      "label": "Generate a Metasploit payload with msfvenom (written to /tmp on Kali). payload:…",
+      "file_type": "rationale",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L448",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator",
+      "label": "e2e_soc_orchestrator.py",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_audit",
+      "label": "audit()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L158",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_kill_switch_active",
+      "label": "kill_switch_active()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L178",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_recent_block_count",
+      "label": "recent_block_count()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L182",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_policy_guard",
+      "label": "policy_guard()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L213",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_containment_allowed",
+      "label": "containment_allowed()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L252",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_call_llm",
+      "label": "call_llm()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L397",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_triage_alert",
+      "label": "triage_alert()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L445",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_assess_enrichment",
+      "label": "assess_enrichment()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L491",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_post_case_comment",
+      "label": "post_case_comment()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L503",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_build_ai_comment",
+      "label": "build_ai_comment()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L531",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_wait_for_analyzer_job",
+      "label": "wait_for_analyzer_job()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L602",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_is_operational_alert",
+      "label": "is_operational_alert()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L633",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_resolve_responder_id",
+      "label": "resolve_responder_id()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L650",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_resolve_case_responder_id",
+      "label": "resolve_case_responder_id()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L677",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_trigger_mailer_responder",
+      "label": "trigger_mailer_responder()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L689",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_wait_for_responder_action",
+      "label": "wait_for_responder_action()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L720",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_select_containment_target",
+      "label": "select_containment_target()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L762",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_process_single_alert",
+      "label": "process_single_alert()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L821",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_main",
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1109",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_159",
+      "label": "Append one JSON-lines record. Every decision the pipeline makes is logged here…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L159",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_183",
+      "label": "Count containment actions executed in the recent window, from the audit log.",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L183",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_214",
+      "label": "Deterministic containment policy. VETO-ONLY — this function can refuse an…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L214",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_253",
+      "label": "Full pre-flight check before any containment. Every refusal path is audited.…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L253",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_398",
+      "label": "Schema-constrained call to Ollama. Returns (parsed_dict | None, error | None).…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L398",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_446",
+      "label": "Phase 1 — assess the raw alert. Returns (assessment | None, error | None).…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L446",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_492",
+      "label": "Phase 2 — assess enrichment results. Returns (assessment | None, error | None).",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L492",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_504",
+      "label": "Post an AI-generated comment onto a case, clearly labelled so no analyst…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L504",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_532",
+      "label": "Render the AI assessment as a labelled markdown comment.",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L532",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_603",
+      "label": "Poll a Cortex job to a terminal state, or raise TimeoutError.",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L603",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_634",
+      "label": "True for pipeline/ops-health alerts (the ElastAlert dead-man watchdogs from…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L634",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_651",
+      "label": "Look up a Cortex responder's real ID from its NAME. Cortex identifies workers…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L651",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_678",
+      "label": "Look up a Cortex responder by name for a case entity (e.g., Mailer).",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L678",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_690",
+      "label": "Tag the case with recipient emails and trigger the Mailer responder.",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L690",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_721",
+      "label": "Confirm a responder action actually SUCCEEDED. create_responder_action() only…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L721",
+      "_origin": "ast"
+    },
+    {
+      "id": "soar_e2e_soc_orchestrator_rationale_763",
+      "label": "Explicitly choose which observable containment would apply to. The original…",
+      "file_type": "rationale",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L763",
+      "_origin": "ast"
+    }
+  ],
+  "edges": [
+    {
+      "source": "mcp",
+      "target": "mcp_mcp_server_redteam_soc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "mcp_mcp_server_redteam_soc",
+      "target": "mcp_command_python3",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "context": "command",
+      "_origin": "ast"
+    },
+    {
+      "source": "mcp",
+      "target": "mcp_mcp_server_burp",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "mcp_mcp_server_burp",
+      "target": "mcp_command_java",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".mcp.json",
+      "source_location": "L1",
+      "weight": 1.0,
+      "context": "command",
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive",
+      "target": "json",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive",
+      "target": "time",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive",
+      "target": "uuid",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive",
+      "target": "requests",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive",
+      "target": "requests",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive",
+      "target": "elastalert_alerts",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive",
+      "target": "elastalert_util",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "target": "alerter",
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_lookup_field",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_load_observable_artifacts",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_load_custom_fields",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_load_tags",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_load_args",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_alert",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_get_info",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L196",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter_load_observable_artifacts",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_lookup_field",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter_load_custom_fields",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_lookup_field",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter_load_tags",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_lookup_field",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter_load_args",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_lookup_field",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter_alert",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_load_observable_artifacts",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter_alert",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_load_tags",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter_alert",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_load_custom_fields",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_hivealerter_alert",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_load_args",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_rationale_12",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "configs_elk_elastalert_patches_thehive_rationale_18",
+      "target": "configs_elk_elastalert_patches_thehive_hivealerter_lookup_field",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "configs/elk/elastalert/patches/thehive.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "ipaddress",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "re",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "shlex",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "subprocess",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "urllib_parse",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "mcp_server_fastmcp",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_extract_host",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_nmap_scan",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L151",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_nmap_scan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_sqlmap",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L166",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_run_sqlmap",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L167",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_hydra",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L180",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_run_hydra",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L181",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_http_request",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L207",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_http_request",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_http_json_bruteforce",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L232",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_http_json_bruteforce",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L233",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_nikto",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L271",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_run_nikto",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L272",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_gobuster",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L291",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_run_gobuster",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L292",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_netexec_enum",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L307",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_netexec_enum",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L308",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_smb_enum",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L326",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_smb_enum",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L327",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_dump_secrets",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L340",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_dump_secrets",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L341",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_wmi_exec",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L355",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_wmi_exec",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L356",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_psexec",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L370",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_psexec",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L371",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_winrm_exec",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L386",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_winrm_exec",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L387",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_ssh_exec",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L405",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_ssh_exec",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L406",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_linpeas_scan",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L422",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_linpeas_scan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L423",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_msf_generate_payload",
+      "target": "tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L445",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server",
+      "target": "redteam_mcp_server_msf_generate_payload",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L446",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_assert_in_scope",
+      "target": "redteam_mcp_server_extract_host",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_nmap_scan",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L162",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_nmap_scan",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_sqlmap",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_sqlmap",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_hydra",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L199",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_hydra",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L201",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_http_request",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_http_request",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_http_json_bruteforce",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L255",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_http_json_bruteforce",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L268",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_nikto",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L284",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_nikto",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L285",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_gobuster",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L300",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_run_gobuster",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L301",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_netexec_enum",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L319",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_netexec_enum",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L323",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_smb_enum",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L333",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_smb_enum",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L337",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_dump_secrets",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L349",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_dump_secrets",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L352",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_wmi_exec",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L364",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_wmi_exec",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L367",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_psexec",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L380",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_psexec",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L383",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_winrm_exec",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L395",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_winrm_exec",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L396",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_ssh_exec",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L413",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_ssh_exec",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L419",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_linpeas_scan",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L432",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_linpeas_scan",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L439",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_msf_generate_payload",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L466",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_75",
+      "target": "redteam_mcp_server_extract_host",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_88",
+      "target": "redteam_mcp_server_assert_in_scope",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_123",
+      "target": "redteam_mcp_server_kali_run",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_153",
+      "target": "redteam_mcp_server_nmap_scan",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_168",
+      "target": "redteam_mcp_server_run_sqlmap",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_183",
+      "target": "redteam_mcp_server_run_hydra",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_210",
+      "target": "redteam_mcp_server_http_request",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L210",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_236",
+      "target": "redteam_mcp_server_http_json_bruteforce",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L236",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_273",
+      "target": "redteam_mcp_server_run_nikto",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L273",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_294",
+      "target": "redteam_mcp_server_run_gobuster",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L294",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_310",
+      "target": "redteam_mcp_server_netexec_enum",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L310",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_328",
+      "target": "redteam_mcp_server_smb_enum",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L328",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_342",
+      "target": "redteam_mcp_server_dump_secrets",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L342",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_358",
+      "target": "redteam_mcp_server_wmi_exec",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L358",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_373",
+      "target": "redteam_mcp_server_psexec",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L373",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_388",
+      "target": "redteam_mcp_server_winrm_exec",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_407",
+      "target": "redteam_mcp_server_ssh_exec",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L407",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_424",
+      "target": "redteam_mcp_server_linpeas_scan",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L424",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "redteam_mcp_server_rationale_448",
+      "target": "redteam_mcp_server_msf_generate_payload",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "redteam-mcp/server.py",
+      "source_location": "L448",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "ipaddress",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "json",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "time",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "datetime",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "requests",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "thehive4py_client",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_audit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_kill_switch_active",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_recent_block_count",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_policy_guard",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_containment_allowed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L252",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_call_llm",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L397",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_triage_alert",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L445",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_assess_enrichment",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L491",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_post_case_comment",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L503",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_build_ai_comment",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L531",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_wait_for_analyzer_job",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L602",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_is_operational_alert",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L633",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_resolve_responder_id",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L650",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_resolve_case_responder_id",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L677",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_trigger_mailer_responder",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L689",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_wait_for_responder_action",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L720",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_select_containment_target",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L762",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_process_single_alert",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L821",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator",
+      "target": "soar_e2e_soc_orchestrator_main",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1109",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_containment_allowed",
+      "target": "soar_e2e_soc_orchestrator_kill_switch_active",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L257",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_containment_allowed",
+      "target": "soar_e2e_soc_orchestrator_policy_guard",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L275",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_containment_allowed",
+      "target": "soar_e2e_soc_orchestrator_recent_block_count",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L279",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_triage_alert",
+      "target": "soar_e2e_soc_orchestrator_call_llm",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L488",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_assess_enrichment",
+      "target": "soar_e2e_soc_orchestrator_call_llm",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L496",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_trigger_mailer_responder",
+      "target": "soar_e2e_soc_orchestrator_resolve_case_responder_id",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L701",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_trigger_mailer_responder",
+      "target": "soar_e2e_soc_orchestrator_audit",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L713",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_select_containment_target",
+      "target": "soar_e2e_soc_orchestrator_policy_guard",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L807",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_audit",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L825",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_triage_alert",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L836",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_wait_for_analyzer_job",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L954",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_select_containment_target",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1007",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_assess_enrichment",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1012",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_containment_allowed",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1037",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_trigger_mailer_responder",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1046",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_resolve_responder_id",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1058",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_wait_for_responder_action",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1080",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_build_ai_comment",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1101",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_process_single_alert",
+      "target": "soar_e2e_soc_orchestrator_post_case_comment",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1102",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_main",
+      "target": "soar_e2e_soc_orchestrator_kill_switch_active",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1121",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_main",
+      "target": "soar_e2e_soc_orchestrator_audit",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1131",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_main",
+      "target": "soar_e2e_soc_orchestrator_process_single_alert",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1147",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_main",
+      "target": "soar_e2e_soc_orchestrator_is_operational_alert",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L1174",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_159",
+      "target": "soar_e2e_soc_orchestrator_audit",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_183",
+      "target": "soar_e2e_soc_orchestrator_recent_block_count",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_214",
+      "target": "soar_e2e_soc_orchestrator_policy_guard",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_253",
+      "target": "soar_e2e_soc_orchestrator_containment_allowed",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L253",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_398",
+      "target": "soar_e2e_soc_orchestrator_call_llm",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L398",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_446",
+      "target": "soar_e2e_soc_orchestrator_triage_alert",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L446",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_492",
+      "target": "soar_e2e_soc_orchestrator_assess_enrichment",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L492",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_504",
+      "target": "soar_e2e_soc_orchestrator_post_case_comment",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L504",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_532",
+      "target": "soar_e2e_soc_orchestrator_build_ai_comment",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L532",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_603",
+      "target": "soar_e2e_soc_orchestrator_wait_for_analyzer_job",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L603",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_634",
+      "target": "soar_e2e_soc_orchestrator_is_operational_alert",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L634",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_651",
+      "target": "soar_e2e_soc_orchestrator_resolve_responder_id",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L651",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_678",
+      "target": "soar_e2e_soc_orchestrator_resolve_case_responder_id",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L678",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_690",
+      "target": "soar_e2e_soc_orchestrator_trigger_mailer_responder",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L690",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_721",
+      "target": "soar_e2e_soc_orchestrator_wait_for_responder_action",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L721",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "soar_e2e_soc_orchestrator_rationale_763",
+      "target": "soar_e2e_soc_orchestrator_select_containment_target",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "soar/e2e_soc_orchestrator.py",
+      "source_location": "L763",
+      "weight": 1.0,
+      "_origin": "ast"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "failed_sources": [
+    "/home/ayman/Desktop/ENSA/Devoteam/soc-internship/.claude/settings.local.json"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "model": "phi4-mini",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a Tier-1 SOC analyst for a lab network. Be precise and conservative.\n\nNETWORK BASELINE (critical for judging false positives):\n- 192.168.10.0/24 = internal LAN. 192.168.10.2 = pfSense gateway (our own firewall).\n  192.168.10.20 = Linux host. 192.168.10.30 = Windows host.\n- 172.16.0.0/24 = DMZ. 172.16.0.10 = OWASP Juice Shop (deliberately vulnerable).\n- 100.64.0.0/10 = Tailscale VPN (our admin access, legitimate).\n- Internal-to-internal traffic (RFC1918 source AND RFC1918 destination) using\n  discovery/broadcast protocols - SSDP, UPnP, mDNS, NetBIOS, LLMNR, DHCP - is\n  NORMAL BACKGROUND NOISE in this environment. Windows hosts emit these constantly.\n  Signatures that flag such traffic as \"amplification\", \"scan\" or \"DoS\" are\n  FALSE POSITIVES here unless there is clear volume/rate evidence of abuse.\n- A true positive normally involves an EXTERNAL source IP, or a clear\n  exploitation/credential/persistence payload.\n\nRULES:\n- mitre_technique MUST be a MITRE ATT&CK technique ID of the form T#### or T####.###\n  (e.g. T1190, T1003.002). It is NOT a CVE number. If the event is benign or no\n  technique applies, return exactly \"N/A\".\n- safe_to_auto_block must be false if the source IP is internal (RFC1918),\n  Tailscale (100.64.0.0/10), or a gateway - blocking those causes self-inflicted outages.\n- confidence is 0.0 to 1.0.\n\nReturn ONLY a JSON object. No prose, no markdown fences."
+    },
+    {
+      "role": "user",
+      "content": "{\n  \"event_type\": \"alert\",\n  \"src_ip\": \"192.168.10.30\",\n  \"dest_ip\": \"224.0.0.251\",\n  \"in_iface\": \"em1\",\n  \"alert\": {\n    \"signature\": \"ET INFO mDNS Query Observed\",\n    \"signature_id\": 2000001,\n    \"category\": \"Misc activity\",\n    \"severity\": 3\n  }\n}"
+    },
+    {
+      "role": "assistant",
+      "content": "{\"summary\": \"Windows host sent a routine mDNS service-discovery query to the local multicast address. Normal LAN background traffic.\", \"severity\": \"low\", \"is_false_positive\": true, \"confidence\": 0.95, \"mitre_technique\": \"N/A\", \"recommended_action\": \"No action. Consider tuning this signature to reduce noise.\", \"safe_to_auto_block\": false}"
+    },
+    {
+      "role": "user",
+      "content": "{\n  \"event_type\": \"alert\",\n  \"src_ip\": \"45.155.205.211\",\n  \"dest_ip\": \"172.16.0.10\",\n  \"in_iface\": \"em2\",\n  \"alert\": {\n    \"signature\": \"ET WEB_SERVER SQL Injection UNION SELECT\",\n    \"signature_id\": 2006446,\n    \"category\": \"Web Application Attack\",\n    \"severity\": 1\n  },\n  \"http\": {\n    \"url\": \"/rest/products/search?q=' UNION SELECT * FROM users--\"\n  }\n}"
+    },
+    {
+      "role": "assistant",
+      "content": "{\"summary\": \"External host attempted SQL injection against the DMZ web application using a UNION SELECT payload to extract user data.\", \"severity\": \"critical\", \"is_false_positive\": false, \"confidence\": 0.93, \"mitre_technique\": \"T1190\", \"recommended_action\": \"Block the source IP at the firewall and review the application logs for successful data extraction.\", \"safe_to_auto_block\": true}"
+    },
+    {
+      "role": "user",
+      "content": "{\n  \"event_type\": \"alert\",\n  \"src_ip\": \"192.168.10.30\",\n  \"dest_ip\": \"192.168.10.2\",\n  \"in_iface\": \"em1\",\n  \"alert\": {\n    \"signature\": \"ET DOS Possible SSDP Amplification Scan in Progress\",\n    \"signature_id\": 2019102,\n    \"category\": \"Attempted Denial of Service\",\n    \"severity\": 2\n  },\n  \"@timestamp\": \"2026-07-28T10:56:40.155012Z\"\n}"
+    }
+  ],
+  "format": {
+    "type": "object",
+    "properties": {
+      "summary": {
+        "type": "string"
+      },
+      "severity": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+        ]
+      },
+      "is_false_positive": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number"
+      },
+      "mitre_technique": {
+        "type": "string",
+        "pattern": "^(T[0-9]{4}(\\.[0-9]{3})?|N/A)$"
+      },
+      "recommended_action": {
+        "type": "string"
+      },
+      "safe_to_auto_block": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "summary",
+      "severity",
+      "is_false_positive",
+      "confidence",
+      "mitre_technique",
+      "recommended_action",
+      "safe_to_auto_block"
+    ]
+  },
+  "stream": false,
+  "options": {
+    "temperature": 0
+  }
+}

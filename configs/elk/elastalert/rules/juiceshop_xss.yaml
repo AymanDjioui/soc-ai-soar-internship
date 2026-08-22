@@ -1,0 +1,54 @@
+name: juiceshop_xss
+index: juiceshop-docker-*
+type: any
+
+filter:
+  - query:
+      query_string:
+        query: >
+          access_log.request_uri:(*script* OR *%3Cscript* OR *alert* OR *onerror* OR *onload*
+          OR *javascript* OR *%3C* OR *xss*)
+          OR access_log.request_body:(*script* OR *%3Cscript* OR *alert* OR *onerror* OR *onload*)
+        analyze_wildcard: true
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "XSS Attempt on Juice Shop"
+  type: "external"
+  source: "elastalert2"
+  severity: 2
+  tags:
+    - "OWASP:A03:2021"
+    - "juiceshop"
+    - "dmz"
+    - "xss"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A request containing XSS payload patterns was detected against
+    the Juice Shop application (OWASP A03:2021 - Injection).
+
+    - Client IP: {0}
+    - Request URI: {1}
+    - Timestamp: {2}
+
+  description_args:
+    - access_log.client_ip
+    - access_log.request_uri
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "access_log.client_ip"
+  - other: "access_log.request_uri"
+
+alert_text_args:
+  - access_log.client_ip
+  - access_log.request_uri
+  - "@timestamp"
+alert_text_type: alert_text_only

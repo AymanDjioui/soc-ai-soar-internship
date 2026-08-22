@@ -1,0 +1,27 @@
+{
+  "id": "07-nmap-scan-dmz",
+  "source": "notes/7.md",
+  "note": "Recon against DMZ Juice Shop from Badr's box over Tailscale.",
+  "alert": {
+    "event_type": "alert",
+    "src_ip": "100.101.27.63",
+    "dest_ip": "172.16.0.10",
+    "in_iface": "em2",
+    "alert": {
+      "signature": "ET SCAN Nmap Scripting Engine User-Agent Detected",
+      "signature_id": 2024364,
+      "category": "Web Application Attack",
+      "severity": 2
+    },
+    "http": {
+      "http_user_agent": "Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)"
+    }
+  },
+  "ground_truth": {
+    "is_false_positive": false,
+    "severity": "medium",
+    "mitre_technique": "T1046",
+    "must_not_auto_block": true,
+    "rationale": "Genuine recon, but source is Tailscale CGNAT (teammate's machine) - policy forbids auto-blocking that range."
+  }
+}

@@ -1,0 +1,972 @@
+{"ts": "2026-08-11T10:08:35.362000+00:00", "event": "alert_received", "alert_id": "~122953976", "title": "Suricata alert"}
+{"ts": "2026-08-11T10:10:47.832003+00:00", "event": "triage_failed", "alert_id": "~122953976", "error": "HTTPConnectionPool(host='100.96.231.95', port=11434): Max retries exceeded with url: /api/chat (Caused by ConnectTimeoutError(<HTTPConnection(host='100.96.231.95', port=11434) at 0x72871828bd10>, 'Connection to 100.96.231.95 timed out. (connect timeout=420)'))", "outcome": "left_for_human"}
+{"ts": "2026-08-11T10:14:46.392468+00:00", "event": "alert_received", "alert_id": "~122953976", "title": "Suricata alert"}
+{"ts": "2026-08-11T10:14:52.560175+00:00", "event": "triage_complete", "alert_id": "~122953976", "severity": "medium", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T10:14:53.321741+00:00", "event": "alert_dismissed", "alert_id": "~122953976", "confidence": 0.75}
+{"ts": "2026-08-11T10:18:43.767398+00:00", "event": "alert_received", "alert_id": "~122966264", "title": "Suricata alert"}
+{"ts": "2026-08-11T10:18:46.186152+00:00", "event": "triage_complete", "alert_id": "~122966264", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T10:18:47.402850+00:00", "event": "case_created", "alert_id": "~122966264", "case_id": "~286806088"}
+{"ts": "2026-08-11T10:19:53.055107+00:00", "event": "enrichment_complete", "case_id": "~286806088", "report_count": 6}
+{"ts": "2026-08-11T10:19:55.979443+00:00", "event": "verdict_complete", "case_id": "~286806088", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T10:19:56.830348+00:00", "event": "containment_executed", "case_id": "~286806088", "target": "217.160.0.187", "responder": "PfSense_Blocker_1_0", "confidence": 0.95}
+{"ts": "2026-08-11T10:19:57.875133+00:00", "event": "comment_posted", "case_id": "~286806088"}
+{"ts": "2026-08-11T10:29:18.891344+00:00", "event": "alert_received", "alert_id": "~122990840", "title": "Suricata alert"}
+{"ts": "2026-08-11T10:29:24.631274+00:00", "event": "triage_complete", "alert_id": "~122990840", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T10:29:25.073275+00:00", "event": "case_created", "alert_id": "~122990840", "case_id": "~286842952"}
+{"ts": "2026-08-11T10:30:19.130232+00:00", "event": "enrichment_complete", "case_id": "~286842952", "report_count": 6}
+{"ts": "2026-08-11T10:30:23.397533+00:00", "event": "verdict_complete", "case_id": "~286842952", "verdict": "benign", "confidence": 0.98}
+{"ts": "2026-08-11T10:30:23.608220+00:00", "event": "comment_posted", "case_id": "~286842952"}
+{"ts": "2026-08-11T15:41:57.234307+00:00", "event": "pipeline_started", "model": "mistral:7b", "dry_run": false, "min_confidence": 0.75, "max_blocks_hour": 5}
+{"ts": "2026-08-11T15:41:58.057723+00:00", "event": "alert_received", "alert_id": "~122888368", "title": "Suricata alert"}
+{"ts": "2026-08-11T15:42:30.896969+00:00", "event": "triage_complete", "alert_id": "~122888368", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T15:42:31.649889+00:00", "event": "alert_dismissed", "alert_id": "~122888368", "confidence": 0.85}
+{"ts": "2026-08-11T15:42:31.650054+00:00", "event": "pipeline_stopped", "reason": "max_alerts_reached", "processed": 1}
+{"ts": "2026-08-11T15:58:59.434168+00:00", "event": "pipeline_started", "model": "mistral:7b", "dry_run": false, "min_confidence": 0.75, "max_blocks_hour": 5}
+{"ts": "2026-08-11T15:58:59.620325+00:00", "event": "alert_received", "alert_id": "~123121912", "title": "TEST INJECTED - Botnet C2 Contact Detected (C-1 demo)"}
+{"ts": "2026-08-11T15:59:05.636111+00:00", "event": "triage_complete", "alert_id": "~123121912", "severity": "low", "is_false_positive": false, "confidence": 0.95, "mitre_technique": "T1071.001"}
+{"ts": "2026-08-11T15:59:05.996201+00:00", "event": "case_created", "alert_id": "~123121912", "case_id": "~286990408"}
+{"ts": "2026-08-11T16:00:02.795855+00:00", "event": "enrichment_complete", "case_id": "~286990408", "report_count": 6}
+{"ts": "2026-08-11T16:00:05.657103+00:00", "event": "verdict_complete", "case_id": "~286990408", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:00:12.852459+00:00", "event": "containment_executed", "case_id": "~286990408", "target": "50.16.16.211", "responder": "PfSense_Blocker_1_0", "responder_id": "aebe07e932adfb592a20678599943378", "confidence": 0.9, "cortex_status": "Success"}
+{"ts": "2026-08-11T16:00:13.507576+00:00", "event": "comment_posted", "case_id": "~286990408"}
+{"ts": "2026-08-11T16:00:13.507835+00:00", "event": "pipeline_stopped", "reason": "targeted_single_alert", "alert_id": "~123121912"}
+{"ts": "2026-08-11T16:00:17.245655+00:00", "event": "pipeline_started", "model": "mistral:7b", "dry_run": false, "min_confidence": 0.75, "max_blocks_hour": 5}
+{"ts": "2026-08-11T16:00:17.905994+00:00", "event": "alert_received", "alert_id": "~122929224", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:00:20.669842+00:00", "event": "triage_complete", "alert_id": "~122929224", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:00:21.522047+00:00", "event": "alert_dismissed", "alert_id": "~122929224", "confidence": 0.85}
+{"ts": "2026-08-11T16:00:21.522227+00:00", "event": "alert_received", "alert_id": "~4184", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:00:23.952934+00:00", "event": "triage_complete", "alert_id": "~4184", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:00:24.536654+00:00", "event": "case_created", "alert_id": "~4184", "case_id": "~287014984"}
+{"ts": "2026-08-11T16:01:02.965430+00:00", "event": "enrichment_complete", "case_id": "~287014984", "report_count": 6}
+{"ts": "2026-08-11T16:01:05.130530+00:00", "event": "verdict_complete", "case_id": "~287014984", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:01:05.130757+00:00", "event": "containment_refused", "case_id": "~287014984", "target": "100.101.27.63", "reason": "policy guard: Tailscale CGNAT range \u2014 our own administrative access path", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:01:05.854061+00:00", "event": "comment_posted", "case_id": "~287014984"}
+{"ts": "2026-08-11T16:01:05.854268+00:00", "event": "alert_received", "alert_id": "~163844152", "title": "New Service on {match[host.name]}"}
+{"ts": "2026-08-11T16:01:08.426080+00:00", "event": "triage_complete", "alert_id": "~163844152", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:01:09.864217+00:00", "event": "case_created", "alert_id": "~163844152", "case_id": "~82243688"}
+{"ts": "2026-08-11T16:01:18.120652+00:00", "event": "observables_missing", "case_id": "~82243688", "alert_id": "~163844152"}
+{"ts": "2026-08-11T16:01:18.120833+00:00", "event": "enrichment_complete", "case_id": "~82243688", "report_count": 0}
+{"ts": "2026-08-11T16:01:18.887740+00:00", "event": "comment_posted", "case_id": "~82243688"}
+{"ts": "2026-08-11T16:01:18.887950+00:00", "event": "alert_received", "alert_id": "~40964328", "title": "New Service on {match[host.name]}"}
+{"ts": "2026-08-11T16:01:21.142842+00:00", "event": "triage_complete", "alert_id": "~40964328", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:01:21.906573+00:00", "event": "case_created", "alert_id": "~40964328", "case_id": "~328003616"}
+{"ts": "2026-08-11T16:01:30.160678+00:00", "event": "observables_missing", "case_id": "~328003616", "alert_id": "~40964328"}
+{"ts": "2026-08-11T16:01:30.160808+00:00", "event": "enrichment_complete", "case_id": "~328003616", "report_count": 0}
+{"ts": "2026-08-11T16:01:30.927696+00:00", "event": "comment_posted", "case_id": "~328003616"}
+{"ts": "2026-08-11T16:01:30.927891+00:00", "event": "alert_received", "alert_id": "~81924224", "title": "New Service on {match[host.name]}"}
+{"ts": "2026-08-11T16:01:33.201251+00:00", "event": "triage_complete", "alert_id": "~81924224", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:01:33.943008+00:00", "event": "case_created", "alert_id": "~81924224", "case_id": "~82247784"}
+{"ts": "2026-08-11T16:01:42.195150+00:00", "event": "observables_missing", "case_id": "~82247784", "alert_id": "~81924224"}
+{"ts": "2026-08-11T16:01:42.195285+00:00", "event": "enrichment_complete", "case_id": "~82247784", "report_count": 0}
+{"ts": "2026-08-11T16:01:42.960704+00:00", "event": "comment_posted", "case_id": "~82247784"}
+{"ts": "2026-08-11T16:01:42.960918+00:00", "event": "alert_received", "alert_id": "~40968424", "title": "Brute Force from {match[winlog.event_data.IpAddress]}"}
+{"ts": "2026-08-11T16:01:45.694079+00:00", "event": "triage_complete", "alert_id": "~40968424", "severity": "medium", "is_false_positive": false, "confidence": 0.8, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:01:45.983573+00:00", "event": "case_created", "alert_id": "~40968424", "case_id": "~205205704"}
+{"ts": "2026-08-11T16:01:54.334024+00:00", "event": "observables_missing", "case_id": "~205205704", "alert_id": "~40968424"}
+{"ts": "2026-08-11T16:01:54.334189+00:00", "event": "enrichment_complete", "case_id": "~205205704", "report_count": 0}
+{"ts": "2026-08-11T16:01:55.028843+00:00", "event": "comment_posted", "case_id": "~205205704"}
+{"ts": "2026-08-11T16:01:55.029069+00:00", "event": "alert_received", "alert_id": "~81928440", "title": "Brute Force from {match[winlog.event_data.IpAddress]}"}
+{"ts": "2026-08-11T16:01:57.699518+00:00", "event": "triage_complete", "alert_id": "~81928440", "severity": "medium", "is_false_positive": false, "confidence": 0.8, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:01:58.052831+00:00", "event": "case_created", "alert_id": "~81928440", "case_id": "~82251880"}
+{"ts": "2026-08-11T16:02:06.296572+00:00", "event": "observables_missing", "case_id": "~82251880", "alert_id": "~81928440"}
+{"ts": "2026-08-11T16:02:06.296744+00:00", "event": "enrichment_complete", "case_id": "~82251880", "report_count": 0}
+{"ts": "2026-08-11T16:02:07.059770+00:00", "event": "comment_posted", "case_id": "~82251880"}
+{"ts": "2026-08-11T16:02:07.059979+00:00", "event": "alert_received", "alert_id": "~40972520", "title": "Brute Force from {match[winlog.event_data.IpAddress]}"}
+{"ts": "2026-08-11T16:02:09.713674+00:00", "event": "triage_complete", "alert_id": "~40972520", "severity": "medium", "is_false_positive": false, "confidence": 0.8, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:02:10.074600+00:00", "event": "case_created", "alert_id": "~40972520", "case_id": "~246071296"}
+{"ts": "2026-08-11T16:02:18.324131+00:00", "event": "observables_missing", "case_id": "~246071296", "alert_id": "~40972520"}
+{"ts": "2026-08-11T16:02:18.324279+00:00", "event": "enrichment_complete", "case_id": "~246071296", "report_count": 0}
+{"ts": "2026-08-11T16:02:19.092539+00:00", "event": "comment_posted", "case_id": "~246071296"}
+{"ts": "2026-08-11T16:02:19.092761+00:00", "event": "alert_received", "alert_id": "~81932440", "title": "Brute Force from {match[winlog.event_data.IpAddress]}"}
+{"ts": "2026-08-11T16:02:21.750299+00:00", "event": "triage_complete", "alert_id": "~81932440", "severity": "medium", "is_false_positive": false, "confidence": 0.8, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:02:23.105153+00:00", "event": "case_created", "alert_id": "~81932440", "case_id": "~246042864"}
+{"ts": "2026-08-11T16:02:31.346484+00:00", "event": "observables_missing", "case_id": "~246042864", "alert_id": "~81932440"}
+{"ts": "2026-08-11T16:02:31.346652+00:00", "event": "enrichment_complete", "case_id": "~246042864", "report_count": 0}
+{"ts": "2026-08-11T16:02:32.124532+00:00", "event": "comment_posted", "case_id": "~246042864"}
+{"ts": "2026-08-11T16:02:32.124708+00:00", "event": "alert_received", "alert_id": "~40976616", "title": "Brute Force from {match[winlog][event_data][IpAddress]}"}
+{"ts": "2026-08-11T16:02:34.803010+00:00", "event": "triage_complete", "alert_id": "~40976616", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:02:35.141851+00:00", "event": "alert_dismissed", "alert_id": "~40976616", "confidence": 0.75}
+{"ts": "2026-08-11T16:02:35.142018+00:00", "event": "alert_received", "alert_id": "~163844272", "title": "New Service on {match[host][name]}"}
+{"ts": "2026-08-11T16:02:37.478576+00:00", "event": "triage_complete", "alert_id": "~163844272", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1053.003"}
+{"ts": "2026-08-11T16:02:38.164030+00:00", "event": "case_created", "alert_id": "~163844272", "case_id": "~123171064"}
+{"ts": "2026-08-11T16:02:46.397495+00:00", "event": "observables_missing", "case_id": "~123171064", "alert_id": "~163844272"}
+{"ts": "2026-08-11T16:02:46.397634+00:00", "event": "enrichment_complete", "case_id": "~123171064", "report_count": 0}
+{"ts": "2026-08-11T16:02:47.177040+00:00", "event": "comment_posted", "case_id": "~123171064"}
+{"ts": "2026-08-11T16:02:47.177284+00:00", "event": "alert_received", "alert_id": "~40980712", "title": "Brute Force from {match[winlog][event_data][IpAddress]}"}
+{"ts": "2026-08-11T16:02:49.452992+00:00", "event": "triage_complete", "alert_id": "~40980712", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:02:50.188958+00:00", "event": "alert_dismissed", "alert_id": "~40980712", "confidence": 0.75}
+{"ts": "2026-08-11T16:02:50.189150+00:00", "event": "alert_received", "alert_id": "~40984808", "title": "Brute Force from {match[winlog][event_data][IpAddress]}"}
+{"ts": "2026-08-11T16:02:52.429511+00:00", "event": "triage_complete", "alert_id": "~40984808", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:02:53.228353+00:00", "event": "alert_dismissed", "alert_id": "~40984808", "confidence": 0.75}
+{"ts": "2026-08-11T16:02:53.228536+00:00", "event": "alert_received", "alert_id": "~81936632", "title": "Brute Force from {match[winlog][event_data][IpAddress]}"}
+{"ts": "2026-08-11T16:02:55.475872+00:00", "event": "triage_complete", "alert_id": "~81936632", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:02:56.229552+00:00", "event": "alert_dismissed", "alert_id": "~81936632", "confidence": 0.75}
+{"ts": "2026-08-11T16:02:56.229753+00:00", "event": "alert_received", "alert_id": "~122888392", "title": "Brute Force from {match[winlog][event_data][IpAddress]}"}
+{"ts": "2026-08-11T16:02:58.478841+00:00", "event": "triage_complete", "alert_id": "~122888392", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:02:59.243143+00:00", "event": "alert_dismissed", "alert_id": "~122888392", "confidence": 0.75}
+{"ts": "2026-08-11T16:02:59.243333+00:00", "event": "alert_received", "alert_id": "~122892504", "title": "Brute Force from {match[winlog][event_data][IpAddress]}"}
+{"ts": "2026-08-11T16:03:01.491460+00:00", "event": "triage_complete", "alert_id": "~122892504", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:03:02.256389+00:00", "event": "alert_dismissed", "alert_id": "~122892504", "confidence": 0.75}
+{"ts": "2026-08-11T16:03:02.256595+00:00", "event": "alert_received", "alert_id": "~163852344", "title": "Windows Brute Force Detected"}
+{"ts": "2026-08-11T16:03:05.063761+00:00", "event": "triage_complete", "alert_id": "~163852344", "severity": "low", "is_false_positive": true, "confidence": 0.95, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:03:05.280796+00:00", "event": "alert_dismissed", "alert_id": "~163852344", "confidence": 0.95}
+{"ts": "2026-08-11T16:03:05.280957+00:00", "event": "alert_received", "alert_id": "~122896600", "title": "Windows Brute Force Detected"}
+{"ts": "2026-08-11T16:03:08.082485+00:00", "event": "triage_complete", "alert_id": "~122896600", "severity": "low", "is_false_positive": true, "confidence": 0.95, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:03:08.288230+00:00", "event": "alert_dismissed", "alert_id": "~122896600", "confidence": 0.95}
+{"ts": "2026-08-11T16:03:08.288432+00:00", "event": "alert_received", "alert_id": "~163856456", "title": "Suspicious PowerShell Execution"}
+{"ts": "2026-08-11T16:03:11.370885+00:00", "event": "triage_complete", "alert_id": "~163856456", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1059.001"}
+{"ts": "2026-08-11T16:03:12.303709+00:00", "event": "case_created", "alert_id": "~163856456", "case_id": "~246063344"}
+{"ts": "2026-08-11T16:03:20.538615+00:00", "event": "observables_missing", "case_id": "~246063344", "alert_id": "~163856456"}
+{"ts": "2026-08-11T16:03:20.538751+00:00", "event": "enrichment_complete", "case_id": "~246063344", "report_count": 0}
+{"ts": "2026-08-11T16:03:21.316553+00:00", "event": "comment_posted", "case_id": "~246063344"}
+{"ts": "2026-08-11T16:03:21.316749+00:00", "event": "alert_received", "alert_id": "~122900696", "title": "Suspicious PowerShell Execution"}
+{"ts": "2026-08-11T16:03:24.380693+00:00", "event": "triage_complete", "alert_id": "~122900696", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1059.001"}
+{"ts": "2026-08-11T16:03:25.344493+00:00", "event": "case_created", "alert_id": "~122900696", "case_id": "~246091776"}
+{"ts": "2026-08-11T16:03:33.618666+00:00", "event": "observables_missing", "case_id": "~246091776", "alert_id": "~122900696"}
+{"ts": "2026-08-11T16:03:33.618854+00:00", "event": "enrichment_complete", "case_id": "~246091776", "report_count": 0}
+{"ts": "2026-08-11T16:03:34.358817+00:00", "event": "comment_posted", "case_id": "~246091776"}
+{"ts": "2026-08-11T16:03:34.359030+00:00", "event": "alert_received", "alert_id": "~40993000", "title": "Windows Brute Force Detected"}
+{"ts": "2026-08-11T16:03:37.029045+00:00", "event": "triage_complete", "alert_id": "~40993000", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:03:37.371477+00:00", "event": "case_created", "alert_id": "~40993000", "case_id": "~287043656"}
+{"ts": "2026-08-11T16:04:09.693586+00:00", "event": "enrichment_complete", "case_id": "~287043656", "report_count": 2}
+{"ts": "2026-08-11T16:04:11.870685+00:00", "event": "verdict_complete", "case_id": "~287043656", "verdict": "benign", "confidence": 1.0}
+{"ts": "2026-08-11T16:04:12.531009+00:00", "event": "comment_posted", "case_id": "~287043656"}
+{"ts": "2026-08-11T16:04:12.531272+00:00", "event": "alert_received", "alert_id": "~163864648", "title": "Windows Brute Force Detected"}
+{"ts": "2026-08-11T16:04:15.757334+00:00", "event": "triage_complete", "alert_id": "~163864648", "severity": "low", "is_false_positive": true, "confidence": 0.5, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:04:16.545482+00:00", "event": "case_created", "alert_id": "~163864648", "case_id": "~82288744"}
+{"ts": "2026-08-11T16:04:24.789359+00:00", "event": "observables_missing", "case_id": "~82288744", "alert_id": "~163864648"}
+{"ts": "2026-08-11T16:04:24.789559+00:00", "event": "enrichment_complete", "case_id": "~82288744", "report_count": 0}
+{"ts": "2026-08-11T16:04:25.561672+00:00", "event": "comment_posted", "case_id": "~82288744"}
+{"ts": "2026-08-11T16:04:25.561855+00:00", "event": "alert_received", "alert_id": "~40997096", "title": "Windows Brute Force Detected"}
+{"ts": "2026-08-11T16:04:28.040657+00:00", "event": "triage_complete", "alert_id": "~40997096", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:04:28.579029+00:00", "event": "case_created", "alert_id": "~40997096", "case_id": "~328028192"}
+{"ts": "2026-08-11T16:04:48.801786+00:00", "event": "enrichment_complete", "case_id": "~328028192", "report_count": 2}
+{"ts": "2026-08-11T16:04:50.708900+00:00", "event": "verdict_complete", "case_id": "~328028192", "verdict": "benign", "confidence": 1.0}
+{"ts": "2026-08-11T16:04:51.723068+00:00", "event": "comment_posted", "case_id": "~328028192"}
+{"ts": "2026-08-11T16:04:51.723280+00:00", "event": "alert_received", "alert_id": "~81944824", "title": "Windows Brute Force Detected"}
+{"ts": "2026-08-11T16:04:54.941236+00:00", "event": "triage_complete", "alert_id": "~81944824", "severity": "low", "is_false_positive": true, "confidence": 0.5, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:04:55.739570+00:00", "event": "case_created", "alert_id": "~81944824", "case_id": "~82309224"}
+{"ts": "2026-08-11T16:05:03.982189+00:00", "event": "observables_missing", "case_id": "~82309224", "alert_id": "~81944824"}
+{"ts": "2026-08-11T16:05:03.982373+00:00", "event": "enrichment_complete", "case_id": "~82309224", "report_count": 0}
+{"ts": "2026-08-11T16:05:04.758951+00:00", "event": "comment_posted", "case_id": "~82309224"}
+{"ts": "2026-08-11T16:05:04.759167+00:00", "event": "alert_received", "alert_id": "~41005288", "title": "New Malicious Windows Service"}
+{"ts": "2026-08-11T16:05:07.810769+00:00", "event": "triage_complete", "alert_id": "~41005288", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1053.003"}
+{"ts": "2026-08-11T16:05:08.775139+00:00", "event": "case_created", "alert_id": "~41005288", "case_id": "~205267144"}
+{"ts": "2026-08-11T16:05:17.027515+00:00", "event": "observables_missing", "case_id": "~205267144", "alert_id": "~41005288"}
+{"ts": "2026-08-11T16:05:17.027684+00:00", "event": "enrichment_complete", "case_id": "~205267144", "report_count": 0}
+{"ts": "2026-08-11T16:05:17.785875+00:00", "event": "comment_posted", "case_id": "~205267144"}
+{"ts": "2026-08-11T16:05:17.786085+00:00", "event": "alert_received", "alert_id": "~81936512", "title": "Windows Privilege Escalation"}
+{"ts": "2026-08-11T16:05:20.913109+00:00", "event": "triage_complete", "alert_id": "~81936512", "severity": "medium", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:05:21.800038+00:00", "event": "case_created", "alert_id": "~81936512", "case_id": "~164216944"}
+{"ts": "2026-08-11T16:05:30.041740+00:00", "event": "observables_missing", "case_id": "~164216944", "alert_id": "~81936512"}
+{"ts": "2026-08-11T16:05:30.041886+00:00", "event": "enrichment_complete", "case_id": "~164216944", "report_count": 0}
+{"ts": "2026-08-11T16:05:30.813443+00:00", "event": "comment_posted", "case_id": "~164216944"}
+{"ts": "2026-08-11T16:05:30.813641+00:00", "event": "alert_received", "alert_id": "~122904792", "title": "New Windows Account Created"}
+{"ts": "2026-08-11T16:05:33.526669+00:00", "event": "triage_complete", "alert_id": "~122904792", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:05:33.836774+00:00", "event": "case_created", "alert_id": "~122904792", "case_id": "~246116592"}
+{"ts": "2026-08-11T16:05:42.077818+00:00", "event": "observables_missing", "case_id": "~246116592", "alert_id": "~122904792"}
+{"ts": "2026-08-11T16:05:42.077980+00:00", "event": "enrichment_complete", "case_id": "~246116592", "report_count": 0}
+{"ts": "2026-08-11T16:05:42.849478+00:00", "event": "comment_posted", "case_id": "~246116592"}
+{"ts": "2026-08-11T16:05:42.849661+00:00", "event": "alert_received", "alert_id": "~81924328", "title": "JuiceShop XSS Attack"}
+{"ts": "2026-08-11T16:05:45.293654+00:00", "event": "triage_complete", "alert_id": "~81924328", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:05:45.873381+00:00", "event": "case_created", "alert_id": "~81924328", "case_id": "~328048672"}
+{"ts": "2026-08-11T16:06:03.090381+00:00", "event": "enrichment_complete", "case_id": "~328048672", "report_count": 3}
+{"ts": "2026-08-11T16:06:09.463744+00:00", "event": "verdict_complete", "case_id": "~328048672", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:06:09.464165+00:00", "event": "containment_refused", "case_id": "~328048672", "target": "100.101.27.63", "reason": "policy guard: Tailscale CGNAT range \u2014 our own administrative access path", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:06:10.013895+00:00", "event": "comment_posted", "case_id": "~328048672"}
+{"ts": "2026-08-11T16:06:10.014143+00:00", "event": "alert_received", "alert_id": "~81924288", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:06:13.224497+00:00", "event": "triage_complete", "alert_id": "~81924288", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:06:14.027299+00:00", "event": "case_created", "alert_id": "~81924288", "case_id": "~123199736"}
+{"ts": "2026-08-11T16:06:40.358605+00:00", "event": "enrichment_complete", "case_id": "~123199736", "report_count": 3}
+{"ts": "2026-08-11T16:06:43.717796+00:00", "event": "verdict_complete", "case_id": "~123199736", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:06:43.717992+00:00", "event": "containment_refused", "case_id": "~123199736", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:06:44.153020+00:00", "event": "comment_posted", "case_id": "~123199736"}
+{"ts": "2026-08-11T16:06:44.153316+00:00", "event": "alert_received", "alert_id": "~122896400", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:06:47.294524+00:00", "event": "triage_complete", "alert_id": "~122896400", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:06:48.174390+00:00", "event": "case_created", "alert_id": "~122896400", "case_id": "~164208680"}
+{"ts": "2026-08-11T16:07:05.450395+00:00", "event": "enrichment_complete", "case_id": "~164208680", "report_count": 3}
+{"ts": "2026-08-11T16:07:09.934600+00:00", "event": "verdict_complete", "case_id": "~164208680", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:07:09.934796+00:00", "event": "containment_refused", "case_id": "~164208680", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:07:10.301183+00:00", "event": "comment_posted", "case_id": "~164208680"}
+{"ts": "2026-08-11T16:07:10.301445+00:00", "event": "alert_received", "alert_id": "~163856416", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:07:13.472454+00:00", "event": "triage_complete", "alert_id": "~163856416", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:07:14.324553+00:00", "event": "case_created", "alert_id": "~163856416", "case_id": "~123244792"}
+{"ts": "2026-08-11T16:07:28.554543+00:00", "event": "enrichment_complete", "case_id": "~123244792", "report_count": 3}
+{"ts": "2026-08-11T16:07:33.007640+00:00", "event": "verdict_complete", "case_id": "~123244792", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:07:33.007835+00:00", "event": "containment_refused", "case_id": "~123244792", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:07:33.471321+00:00", "event": "comment_posted", "case_id": "~123244792"}
+{"ts": "2026-08-11T16:07:33.471612+00:00", "event": "alert_received", "alert_id": "~163860512", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:07:36.515586+00:00", "event": "triage_complete", "alert_id": "~163860512", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:07:37.486671+00:00", "event": "case_created", "alert_id": "~163860512", "case_id": "~287096904"}
+{"ts": "2026-08-11T16:08:09.920079+00:00", "event": "enrichment_complete", "case_id": "~287096904", "report_count": 3}
+{"ts": "2026-08-11T16:08:13.268600+00:00", "event": "verdict_complete", "case_id": "~287096904", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:08:13.268881+00:00", "event": "containment_refused", "case_id": "~287096904", "target": "192.168.84.1", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:08:13.658148+00:00", "event": "comment_posted", "case_id": "~287096904"}
+{"ts": "2026-08-11T16:08:13.658472+00:00", "event": "alert_received", "alert_id": "~20584", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:08:16.855612+00:00", "event": "triage_complete", "alert_id": "~20584", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:08:17.673467+00:00", "event": "case_created", "alert_id": "~20584", "case_id": "~164245544"}
+{"ts": "2026-08-11T16:08:31.896724+00:00", "event": "enrichment_complete", "case_id": "~164245544", "report_count": 1}
+{"ts": "2026-08-11T16:08:34.132062+00:00", "event": "verdict_complete", "case_id": "~164245544", "verdict": "benign", "confidence": 1.0}
+{"ts": "2026-08-11T16:08:34.844302+00:00", "event": "comment_posted", "case_id": "~164245544"}
+{"ts": "2026-08-11T16:08:34.844637+00:00", "event": "alert_received", "alert_id": "~163856624", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:08:37.843909+00:00", "event": "triage_complete", "alert_id": "~163856624", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:08:38.868301+00:00", "event": "case_created", "alert_id": "~163856624", "case_id": "~164257832"}
+{"ts": "2026-08-11T16:08:41.055696+00:00", "event": "enrichment_complete", "case_id": "~164257832", "report_count": 0}
+{"ts": "2026-08-11T16:08:41.920166+00:00", "event": "comment_posted", "case_id": "~164257832"}
+{"ts": "2026-08-11T16:08:41.920359+00:00", "event": "alert_received", "alert_id": "~24680", "title": "PfSense DMZ Breakout"}
+{"ts": "2026-08-11T16:08:45.128180+00:00", "event": "triage_complete", "alert_id": "~24680", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:08:45.940282+00:00", "event": "case_created", "alert_id": "~24680", "case_id": "~205357256"}
+{"ts": "2026-08-11T16:08:48.101062+00:00", "event": "enrichment_complete", "case_id": "~205357256", "report_count": 0}
+{"ts": "2026-08-11T16:08:48.963536+00:00", "event": "comment_posted", "case_id": "~205357256"}
+{"ts": "2026-08-11T16:08:48.963741+00:00", "event": "alert_received", "alert_id": "~122908688", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:08:51.861442+00:00", "event": "triage_complete", "alert_id": "~122908688", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:08:52.978940+00:00", "event": "case_created", "alert_id": "~122908688", "case_id": "~287117384"}
+{"ts": "2026-08-11T16:08:55.132946+00:00", "event": "enrichment_complete", "case_id": "~287117384", "report_count": 0}
+{"ts": "2026-08-11T16:08:56.002382+00:00", "event": "comment_posted", "case_id": "~287117384"}
+{"ts": "2026-08-11T16:08:56.002609+00:00", "event": "alert_received", "alert_id": "~204816456", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:08:58.661282+00:00", "event": "triage_complete", "alert_id": "~204816456", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:08:59.021826+00:00", "event": "case_created", "alert_id": "~204816456", "case_id": "~164270120"}
+{"ts": "2026-08-11T16:09:01.218465+00:00", "event": "enrichment_complete", "case_id": "~164270120", "report_count": 0}
+{"ts": "2026-08-11T16:09:02.059764+00:00", "event": "comment_posted", "case_id": "~164270120"}
+{"ts": "2026-08-11T16:09:02.059948+00:00", "event": "alert_received", "alert_id": "~81936576", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:09:04.726490+00:00", "event": "triage_complete", "alert_id": "~81936576", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:09:05.071648+00:00", "event": "case_created", "alert_id": "~81936576", "case_id": "~205369544"}
+{"ts": "2026-08-11T16:09:19.365532+00:00", "event": "enrichment_complete", "case_id": "~205369544", "report_count": 3}
+{"ts": "2026-08-11T16:09:23.822147+00:00", "event": "verdict_complete", "case_id": "~205369544", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:09:23.822338+00:00", "event": "containment_refused", "case_id": "~205369544", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:09:24.215081+00:00", "event": "comment_posted", "case_id": "~205369544"}
+{"ts": "2026-08-11T16:09:24.215331+00:00", "event": "alert_received", "alert_id": "~122892440", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:09:27.183861+00:00", "event": "triage_complete", "alert_id": "~122892440", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:09:28.235306+00:00", "event": "case_created", "alert_id": "~122892440", "case_id": "~205381832"}
+{"ts": "2026-08-11T16:09:45.485140+00:00", "event": "enrichment_complete", "case_id": "~205381832", "report_count": 3}
+{"ts": "2026-08-11T16:09:49.963889+00:00", "event": "verdict_complete", "case_id": "~205381832", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:09:49.964166+00:00", "event": "containment_refused", "case_id": "~205381832", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:09:50.387219+00:00", "event": "comment_posted", "case_id": "~205381832"}
+{"ts": "2026-08-11T16:09:50.387514+00:00", "event": "alert_received", "alert_id": "~122900632", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:09:53.330886+00:00", "event": "triage_complete", "alert_id": "~122900632", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:09:54.409770+00:00", "event": "case_created", "alert_id": "~122900632", "case_id": "~287146056"}
+{"ts": "2026-08-11T16:10:11.700547+00:00", "event": "enrichment_complete", "case_id": "~287146056", "report_count": 3}
+{"ts": "2026-08-11T16:10:16.153176+00:00", "event": "verdict_complete", "case_id": "~287146056", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:10:16.153390+00:00", "event": "containment_refused", "case_id": "~287146056", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:10:16.520059+00:00", "event": "comment_posted", "case_id": "~287146056"}
+{"ts": "2026-08-11T16:10:16.520312+00:00", "event": "alert_received", "alert_id": "~122908824", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:10:19.461065+00:00", "event": "triage_complete", "alert_id": "~122908824", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:10:20.532544+00:00", "event": "case_created", "alert_id": "~122908824", "case_id": "~246202608"}
+{"ts": "2026-08-11T16:10:34.762958+00:00", "event": "enrichment_complete", "case_id": "~246202608", "report_count": 3}
+{"ts": "2026-08-11T16:10:39.224339+00:00", "event": "verdict_complete", "case_id": "~246202608", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:10:39.224572+00:00", "event": "containment_refused", "case_id": "~246202608", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:10:39.785437+00:00", "event": "comment_posted", "case_id": "~246202608"}
+{"ts": "2026-08-11T16:10:39.785688+00:00", "event": "alert_received", "alert_id": "~163864816", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:10:42.744572+00:00", "event": "triage_complete", "alert_id": "~163864816", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:10:43.798678+00:00", "event": "case_created", "alert_id": "~163864816", "case_id": "~123314424"}
+{"ts": "2026-08-11T16:11:01.035312+00:00", "event": "enrichment_complete", "case_id": "~123314424", "report_count": 3}
+{"ts": "2026-08-11T16:11:05.520356+00:00", "event": "verdict_complete", "case_id": "~123314424", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:11:05.520576+00:00", "event": "containment_refused", "case_id": "~123314424", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:11:05.954759+00:00", "event": "comment_posted", "case_id": "~123314424"}
+{"ts": "2026-08-11T16:11:05.955181+00:00", "event": "alert_received", "alert_id": "~81924232", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:11:08.906022+00:00", "event": "triage_complete", "alert_id": "~81924232", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:11:09.972513+00:00", "event": "case_created", "alert_id": "~81924232", "case_id": "~123334904"}
+{"ts": "2026-08-11T16:11:18.226503+00:00", "event": "observables_missing", "case_id": "~123334904", "alert_id": "~81924232"}
+{"ts": "2026-08-11T16:11:18.226694+00:00", "event": "enrichment_complete", "case_id": "~123334904", "report_count": 0}
+{"ts": "2026-08-11T16:11:18.987184+00:00", "event": "comment_posted", "case_id": "~123334904"}
+{"ts": "2026-08-11T16:11:18.987438+00:00", "event": "alert_received", "alert_id": "~204808288", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:11:21.802954+00:00", "event": "triage_complete", "alert_id": "~204808288", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:11:22.997862+00:00", "event": "case_created", "alert_id": "~204808288", "case_id": "~246227184"}
+{"ts": "2026-08-11T16:11:31.242953+00:00", "event": "observables_missing", "case_id": "~246227184", "alert_id": "~204808288"}
+{"ts": "2026-08-11T16:11:31.243146+00:00", "event": "enrichment_complete", "case_id": "~246227184", "report_count": 0}
+{"ts": "2026-08-11T16:11:32.017630+00:00", "event": "comment_posted", "case_id": "~246227184"}
+{"ts": "2026-08-11T16:11:32.017824+00:00", "event": "alert_received", "alert_id": "~204808432", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:11:34.376501+00:00", "event": "triage_complete", "alert_id": "~204808432", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:11:35.030172+00:00", "event": "case_created", "alert_id": "~204808432", "case_id": "~123343096"}
+{"ts": "2026-08-11T16:11:43.264951+00:00", "event": "observables_missing", "case_id": "~123343096", "alert_id": "~204808432"}
+{"ts": "2026-08-11T16:11:43.265139+00:00", "event": "enrichment_complete", "case_id": "~123343096", "report_count": 0}
+{"ts": "2026-08-11T16:11:44.049323+00:00", "event": "comment_posted", "case_id": "~123343096"}
+{"ts": "2026-08-11T16:11:44.049568+00:00", "event": "alert_received", "alert_id": "~204812384", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:11:46.858027+00:00", "event": "triage_complete", "alert_id": "~204812384", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:11:47.062244+00:00", "event": "case_created", "alert_id": "~204812384", "case_id": "~328204320"}
+{"ts": "2026-08-11T16:11:55.299344+00:00", "event": "observables_missing", "case_id": "~328204320", "alert_id": "~204812384"}
+{"ts": "2026-08-11T16:11:55.299570+00:00", "event": "enrichment_complete", "case_id": "~328204320", "report_count": 0}
+{"ts": "2026-08-11T16:11:56.077478+00:00", "event": "comment_posted", "case_id": "~328204320"}
+{"ts": "2026-08-11T16:11:56.077713+00:00", "event": "alert_received", "alert_id": "~40972328", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:11:58.886816+00:00", "event": "triage_complete", "alert_id": "~40972328", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:11:59.095697+00:00", "event": "case_created", "alert_id": "~40972328", "case_id": "~287187016"}
+{"ts": "2026-08-11T16:12:07.334017+00:00", "event": "observables_missing", "case_id": "~287187016", "alert_id": "~40972328"}
+{"ts": "2026-08-11T16:12:07.334192+00:00", "event": "enrichment_complete", "case_id": "~287187016", "report_count": 0}
+{"ts": "2026-08-11T16:12:08.129508+00:00", "event": "comment_posted", "case_id": "~287187016"}
+{"ts": "2026-08-11T16:12:08.129740+00:00", "event": "alert_received", "alert_id": "~163844304", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:12:10.792547+00:00", "event": "triage_complete", "alert_id": "~163844304", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:12:12.142277+00:00", "event": "case_created", "alert_id": "~163844304", "case_id": "~164360304"}
+{"ts": "2026-08-11T16:12:20.376219+00:00", "event": "observables_missing", "case_id": "~164360304", "alert_id": "~163844304"}
+{"ts": "2026-08-11T16:12:20.376362+00:00", "event": "enrichment_complete", "case_id": "~164360304", "report_count": 0}
+{"ts": "2026-08-11T16:12:21.152013+00:00", "event": "comment_posted", "case_id": "~164360304"}
+{"ts": "2026-08-11T16:12:21.152200+00:00", "event": "alert_received", "alert_id": "~40976424", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:12:23.981119+00:00", "event": "triage_complete", "alert_id": "~40976424", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:12:24.181636+00:00", "event": "case_created", "alert_id": "~40976424", "case_id": "~246267904"}
+{"ts": "2026-08-11T16:12:32.413301+00:00", "event": "observables_missing", "case_id": "~246267904", "alert_id": "~40976424"}
+{"ts": "2026-08-11T16:12:32.413515+00:00", "event": "enrichment_complete", "case_id": "~246267904", "report_count": 0}
+{"ts": "2026-08-11T16:12:33.202341+00:00", "event": "comment_posted", "case_id": "~246267904"}
+{"ts": "2026-08-11T16:12:33.202585+00:00", "event": "alert_received", "alert_id": "~81932424", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:12:35.593856+00:00", "event": "triage_complete", "alert_id": "~81932424", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:12:36.212588+00:00", "event": "case_created", "alert_id": "~81932424", "case_id": "~287256752"}
+{"ts": "2026-08-11T16:12:44.459024+00:00", "event": "observables_missing", "case_id": "~287256752", "alert_id": "~81932424"}
+{"ts": "2026-08-11T16:12:44.459195+00:00", "event": "enrichment_complete", "case_id": "~287256752", "report_count": 0}
+{"ts": "2026-08-11T16:12:45.227638+00:00", "event": "comment_posted", "case_id": "~287256752"}
+{"ts": "2026-08-11T16:12:45.227849+00:00", "event": "alert_received", "alert_id": "~122888352", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:12:48.186780+00:00", "event": "triage_complete", "alert_id": "~122888352", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:12:49.245390+00:00", "event": "case_created", "alert_id": "~122888352", "case_id": "~123371768"}
+{"ts": "2026-08-11T16:12:57.493640+00:00", "event": "observables_missing", "case_id": "~123371768", "alert_id": "~122888352"}
+{"ts": "2026-08-11T16:12:57.493843+00:00", "event": "enrichment_complete", "case_id": "~123371768", "report_count": 0}
+{"ts": "2026-08-11T16:12:58.255957+00:00", "event": "comment_posted", "case_id": "~123371768"}
+{"ts": "2026-08-11T16:12:58.256158+00:00", "event": "alert_received", "alert_id": "~81940616", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:13:00.646482+00:00", "event": "triage_complete", "alert_id": "~81940616", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:13:01.268602+00:00", "event": "case_created", "alert_id": "~81940616", "case_id": "~123379960"}
+{"ts": "2026-08-11T16:13:09.507689+00:00", "event": "observables_missing", "case_id": "~123379960", "alert_id": "~81940616"}
+{"ts": "2026-08-11T16:13:09.507873+00:00", "event": "enrichment_complete", "case_id": "~123379960", "report_count": 0}
+{"ts": "2026-08-11T16:13:10.286124+00:00", "event": "comment_posted", "case_id": "~123379960"}
+{"ts": "2026-08-11T16:13:10.286341+00:00", "event": "alert_received", "alert_id": "~163856592", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:13:13.124862+00:00", "event": "triage_complete", "alert_id": "~163856592", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:13:13.297771+00:00", "event": "case_created", "alert_id": "~163856592", "case_id": "~328232992"}
+{"ts": "2026-08-11T16:13:21.534170+00:00", "event": "observables_missing", "case_id": "~328232992", "alert_id": "~163856592"}
+{"ts": "2026-08-11T16:13:21.534349+00:00", "event": "enrichment_complete", "case_id": "~328232992", "report_count": 0}
+{"ts": "2026-08-11T16:13:22.308931+00:00", "event": "comment_posted", "case_id": "~328232992"}
+{"ts": "2026-08-11T16:13:22.309207+00:00", "event": "alert_received", "alert_id": "~122888200", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:13:25.042880+00:00", "event": "triage_complete", "alert_id": "~122888200", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:13:25.328226+00:00", "event": "case_created", "alert_id": "~122888200", "case_id": "~164364328"}
+{"ts": "2026-08-11T16:13:33.610191+00:00", "event": "observables_missing", "case_id": "~164364328", "alert_id": "~122888200"}
+{"ts": "2026-08-11T16:13:33.610342+00:00", "event": "enrichment_complete", "case_id": "~164364328", "report_count": 0}
+{"ts": "2026-08-11T16:13:34.338716+00:00", "event": "comment_posted", "case_id": "~164364328"}
+{"ts": "2026-08-11T16:13:34.338943+00:00", "event": "alert_received", "alert_id": "~204820576", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:13:36.680141+00:00", "event": "triage_complete", "alert_id": "~204820576", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:13:37.354049+00:00", "event": "case_created", "alert_id": "~204820576", "case_id": "~164388976"}
+{"ts": "2026-08-11T16:13:45.617698+00:00", "event": "observables_missing", "case_id": "~164388976", "alert_id": "~204820576"}
+{"ts": "2026-08-11T16:13:45.617848+00:00", "event": "enrichment_complete", "case_id": "~164388976", "report_count": 0}
+{"ts": "2026-08-11T16:13:46.369158+00:00", "event": "comment_posted", "case_id": "~164388976"}
+{"ts": "2026-08-11T16:13:46.369365+00:00", "event": "alert_received", "alert_id": "~122892296", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:13:49.088528+00:00", "event": "triage_complete", "alert_id": "~122892296", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:13:49.389267+00:00", "event": "case_created", "alert_id": "~122892296", "case_id": "~123384056"}
+{"ts": "2026-08-11T16:13:57.632406+00:00", "event": "observables_missing", "case_id": "~123384056", "alert_id": "~122892296"}
+{"ts": "2026-08-11T16:13:57.632604+00:00", "event": "enrichment_complete", "case_id": "~123384056", "report_count": 0}
+{"ts": "2026-08-11T16:13:58.403771+00:00", "event": "comment_posted", "case_id": "~123384056"}
+{"ts": "2026-08-11T16:13:58.403957+00:00", "event": "alert_received", "alert_id": "~204816624", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:14:01.326796+00:00", "event": "triage_complete", "alert_id": "~204816624", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:14:02.416363+00:00", "event": "case_created", "alert_id": "~204816624", "case_id": "~287211592"}
+{"ts": "2026-08-11T16:14:10.678998+00:00", "event": "observables_missing", "case_id": "~287211592", "alert_id": "~204816624"}
+{"ts": "2026-08-11T16:14:10.679152+00:00", "event": "enrichment_complete", "case_id": "~287211592", "report_count": 0}
+{"ts": "2026-08-11T16:14:11.433794+00:00", "event": "comment_posted", "case_id": "~287211592"}
+{"ts": "2026-08-11T16:14:11.434004+00:00", "event": "alert_received", "alert_id": "~81944712", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:14:13.768497+00:00", "event": "triage_complete", "alert_id": "~81944712", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:14:14.454783+00:00", "event": "case_created", "alert_id": "~81944712", "case_id": "~82509928"}
+{"ts": "2026-08-11T16:14:22.696694+00:00", "event": "observables_missing", "case_id": "~82509928", "alert_id": "~81944712"}
+{"ts": "2026-08-11T16:14:22.696827+00:00", "event": "enrichment_complete", "case_id": "~82509928", "report_count": 0}
+{"ts": "2026-08-11T16:14:23.463704+00:00", "event": "comment_posted", "case_id": "~82509928"}
+{"ts": "2026-08-11T16:14:23.463926+00:00", "event": "alert_received", "alert_id": "~122892448", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:14:26.280534+00:00", "event": "triage_complete", "alert_id": "~122892448", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:14:26.475678+00:00", "event": "case_created", "alert_id": "~122892448", "case_id": "~328245280"}
+{"ts": "2026-08-11T16:14:34.713774+00:00", "event": "observables_missing", "case_id": "~328245280", "alert_id": "~122892448"}
+{"ts": "2026-08-11T16:14:34.713908+00:00", "event": "enrichment_complete", "case_id": "~328245280", "report_count": 0}
+{"ts": "2026-08-11T16:14:35.498315+00:00", "event": "comment_posted", "case_id": "~328245280"}
+{"ts": "2026-08-11T16:14:35.498538+00:00", "event": "alert_received", "alert_id": "~204820720", "title": "Suspicious PowerShell Execution"}
+{"ts": "2026-08-11T16:14:38.606598+00:00", "event": "triage_complete", "alert_id": "~204820720", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1059.001"}
+{"ts": "2026-08-11T16:14:39.505333+00:00", "event": "case_created", "alert_id": "~204820720", "case_id": "~164397168"}
+{"ts": "2026-08-11T16:14:47.781193+00:00", "event": "observables_missing", "case_id": "~164397168", "alert_id": "~204820720"}
+{"ts": "2026-08-11T16:14:47.781357+00:00", "event": "enrichment_complete", "case_id": "~164397168", "report_count": 0}
+{"ts": "2026-08-11T16:14:48.520143+00:00", "event": "comment_posted", "case_id": "~164397168"}
+{"ts": "2026-08-11T16:14:48.520346+00:00", "event": "alert_received", "alert_id": "~204828768", "title": "Suspicious PowerShell Execution"}
+{"ts": "2026-08-11T16:14:51.570649+00:00", "event": "triage_complete", "alert_id": "~204828768", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1059.001"}
+{"ts": "2026-08-11T16:14:52.537034+00:00", "event": "case_created", "alert_id": "~204828768", "case_id": "~246296576"}
+{"ts": "2026-08-11T16:15:00.782447+00:00", "event": "observables_missing", "case_id": "~246296576", "alert_id": "~204828768"}
+{"ts": "2026-08-11T16:15:00.782608+00:00", "event": "enrichment_complete", "case_id": "~246296576", "report_count": 0}
+{"ts": "2026-08-11T16:15:01.552894+00:00", "event": "comment_posted", "case_id": "~246296576"}
+{"ts": "2026-08-11T16:15:01.553108+00:00", "event": "alert_received", "alert_id": "~122900560", "title": "Suspicious PowerShell Execution"}
+{"ts": "2026-08-11T16:15:04.607697+00:00", "event": "triage_complete", "alert_id": "~122900560", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1059.001"}
+{"ts": "2026-08-11T16:15:05.567688+00:00", "event": "case_created", "alert_id": "~122900560", "case_id": "~246264048"}
+{"ts": "2026-08-11T16:15:13.803870+00:00", "event": "observables_missing", "case_id": "~246264048", "alert_id": "~122900560"}
+{"ts": "2026-08-11T16:15:13.804034+00:00", "event": "enrichment_complete", "case_id": "~246264048", "report_count": 0}
+{"ts": "2026-08-11T16:15:14.584196+00:00", "event": "comment_posted", "case_id": "~246264048"}
+{"ts": "2026-08-11T16:15:14.584465+00:00", "event": "alert_received", "alert_id": "~204832864", "title": "Windows Privilege Escalation"}
+{"ts": "2026-08-11T16:15:17.725549+00:00", "event": "triage_complete", "alert_id": "~204832864", "severity": "medium", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:15:18.597962+00:00", "event": "case_created", "alert_id": "~204832864", "case_id": "~164413552"}
+{"ts": "2026-08-11T16:15:26.830746+00:00", "event": "observables_missing", "case_id": "~164413552", "alert_id": "~204832864"}
+{"ts": "2026-08-11T16:15:26.830863+00:00", "event": "enrichment_complete", "case_id": "~164413552", "report_count": 0}
+{"ts": "2026-08-11T16:15:27.607105+00:00", "event": "comment_posted", "case_id": "~164413552"}
+{"ts": "2026-08-11T16:15:27.607326+00:00", "event": "alert_received", "alert_id": "~40992808", "title": "New Windows Account Created"}
+{"ts": "2026-08-11T16:15:30.440197+00:00", "event": "triage_complete", "alert_id": "~40992808", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1136.001"}
+{"ts": "2026-08-11T16:15:30.617350+00:00", "event": "case_created", "alert_id": "~40992808", "case_id": "~164421744"}
+{"ts": "2026-08-11T16:15:38.847515+00:00", "event": "observables_missing", "case_id": "~164421744", "alert_id": "~40992808"}
+{"ts": "2026-08-11T16:15:38.847633+00:00", "event": "enrichment_complete", "case_id": "~164421744", "report_count": 0}
+{"ts": "2026-08-11T16:15:39.630168+00:00", "event": "comment_posted", "case_id": "~164421744"}
+{"ts": "2026-08-11T16:15:39.630342+00:00", "event": "alert_received", "alert_id": "~41001000", "title": "Windows Brute Force Detected"}
+{"ts": "2026-08-11T16:15:42.255216+00:00", "event": "triage_complete", "alert_id": "~41001000", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:15:42.648848+00:00", "event": "case_created", "alert_id": "~41001000", "case_id": "~82530408"}
+{"ts": "2026-08-11T16:15:50.890487+00:00", "event": "observables_missing", "case_id": "~82530408", "alert_id": "~41001000"}
+{"ts": "2026-08-11T16:15:50.890646+00:00", "event": "enrichment_complete", "case_id": "~82530408", "report_count": 0}
+{"ts": "2026-08-11T16:15:51.659909+00:00", "event": "comment_posted", "case_id": "~82530408"}
+{"ts": "2026-08-11T16:15:51.660156+00:00", "event": "alert_received", "alert_id": "~81932456", "title": "New Malicious Windows Service"}
+{"ts": "2026-08-11T16:15:55.266636+00:00", "event": "triage_complete", "alert_id": "~81932456", "severity": "medium", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:15:56.674973+00:00", "event": "case_created", "alert_id": "~81932456", "case_id": "~164388904"}
+{"ts": "2026-08-11T16:16:04.918427+00:00", "event": "observables_missing", "case_id": "~164388904", "alert_id": "~81932456"}
+{"ts": "2026-08-11T16:16:04.918624+00:00", "event": "enrichment_complete", "case_id": "~164388904", "report_count": 0}
+{"ts": "2026-08-11T16:16:05.690916+00:00", "event": "comment_posted", "case_id": "~164388904"}
+{"ts": "2026-08-11T16:16:05.691123+00:00", "event": "alert_received", "alert_id": "~163860688", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:16:08.647784+00:00", "event": "triage_complete", "alert_id": "~163860688", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:16:09.707366+00:00", "event": "case_created", "alert_id": "~163860688", "case_id": "~205476040"}
+{"ts": "2026-08-11T16:16:17.941397+00:00", "event": "observables_missing", "case_id": "~205476040", "alert_id": "~163860688"}
+{"ts": "2026-08-11T16:16:17.941565+00:00", "event": "enrichment_complete", "case_id": "~205476040", "report_count": 0}
+{"ts": "2026-08-11T16:16:18.722477+00:00", "event": "comment_posted", "case_id": "~205476040"}
+{"ts": "2026-08-11T16:16:18.722701+00:00", "event": "alert_received", "alert_id": "~204836960", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:16:21.083030+00:00", "event": "triage_complete", "alert_id": "~204836960", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:16:21.735137+00:00", "event": "case_created", "alert_id": "~204836960", "case_id": "~328265760"}
+{"ts": "2026-08-11T16:16:29.987361+00:00", "event": "observables_missing", "case_id": "~328265760", "alert_id": "~204836960"}
+{"ts": "2026-08-11T16:16:29.987510+00:00", "event": "enrichment_complete", "case_id": "~328265760", "report_count": 0}
+{"ts": "2026-08-11T16:16:30.765216+00:00", "event": "comment_posted", "case_id": "~328265760"}
+{"ts": "2026-08-11T16:16:30.765447+00:00", "event": "alert_received", "alert_id": "~204841056", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:16:33.492190+00:00", "event": "triage_complete", "alert_id": "~204841056", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:16:33.775709+00:00", "event": "alert_dismissed", "alert_id": "~204841056", "confidence": 0.75}
+{"ts": "2026-08-11T16:16:33.775908+00:00", "event": "alert_received", "alert_id": "~122904656", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:16:36.199975+00:00", "event": "triage_complete", "alert_id": "~122904656", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:16:36.796355+00:00", "event": "case_created", "alert_id": "~122904656", "case_id": "~246284528"}
+{"ts": "2026-08-11T16:17:33.267136+00:00", "event": "enrichment_complete", "case_id": "~246284528", "report_count": 6}
+{"ts": "2026-08-11T16:17:39.671959+00:00", "event": "verdict_complete", "case_id": "~246284528", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:17:40.059523+00:00", "event": "comment_posted", "case_id": "~246284528"}
+{"ts": "2026-08-11T16:17:40.059835+00:00", "event": "alert_received", "alert_id": "~41009192", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:17:42.857060+00:00", "event": "triage_complete", "alert_id": "~41009192", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:17:43.084003+00:00", "event": "case_created", "alert_id": "~41009192", "case_id": "~164450416"}
+{"ts": "2026-08-11T16:18:12.409608+00:00", "event": "enrichment_complete", "case_id": "~164450416", "report_count": 6}
+{"ts": "2026-08-11T16:18:15.937975+00:00", "event": "verdict_complete", "case_id": "~164450416", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:18:22.727184+00:00", "event": "containment_executed", "case_id": "~164450416", "target": "217.160.0.187", "responder": "PfSense_Blocker_1_0", "responder_id": "aebe07e932adfb592a20678599943378", "confidence": 0.95, "cortex_status": "Success"}
+{"ts": "2026-08-11T16:18:23.349005+00:00", "event": "comment_posted", "case_id": "~164450416"}
+{"ts": "2026-08-11T16:18:23.349358+00:00", "event": "alert_received", "alert_id": "~81940648", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:18:25.965445+00:00", "event": "triage_complete", "alert_id": "~81940648", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:18:26.361162+00:00", "event": "alert_dismissed", "alert_id": "~81940648", "confidence": 0.85}
+{"ts": "2026-08-11T16:18:26.361326+00:00", "event": "alert_received", "alert_id": "~41021480", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:18:28.791089+00:00", "event": "triage_complete", "alert_id": "~41021480", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:18:29.378785+00:00", "event": "case_created", "alert_id": "~41021480", "case_id": "~164483184"}
+{"ts": "2026-08-11T16:19:28.831942+00:00", "event": "enrichment_complete", "case_id": "~164483184", "report_count": 6}
+{"ts": "2026-08-11T16:19:32.218828+00:00", "event": "verdict_complete", "case_id": "~164483184", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:19:32.219087+00:00", "event": "containment_refused", "case_id": "~164483184", "target": "100.101.27.63", "reason": "policy guard: Tailscale CGNAT range \u2014 our own administrative access path", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:19:32.595361+00:00", "event": "comment_posted", "case_id": "~164483184"}
+{"ts": "2026-08-11T16:19:32.595713+00:00", "event": "alert_received", "alert_id": "~204841200", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:19:35.514774+00:00", "event": "triage_complete", "alert_id": "~204841200", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:19:35.607232+00:00", "event": "alert_dismissed", "alert_id": "~204841200", "confidence": 0.85}
+{"ts": "2026-08-11T16:19:35.607373+00:00", "event": "alert_received", "alert_id": "~122916944", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:19:38.885244+00:00", "event": "triage_complete", "alert_id": "~122916944", "severity": "medium", "is_false_positive": false, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:19:39.630249+00:00", "event": "case_created", "alert_id": "~122916944", "case_id": "~287346760"}
+{"ts": "2026-08-11T16:20:39.076465+00:00", "event": "enrichment_complete", "case_id": "~287346760", "report_count": 6}
+{"ts": "2026-08-11T16:20:45.486656+00:00", "event": "verdict_complete", "case_id": "~287346760", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:20:45.486883+00:00", "event": "containment_refused", "case_id": "~287346760", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:20:45.870649+00:00", "event": "comment_posted", "case_id": "~287346760"}
+{"ts": "2026-08-11T16:20:45.870971+00:00", "event": "alert_received", "alert_id": "~122925136", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:20:49.021237+00:00", "event": "triage_complete", "alert_id": "~122925136", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:20:49.904140+00:00", "event": "alert_dismissed", "alert_id": "~122925136", "confidence": 0.85}
+{"ts": "2026-08-11T16:20:49.904288+00:00", "event": "alert_received", "alert_id": "~81957000", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:20:52.577855+00:00", "event": "triage_complete", "alert_id": "~81957000", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:20:52.924508+00:00", "event": "alert_dismissed", "alert_id": "~81957000", "confidence": 0.85}
+{"ts": "2026-08-11T16:20:52.924663+00:00", "event": "alert_received", "alert_id": "~122908680", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:20:56.187509+00:00", "event": "triage_complete", "alert_id": "~122908680", "severity": "medium", "is_false_positive": false, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:20:56.938279+00:00", "event": "case_created", "alert_id": "~122908680", "case_id": "~328339488"}
+{"ts": "2026-08-11T16:21:29.386653+00:00", "event": "enrichment_complete", "case_id": "~328339488", "report_count": 6}
+{"ts": "2026-08-11T16:21:35.227188+00:00", "event": "verdict_complete", "case_id": "~328339488", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:21:35.227460+00:00", "event": "containment_refused", "case_id": "~328339488", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:21:36.235237+00:00", "event": "comment_posted", "case_id": "~328339488"}
+{"ts": "2026-08-11T16:21:36.235546+00:00", "event": "alert_received", "alert_id": "~204853488", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:21:39.234922+00:00", "event": "triage_complete", "alert_id": "~204853488", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:21:40.244222+00:00", "event": "alert_dismissed", "alert_id": "~204853488", "confidence": 0.85}
+{"ts": "2026-08-11T16:21:40.244384+00:00", "event": "alert_received", "alert_id": "~122933328", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:21:42.912607+00:00", "event": "triage_complete", "alert_id": "~122933328", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:21:43.253846+00:00", "event": "alert_dismissed", "alert_id": "~122933328", "confidence": 0.85}
+{"ts": "2026-08-11T16:21:43.254009+00:00", "event": "alert_received", "alert_id": "~163893456", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:21:46.201841+00:00", "event": "triage_complete", "alert_id": "~163893456", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:21:47.274153+00:00", "event": "case_created", "alert_id": "~163893456", "case_id": "~246415360"}
+{"ts": "2026-08-11T16:21:55.523065+00:00", "event": "observables_missing", "case_id": "~246415360", "alert_id": "~163893456"}
+{"ts": "2026-08-11T16:21:55.523200+00:00", "event": "enrichment_complete", "case_id": "~246415360", "report_count": 0}
+{"ts": "2026-08-11T16:21:56.287372+00:00", "event": "comment_posted", "case_id": "~246415360"}
+{"ts": "2026-08-11T16:21:56.287606+00:00", "event": "alert_received", "alert_id": "~163897552", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:21:58.617639+00:00", "event": "triage_complete", "alert_id": "~163897552", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:21:59.315260+00:00", "event": "case_created", "alert_id": "~163897552", "case_id": "~205586632"}
+{"ts": "2026-08-11T16:22:07.553584+00:00", "event": "observables_missing", "case_id": "~205586632", "alert_id": "~163897552"}
+{"ts": "2026-08-11T16:22:07.553744+00:00", "event": "enrichment_complete", "case_id": "~205586632", "report_count": 0}
+{"ts": "2026-08-11T16:22:08.324950+00:00", "event": "comment_posted", "case_id": "~205586632"}
+{"ts": "2026-08-11T16:22:08.325183+00:00", "event": "alert_received", "alert_id": "~122945616", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:22:11.032900+00:00", "event": "triage_complete", "alert_id": "~122945616", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:22:11.340269+00:00", "event": "alert_dismissed", "alert_id": "~122945616", "confidence": 0.85}
+{"ts": "2026-08-11T16:22:11.340474+00:00", "event": "alert_received", "alert_id": "~122920968", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:22:14.025733+00:00", "event": "triage_complete", "alert_id": "~122920968", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:22:14.354033+00:00", "event": "alert_dismissed", "alert_id": "~122920968", "confidence": 0.85}
+{"ts": "2026-08-11T16:22:14.354191+00:00", "event": "alert_received", "alert_id": "~122953808", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:22:17.663842+00:00", "event": "triage_complete", "alert_id": "~122953808", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:22:18.368205+00:00", "event": "case_created", "alert_id": "~122953808", "case_id": "~164483112"}
+{"ts": "2026-08-11T16:22:48.264038+00:00", "event": "enrichment_complete", "case_id": "~164483112", "report_count": 6}
+{"ts": "2026-08-11T16:22:54.099012+00:00", "event": "verdict_complete", "case_id": "~164483112", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:22:54.099282+00:00", "event": "containment_refused", "case_id": "~164483112", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:22:55.158632+00:00", "event": "comment_posted", "case_id": "~164483112"}
+{"ts": "2026-08-11T16:22:55.158977+00:00", "event": "alert_received", "alert_id": "~204857584", "title": "Linux Root SSH Login"}
+{"ts": "2026-08-11T16:22:58.264341+00:00", "event": "triage_complete", "alert_id": "~204857584", "severity": "high", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:22:59.174983+00:00", "event": "case_created", "alert_id": "~204857584", "case_id": "~328405024"}
+{"ts": "2026-08-11T16:23:07.452678+00:00", "event": "observables_missing", "case_id": "~328405024", "alert_id": "~204857584"}
+{"ts": "2026-08-11T16:23:07.452857+00:00", "event": "enrichment_complete", "case_id": "~328405024", "report_count": 0}
+{"ts": "2026-08-11T16:23:08.191649+00:00", "event": "comment_posted", "case_id": "~328405024"}
+{"ts": "2026-08-11T16:23:08.191859+00:00", "event": "alert_received", "alert_id": "~81957032", "title": "Linux SSH Brute Force"}
+{"ts": "2026-08-11T16:23:10.562168+00:00", "event": "triage_complete", "alert_id": "~81957032", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1110"}
+{"ts": "2026-08-11T16:23:11.208653+00:00", "event": "case_created", "alert_id": "~81957032", "case_id": "~164499496"}
+{"ts": "2026-08-11T16:23:19.456295+00:00", "event": "observables_missing", "case_id": "~164499496", "alert_id": "~81957032"}
+{"ts": "2026-08-11T16:23:19.456464+00:00", "event": "enrichment_complete", "case_id": "~164499496", "report_count": 0}
+{"ts": "2026-08-11T16:23:20.229573+00:00", "event": "comment_posted", "case_id": "~164499496"}
+{"ts": "2026-08-11T16:23:20.229792+00:00", "event": "alert_received", "alert_id": "~122884288", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:23:22.408544+00:00", "event": "triage_complete", "alert_id": "~122884288", "severity": "low", "is_false_positive": true, "confidence": 0.95, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:23:23.243212+00:00", "event": "alert_dismissed", "alert_id": "~122884288", "confidence": 0.95}
+{"ts": "2026-08-11T16:23:23.243381+00:00", "event": "alert_received", "alert_id": "~122900672", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:23:26.454535+00:00", "event": "triage_complete", "alert_id": "~122900672", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:23:27.277193+00:00", "event": "case_created", "alert_id": "~122900672", "case_id": "~164585584"}
+{"ts": "2026-08-11T16:23:59.635283+00:00", "event": "enrichment_complete", "case_id": "~164585584", "report_count": 6}
+{"ts": "2026-08-11T16:24:02.474670+00:00", "event": "verdict_complete", "case_id": "~164585584", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:24:02.474889+00:00", "event": "containment_refused", "case_id": "~164585584", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:24:03.477117+00:00", "event": "comment_posted", "case_id": "~164585584"}
+{"ts": "2026-08-11T16:24:03.477386+00:00", "event": "alert_received", "alert_id": "~122892424", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:24:07.152620+00:00", "event": "triage_complete", "alert_id": "~122892424", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:24:07.490739+00:00", "event": "case_created", "alert_id": "~122892424", "case_id": "~164515880"}
+{"ts": "2026-08-11T16:24:39.908642+00:00", "event": "enrichment_complete", "case_id": "~164515880", "report_count": 6}
+{"ts": "2026-08-11T16:24:45.747893+00:00", "event": "verdict_complete", "case_id": "~164515880", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:24:45.748101+00:00", "event": "containment_refused", "case_id": "~164515880", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:24:46.691871+00:00", "event": "comment_posted", "case_id": "~164515880"}
+{"ts": "2026-08-11T16:24:46.692200+00:00", "event": "alert_received", "alert_id": "~122884264", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:24:50.264903+00:00", "event": "triage_complete", "alert_id": "~122884264", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:24:50.706405+00:00", "event": "case_created", "alert_id": "~122884264", "case_id": "~164647024"}
+{"ts": "2026-08-11T16:25:23.075872+00:00", "event": "enrichment_complete", "case_id": "~164647024", "report_count": 6}
+{"ts": "2026-08-11T16:25:26.653259+00:00", "event": "verdict_complete", "case_id": "~164647024", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:25:26.653540+00:00", "event": "containment_refused", "case_id": "~164647024", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:25:26.929853+00:00", "event": "comment_posted", "case_id": "~164647024"}
+{"ts": "2026-08-11T16:25:26.930147+00:00", "event": "alert_received", "alert_id": "~122884160", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:25:30.147883+00:00", "event": "triage_complete", "alert_id": "~122884160", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:25:30.942328+00:00", "event": "case_created", "alert_id": "~122884160", "case_id": "~328470560"}
+{"ts": "2026-08-11T16:25:48.161714+00:00", "event": "enrichment_complete", "case_id": "~328470560", "report_count": 3}
+{"ts": "2026-08-11T16:25:53.856848+00:00", "event": "verdict_complete", "case_id": "~328470560", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:25:54.053710+00:00", "event": "comment_posted", "case_id": "~328470560"}
+{"ts": "2026-08-11T16:25:54.053982+00:00", "event": "alert_received", "alert_id": "~40964200", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:25:57.591453+00:00", "event": "triage_complete", "alert_id": "~40964200", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:25:58.067258+00:00", "event": "case_created", "alert_id": "~40964200", "case_id": "~246497520"}
+{"ts": "2026-08-11T16:26:30.459378+00:00", "event": "enrichment_complete", "case_id": "~246497520", "report_count": 6}
+{"ts": "2026-08-11T16:26:34.017337+00:00", "event": "verdict_complete", "case_id": "~246497520", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:26:34.017599+00:00", "event": "containment_refused", "case_id": "~246497520", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:26:34.333262+00:00", "event": "comment_posted", "case_id": "~246497520"}
+{"ts": "2026-08-11T16:26:34.333659+00:00", "event": "alert_received", "alert_id": "~204808224", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:26:37.517795+00:00", "event": "triage_complete", "alert_id": "~204808224", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:26:38.351566+00:00", "event": "case_created", "alert_id": "~204808224", "case_id": "~205709512"}
+{"ts": "2026-08-11T16:26:55.615797+00:00", "event": "enrichment_complete", "case_id": "~205709512", "report_count": 3}
+{"ts": "2026-08-11T16:27:01.328879+00:00", "event": "verdict_complete", "case_id": "~205709512", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:27:01.480639+00:00", "event": "comment_posted", "case_id": "~205709512"}
+{"ts": "2026-08-11T16:27:01.480909+00:00", "event": "alert_received", "alert_id": "~122888360", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:27:05.089768+00:00", "event": "triage_complete", "alert_id": "~122888360", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:27:05.491992+00:00", "event": "case_created", "alert_id": "~122888360", "case_id": "~287527088"}
+{"ts": "2026-08-11T16:27:34.824717+00:00", "event": "enrichment_complete", "case_id": "~287527088", "report_count": 6}
+{"ts": "2026-08-11T16:27:40.688833+00:00", "event": "verdict_complete", "case_id": "~287527088", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:27:40.689088+00:00", "event": "containment_refused", "case_id": "~287527088", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:27:41.732838+00:00", "event": "comment_posted", "case_id": "~287527088"}
+{"ts": "2026-08-11T16:27:41.733161+00:00", "event": "alert_received", "alert_id": "~204812320", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:27:44.924300+00:00", "event": "triage_complete", "alert_id": "~204812320", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:27:45.748936+00:00", "event": "case_created", "alert_id": "~204812320", "case_id": "~164724848"}
+{"ts": "2026-08-11T16:28:15.059159+00:00", "event": "enrichment_complete", "case_id": "~164724848", "report_count": 3}
+{"ts": "2026-08-11T16:28:19.994792+00:00", "event": "verdict_complete", "case_id": "~164724848", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:28:20.875068+00:00", "event": "comment_posted", "case_id": "~164724848"}
+{"ts": "2026-08-11T16:28:20.875318+00:00", "event": "alert_received", "alert_id": "~122921152", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:28:24.611891+00:00", "event": "triage_complete", "alert_id": "~122921152", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:28:24.890129+00:00", "event": "case_created", "alert_id": "~122921152", "case_id": "~164733040"}
+{"ts": "2026-08-11T16:28:54.206649+00:00", "event": "enrichment_complete", "case_id": "~164733040", "report_count": 6}
+{"ts": "2026-08-11T16:28:57.778264+00:00", "event": "verdict_complete", "case_id": "~164733040", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:28:57.778534+00:00", "event": "containment_refused", "case_id": "~164733040", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:28:58.107117+00:00", "event": "comment_posted", "case_id": "~164733040"}
+{"ts": "2026-08-11T16:28:58.107379+00:00", "event": "alert_received", "alert_id": "~122925248", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:29:01.131642+00:00", "event": "triage_complete", "alert_id": "~122925248", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:29:02.119181+00:00", "event": "case_created", "alert_id": "~122925248", "case_id": "~82870376"}
+{"ts": "2026-08-11T16:29:34.439326+00:00", "event": "enrichment_complete", "case_id": "~82870376", "report_count": 3}
+{"ts": "2026-08-11T16:29:36.743151+00:00", "event": "verdict_complete", "case_id": "~82870376", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:29:36.743369+00:00", "event": "containment_refused", "case_id": "~82870376", "target": "172.16.0.10", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:29:37.246943+00:00", "event": "comment_posted", "case_id": "~82870376"}
+{"ts": "2026-08-11T16:29:37.247179+00:00", "event": "alert_received", "alert_id": "~204816560", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:29:40.862450+00:00", "event": "triage_complete", "alert_id": "~204816560", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:29:41.270104+00:00", "event": "case_created", "alert_id": "~204816560", "case_id": "~328593440"}
+{"ts": "2026-08-11T16:30:25.678746+00:00", "event": "enrichment_complete", "case_id": "~328593440", "report_count": 6}
+{"ts": "2026-08-11T16:30:28.468044+00:00", "event": "verdict_complete", "case_id": "~328593440", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:30:28.468269+00:00", "event": "containment_refused", "case_id": "~328593440", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:30:29.487814+00:00", "event": "comment_posted", "case_id": "~328593440"}
+{"ts": "2026-08-11T16:30:29.488116+00:00", "event": "alert_received", "alert_id": "~245784672", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:30:32.496947+00:00", "event": "triage_complete", "alert_id": "~245784672", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:30:33.515298+00:00", "event": "case_created", "alert_id": "~245784672", "case_id": "~287658056"}
+{"ts": "2026-08-11T16:30:50.737874+00:00", "event": "enrichment_complete", "case_id": "~287658056", "report_count": 3}
+{"ts": "2026-08-11T16:30:54.527123+00:00", "event": "verdict_complete", "case_id": "~287658056", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:30:54.527468+00:00", "event": "containment_refused", "case_id": "~287658056", "target": "172.16.0.10", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:30:55.635243+00:00", "event": "comment_posted", "case_id": "~287658056"}
+{"ts": "2026-08-11T16:30:55.635527+00:00", "event": "alert_received", "alert_id": "~122904744", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:30:59.244976+00:00", "event": "triage_complete", "alert_id": "~122904744", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:30:59.664697+00:00", "event": "case_created", "alert_id": "~122904744", "case_id": "~287666248"}
+{"ts": "2026-08-11T16:31:41.110666+00:00", "event": "enrichment_complete", "case_id": "~287666248", "report_count": 6}
+{"ts": "2026-08-11T16:31:47.452175+00:00", "event": "verdict_complete", "case_id": "~287666248", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:31:47.899402+00:00", "event": "comment_posted", "case_id": "~287666248"}
+{"ts": "2026-08-11T16:31:47.899687+00:00", "event": "alert_received", "alert_id": "~122933440", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:31:51.097691+00:00", "event": "triage_complete", "alert_id": "~122933440", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:31:51.912144+00:00", "event": "case_created", "alert_id": "~122933440", "case_id": "~246640640"}
+{"ts": "2026-08-11T16:32:09.170672+00:00", "event": "enrichment_complete", "case_id": "~246640640", "report_count": 3}
+{"ts": "2026-08-11T16:32:13.546814+00:00", "event": "verdict_complete", "case_id": "~246640640", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:32:14.067918+00:00", "event": "comment_posted", "case_id": "~246640640"}
+{"ts": "2026-08-11T16:32:14.068212+00:00", "event": "alert_received", "alert_id": "~40976488", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:32:17.815401+00:00", "event": "triage_complete", "alert_id": "~40976488", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:32:18.080510+00:00", "event": "case_created", "alert_id": "~40976488", "case_id": "~328663072"}
+{"ts": "2026-08-11T16:32:50.415340+00:00", "event": "enrichment_complete", "case_id": "~328663072", "report_count": 6}
+{"ts": "2026-08-11T16:32:52.660351+00:00", "event": "verdict_complete", "case_id": "~328663072", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:32:52.660641+00:00", "event": "containment_refused", "case_id": "~328663072", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:32:53.306438+00:00", "event": "comment_posted", "case_id": "~328663072"}
+{"ts": "2026-08-11T16:32:53.306729+00:00", "event": "alert_received", "alert_id": "~122941632", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:32:56.326055+00:00", "event": "triage_complete", "alert_id": "~122941632", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:32:57.327273+00:00", "event": "case_created", "alert_id": "~122941632", "case_id": "~205869256"}
+{"ts": "2026-08-11T16:33:14.543750+00:00", "event": "enrichment_complete", "case_id": "~205869256", "report_count": 3}
+{"ts": "2026-08-11T16:33:18.312837+00:00", "event": "verdict_complete", "case_id": "~205869256", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:33:18.313055+00:00", "event": "containment_refused", "case_id": "~205869256", "target": "172.16.0.10", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:33:18.473873+00:00", "event": "comment_posted", "case_id": "~205869256"}
+{"ts": "2026-08-11T16:33:18.474163+00:00", "event": "alert_received", "alert_id": "~204837040", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:33:22.127947+00:00", "event": "triage_complete", "alert_id": "~204837040", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:33:22.501263+00:00", "event": "case_created", "alert_id": "~204837040", "case_id": "~123826424"}
+{"ts": "2026-08-11T16:33:54.884281+00:00", "event": "enrichment_complete", "case_id": "~123826424", "report_count": 6}
+{"ts": "2026-08-11T16:33:57.117712+00:00", "event": "verdict_complete", "case_id": "~123826424", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:33:57.117939+00:00", "event": "containment_refused", "case_id": "~123826424", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:33:57.747323+00:00", "event": "comment_posted", "case_id": "~123826424"}
+{"ts": "2026-08-11T16:33:57.747653+00:00", "event": "alert_received", "alert_id": "~122945728", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:34:00.923723+00:00", "event": "triage_complete", "alert_id": "~122945728", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:34:01.769123+00:00", "event": "case_created", "alert_id": "~122945728", "case_id": "~287752264"}
+{"ts": "2026-08-11T16:34:15.963849+00:00", "event": "enrichment_complete", "case_id": "~287752264", "report_count": 3}
+{"ts": "2026-08-11T16:34:20.319261+00:00", "event": "verdict_complete", "case_id": "~287752264", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:34:20.897609+00:00", "event": "comment_posted", "case_id": "~287752264"}
+{"ts": "2026-08-11T16:34:20.897865+00:00", "event": "alert_received", "alert_id": "~122925224", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:34:24.439234+00:00", "event": "triage_complete", "alert_id": "~122925224", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:34:24.913039+00:00", "event": "case_created", "alert_id": "~122925224", "case_id": "~164855848"}
+{"ts": "2026-08-11T16:34:57.287262+00:00", "event": "enrichment_complete", "case_id": "~164855848", "report_count": 6}
+{"ts": "2026-08-11T16:35:02.315734+00:00", "event": "verdict_complete", "case_id": "~164855848", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:35:03.152948+00:00", "event": "comment_posted", "case_id": "~164855848"}
+{"ts": "2026-08-11T16:35:03.153242+00:00", "event": "alert_received", "alert_id": "~122949824", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:35:06.345209+00:00", "event": "triage_complete", "alert_id": "~122949824", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:35:07.168913+00:00", "event": "case_created", "alert_id": "~122949824", "case_id": "~205959368"}
+{"ts": "2026-08-11T16:35:21.403298+00:00", "event": "enrichment_complete", "case_id": "~205959368", "report_count": 3}
+{"ts": "2026-08-11T16:35:25.790608+00:00", "event": "verdict_complete", "case_id": "~205959368", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:35:26.289820+00:00", "event": "comment_posted", "case_id": "~205959368"}
+{"ts": "2026-08-11T16:35:26.290086+00:00", "event": "alert_received", "alert_id": "~40972336", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:35:30.033616+00:00", "event": "triage_complete", "alert_id": "~40972336", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:35:31.312548+00:00", "event": "case_created", "alert_id": "~40972336", "case_id": "~164900976"}
+{"ts": "2026-08-11T16:36:00.658156+00:00", "event": "enrichment_complete", "case_id": "~164900976", "report_count": 6}
+{"ts": "2026-08-11T16:36:02.910151+00:00", "event": "verdict_complete", "case_id": "~164900976", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:36:02.910387+00:00", "event": "containment_refused", "case_id": "~164900976", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:36:03.570890+00:00", "event": "comment_posted", "case_id": "~164900976"}
+{"ts": "2026-08-11T16:36:03.571149+00:00", "event": "alert_received", "alert_id": "~40976432", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:36:06.775192+00:00", "event": "triage_complete", "alert_id": "~40976432", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:36:07.581768+00:00", "event": "case_created", "alert_id": "~40976432", "case_id": "~83079272"}
+{"ts": "2026-08-11T16:36:21.822649+00:00", "event": "enrichment_complete", "case_id": "~83079272", "report_count": 3}
+{"ts": "2026-08-11T16:36:26.176919+00:00", "event": "verdict_complete", "case_id": "~83079272", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:36:26.711516+00:00", "event": "comment_posted", "case_id": "~83079272"}
+{"ts": "2026-08-11T16:36:26.711756+00:00", "event": "alert_received", "alert_id": "~40984680", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:36:30.435508+00:00", "event": "triage_complete", "alert_id": "~40984680", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:36:30.724260+00:00", "event": "case_created", "alert_id": "~40984680", "case_id": "~206004424"}
+{"ts": "2026-08-11T16:37:03.086566+00:00", "event": "enrichment_complete", "case_id": "~206004424", "report_count": 6}
+{"ts": "2026-08-11T16:37:05.314297+00:00", "event": "verdict_complete", "case_id": "~206004424", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:37:05.314547+00:00", "event": "containment_refused", "case_id": "~206004424", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:37:05.956712+00:00", "event": "comment_posted", "case_id": "~206004424"}
+{"ts": "2026-08-11T16:37:05.957019+00:00", "event": "alert_received", "alert_id": "~204849328", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:37:09.150239+00:00", "event": "triage_complete", "alert_id": "~204849328", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:37:09.973834+00:00", "event": "case_created", "alert_id": "~204849328", "case_id": "~287768752"}
+{"ts": "2026-08-11T16:37:27.276080+00:00", "event": "enrichment_complete", "case_id": "~287768752", "report_count": 3}
+{"ts": "2026-08-11T16:37:31.652187+00:00", "event": "verdict_complete", "case_id": "~287768752", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:37:32.126178+00:00", "event": "comment_posted", "case_id": "~287768752"}
+{"ts": "2026-08-11T16:37:32.126473+00:00", "event": "alert_received", "alert_id": "~40980528", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:37:35.909993+00:00", "event": "triage_complete", "alert_id": "~40980528", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:37:36.137890+00:00", "event": "case_created", "alert_id": "~40980528", "case_id": "~246792432"}
+{"ts": "2026-08-11T16:38:37.335781+00:00", "event": "enrichment_complete", "case_id": "~246792432", "report_count": 6}
+{"ts": "2026-08-11T16:38:42.375766+00:00", "event": "verdict_complete", "case_id": "~246792432", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:38:43.267308+00:00", "event": "comment_posted", "case_id": "~246792432"}
+{"ts": "2026-08-11T16:38:43.267690+00:00", "event": "alert_received", "alert_id": "~40996968", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:38:46.488793+00:00", "event": "triage_complete", "alert_id": "~40996968", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:38:47.315374+00:00", "event": "case_created", "alert_id": "~40996968", "case_id": "~328863776"}
+{"ts": "2026-08-11T16:39:17.019941+00:00", "event": "enrichment_complete", "case_id": "~328863776", "report_count": 3}
+{"ts": "2026-08-11T16:39:21.355705+00:00", "event": "verdict_complete", "case_id": "~328863776", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:39:21.355932+00:00", "event": "containment_refused", "case_id": "~328863776", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:39:21.807182+00:00", "event": "comment_posted", "case_id": "~328863776"}
+{"ts": "2026-08-11T16:39:21.807497+00:00", "event": "alert_received", "alert_id": "~122937512", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:39:25.431500+00:00", "event": "triage_complete", "alert_id": "~122937512", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:39:25.849898+00:00", "event": "case_created", "alert_id": "~122937512", "case_id": "~287822000"}
+{"ts": "2026-08-11T16:39:58.493377+00:00", "event": "enrichment_complete", "case_id": "~287822000", "report_count": 6}
+{"ts": "2026-08-11T16:40:03.531829+00:00", "event": "verdict_complete", "case_id": "~287822000", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:40:04.332238+00:00", "event": "comment_posted", "case_id": "~287822000"}
+{"ts": "2026-08-11T16:40:04.332552+00:00", "event": "alert_received", "alert_id": "~122921024", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:40:07.530425+00:00", "event": "triage_complete", "alert_id": "~122921024", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:40:08.358687+00:00", "event": "case_created", "alert_id": "~122921024", "case_id": "~246824960"}
+{"ts": "2026-08-11T16:40:22.759125+00:00", "event": "enrichment_complete", "case_id": "~246824960", "report_count": 3}
+{"ts": "2026-08-11T16:40:26.304113+00:00", "event": "verdict_complete", "case_id": "~246824960", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:40:26.304291+00:00", "event": "containment_refused", "case_id": "~246824960", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:40:26.684923+00:00", "event": "comment_posted", "case_id": "~246824960"}
+{"ts": "2026-08-11T16:40:26.685155+00:00", "event": "alert_received", "alert_id": "~122970304", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:40:30.282497+00:00", "event": "triage_complete", "alert_id": "~122970304", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:40:30.715793+00:00", "event": "case_created", "alert_id": "~122970304", "case_id": "~246845680"}
+{"ts": "2026-08-11T16:41:18.408808+00:00", "event": "enrichment_complete", "case_id": "~246845680", "report_count": 6}
+{"ts": "2026-08-11T16:41:22.236455+00:00", "event": "verdict_complete", "case_id": "~246845680", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:41:23.210695+00:00", "event": "comment_posted", "case_id": "~246845680"}
+{"ts": "2026-08-11T16:41:23.210978+00:00", "event": "alert_received", "alert_id": "~40992816", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:41:26.395139+00:00", "event": "triage_complete", "alert_id": "~40992816", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:41:27.231547+00:00", "event": "case_created", "alert_id": "~40992816", "case_id": "~328933408"}
+{"ts": "2026-08-11T16:41:41.586068+00:00", "event": "enrichment_complete", "case_id": "~328933408", "report_count": 3}
+{"ts": "2026-08-11T16:41:45.113223+00:00", "event": "verdict_complete", "case_id": "~328933408", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:41:45.113480+00:00", "event": "containment_refused", "case_id": "~328933408", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:41:45.473379+00:00", "event": "comment_posted", "case_id": "~328933408"}
+{"ts": "2026-08-11T16:41:45.473701+00:00", "event": "alert_received", "alert_id": "~122974400", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:41:49.114147+00:00", "event": "triage_complete", "alert_id": "~122974400", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:41:49.509290+00:00", "event": "case_created", "alert_id": "~122974400", "case_id": "~165044336"}
+{"ts": "2026-08-11T16:42:37.126315+00:00", "event": "enrichment_complete", "case_id": "~165044336", "report_count": 6}
+{"ts": "2026-08-11T16:42:42.724829+00:00", "event": "verdict_complete", "case_id": "~165044336", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:42:42.725060+00:00", "event": "containment_refused", "case_id": "~165044336", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:42:42.928167+00:00", "event": "comment_posted", "case_id": "~165044336"}
+{"ts": "2026-08-11T16:42:42.928523+00:00", "event": "alert_received", "alert_id": "~122982592", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:42:46.156482+00:00", "event": "triage_complete", "alert_id": "~122982592", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:42:46.947835+00:00", "event": "case_created", "alert_id": "~122982592", "case_id": "~83275880"}
+{"ts": "2026-08-11T16:43:04.363576+00:00", "event": "enrichment_complete", "case_id": "~83275880", "report_count": 3}
+{"ts": "2026-08-11T16:43:07.903315+00:00", "event": "verdict_complete", "case_id": "~83275880", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:43:07.903560+00:00", "event": "containment_refused", "case_id": "~83275880", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:43:08.113799+00:00", "event": "comment_posted", "case_id": "~83275880"}
+{"ts": "2026-08-11T16:43:08.114104+00:00", "event": "alert_received", "alert_id": "~122925120", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:43:11.793379+00:00", "event": "triage_complete", "alert_id": "~122925120", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:43:12.131587+00:00", "event": "case_created", "alert_id": "~122925120", "case_id": "~165089320"}
+{"ts": "2026-08-11T16:43:44.668931+00:00", "event": "enrichment_complete", "case_id": "~165089320", "report_count": 6}
+{"ts": "2026-08-11T16:43:47.943888+00:00", "event": "verdict_complete", "case_id": "~165089320", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:43:48.487089+00:00", "event": "comment_posted", "case_id": "~165089320"}
+{"ts": "2026-08-11T16:43:48.487376+00:00", "event": "alert_received", "alert_id": "~122929216", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:43:51.714039+00:00", "event": "triage_complete", "alert_id": "~122929216", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:43:52.507521+00:00", "event": "case_created", "alert_id": "~122929216", "case_id": "~287973552"}
+{"ts": "2026-08-11T16:44:06.826589+00:00", "event": "enrichment_complete", "case_id": "~287973552", "report_count": 3}
+{"ts": "2026-08-11T16:44:10.396947+00:00", "event": "verdict_complete", "case_id": "~287973552", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:44:10.397155+00:00", "event": "containment_refused", "case_id": "~287973552", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:44:10.711114+00:00", "event": "comment_posted", "case_id": "~287973552"}
+{"ts": "2026-08-11T16:44:10.711399+00:00", "event": "alert_received", "alert_id": "~122941576", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:44:14.392133+00:00", "event": "triage_complete", "alert_id": "~122941576", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:44:14.738226+00:00", "event": "case_created", "alert_id": "~122941576", "case_id": "~165105776"}
+{"ts": "2026-08-11T16:44:47.268232+00:00", "event": "enrichment_complete", "case_id": "~165105776", "report_count": 6}
+{"ts": "2026-08-11T16:44:52.194488+00:00", "event": "verdict_complete", "case_id": "~165105776", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:44:52.194694+00:00", "event": "containment_refused", "case_id": "~165105776", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:44:53.123600+00:00", "event": "comment_posted", "case_id": "~165105776"}
+{"ts": "2026-08-11T16:44:53.124004+00:00", "event": "alert_received", "alert_id": "~122941504", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:44:56.357727+00:00", "event": "triage_complete", "alert_id": "~122941504", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:44:57.140472+00:00", "event": "case_created", "alert_id": "~122941504", "case_id": "~288010416"}
+{"ts": "2026-08-11T16:45:14.472187+00:00", "event": "enrichment_complete", "case_id": "~288010416", "report_count": 3}
+{"ts": "2026-08-11T16:45:18.009929+00:00", "event": "verdict_complete", "case_id": "~288010416", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:45:18.010127+00:00", "event": "containment_refused", "case_id": "~288010416", "target": "192.168.84.134", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:45:18.310312+00:00", "event": "comment_posted", "case_id": "~288010416"}
+{"ts": "2026-08-11T16:45:18.310609+00:00", "event": "alert_received", "alert_id": "~204865712", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:45:21.943082+00:00", "event": "triage_complete", "alert_id": "~204865712", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:45:22.334785+00:00", "event": "case_created", "alert_id": "~204865712", "case_id": "~83341416"}
+{"ts": "2026-08-11T16:45:54.759501+00:00", "event": "enrichment_complete", "case_id": "~83341416", "report_count": 6}
+{"ts": "2026-08-11T16:45:59.664743+00:00", "event": "verdict_complete", "case_id": "~83341416", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:45:59.664982+00:00", "event": "containment_refused", "case_id": "~83341416", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:46:00.618217+00:00", "event": "comment_posted", "case_id": "~83341416"}
+{"ts": "2026-08-11T16:46:00.618550+00:00", "event": "alert_received", "alert_id": "~245817440", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:46:04.329953+00:00", "event": "triage_complete", "alert_id": "~245817440", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:46:04.637182+00:00", "event": "case_created", "alert_id": "~245817440", "case_id": "~246964224"}
+{"ts": "2026-08-11T16:46:34.046095+00:00", "event": "enrichment_complete", "case_id": "~246964224", "report_count": 6}
+{"ts": "2026-08-11T16:46:37.303523+00:00", "event": "verdict_complete", "case_id": "~246964224", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:46:37.934019+00:00", "event": "comment_posted", "case_id": "~246964224"}
+{"ts": "2026-08-11T16:46:37.934347+00:00", "event": "alert_received", "alert_id": "~41005104", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:46:41.633986+00:00", "event": "triage_complete", "alert_id": "~41005104", "severity": "low", "is_false_positive": true, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:46:41.951832+00:00", "event": "case_created", "alert_id": "~41005104", "case_id": "~288071856"}
+{"ts": "2026-08-11T16:47:14.390895+00:00", "event": "enrichment_complete", "case_id": "~288071856", "report_count": 6}
+{"ts": "2026-08-11T16:47:17.642047+00:00", "event": "verdict_complete", "case_id": "~288071856", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:47:18.232704+00:00", "event": "comment_posted", "case_id": "~288071856"}
+{"ts": "2026-08-11T16:47:18.233003+00:00", "event": "alert_received", "alert_id": "~41009200", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:47:21.851914+00:00", "event": "triage_complete", "alert_id": "~41009200", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:47:22.274223+00:00", "event": "case_created", "alert_id": "~41009200", "case_id": "~165216368"}
+{"ts": "2026-08-11T16:47:54.681903+00:00", "event": "enrichment_complete", "case_id": "~165216368", "report_count": 6}
+{"ts": "2026-08-11T16:47:59.562705+00:00", "event": "verdict_complete", "case_id": "~165216368", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:47:59.562952+00:00", "event": "containment_refused", "case_id": "~165216368", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:48:00.567618+00:00", "event": "comment_posted", "case_id": "~165216368"}
+{"ts": "2026-08-11T16:48:00.567892+00:00", "event": "alert_received", "alert_id": "~41013296", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:48:04.193999+00:00", "event": "triage_complete", "alert_id": "~41013296", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:48:04.593943+00:00", "event": "case_created", "alert_id": "~41013296", "case_id": "~329138208"}
+{"ts": "2026-08-11T16:48:33.967580+00:00", "event": "enrichment_complete", "case_id": "~329138208", "report_count": 6}
+{"ts": "2026-08-11T16:48:38.872590+00:00", "event": "verdict_complete", "case_id": "~329138208", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:48:38.872894+00:00", "event": "containment_refused", "case_id": "~329138208", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:48:39.875791+00:00", "event": "comment_posted", "case_id": "~329138208"}
+{"ts": "2026-08-11T16:48:39.876070+00:00", "event": "alert_received", "alert_id": "~123011264", "title": "JuiceShop XSS Attack"}
+{"ts": "2026-08-11T16:48:42.650240+00:00", "event": "triage_complete", "alert_id": "~123011264", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:48:42.893555+00:00", "event": "case_created", "alert_id": "~123011264", "case_id": "~206315720"}
+{"ts": "2026-08-11T16:49:15.253691+00:00", "event": "enrichment_complete", "case_id": "~206315720", "report_count": 3}
+{"ts": "2026-08-11T16:49:21.529491+00:00", "event": "verdict_complete", "case_id": "~206315720", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:49:21.529744+00:00", "event": "containment_refused", "case_id": "~206315720", "target": "100.101.27.63", "reason": "policy guard: Tailscale CGNAT range \u2014 our own administrative access path", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:49:22.106178+00:00", "event": "comment_posted", "case_id": "~206315720"}
+{"ts": "2026-08-11T16:49:22.106497+00:00", "event": "alert_received", "alert_id": "~41009256", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:49:25.660609+00:00", "event": "triage_complete", "alert_id": "~41009256", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:49:26.140952+00:00", "event": "case_created", "alert_id": "~41009256", "case_id": "~83447912"}
+{"ts": "2026-08-11T16:49:58.535619+00:00", "event": "enrichment_complete", "case_id": "~83447912", "report_count": 6}
+{"ts": "2026-08-11T16:50:03.437575+00:00", "event": "verdict_complete", "case_id": "~83447912", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:50:03.437794+00:00", "event": "containment_refused", "case_id": "~83447912", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.98}
+{"ts": "2026-08-11T16:50:04.404507+00:00", "event": "comment_posted", "case_id": "~83447912"}
+{"ts": "2026-08-11T16:50:04.404858+00:00", "event": "alert_received", "alert_id": "~122957888", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:50:07.690970+00:00", "event": "triage_complete", "alert_id": "~122957888", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:50:08.421266+00:00", "event": "alert_dismissed", "alert_id": "~122957888", "confidence": 0.75}
+{"ts": "2026-08-11T16:50:08.421452+00:00", "event": "alert_received", "alert_id": "~41033776", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:50:11.731275+00:00", "event": "triage_complete", "alert_id": "~41033776", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:50:12.439959+00:00", "event": "case_created", "alert_id": "~41033776", "case_id": "~329207840"}
+{"ts": "2026-08-11T16:50:44.818839+00:00", "event": "enrichment_complete", "case_id": "~329207840", "report_count": 6}
+{"ts": "2026-08-11T16:50:48.065606+00:00", "event": "verdict_complete", "case_id": "~329207840", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:50:48.725043+00:00", "event": "comment_posted", "case_id": "~329207840"}
+{"ts": "2026-08-11T16:50:48.725382+00:00", "event": "alert_received", "alert_id": "~41021544", "title": "JuiceShop XSS Attack"}
+{"ts": "2026-08-11T16:50:51.477933+00:00", "event": "triage_complete", "alert_id": "~41021544", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:50:51.761399+00:00", "event": "case_created", "alert_id": "~41021544", "case_id": "~247140352"}
+{"ts": "2026-08-11T16:51:24.088491+00:00", "event": "enrichment_complete", "case_id": "~247140352", "report_count": 3}
+{"ts": "2026-08-11T16:51:31.024401+00:00", "event": "verdict_complete", "case_id": "~247140352", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:51:31.880518+00:00", "event": "comment_posted", "case_id": "~247140352"}
+{"ts": "2026-08-11T16:51:31.880844+00:00", "event": "alert_received", "alert_id": "~123031744", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:51:35.386666+00:00", "event": "triage_complete", "alert_id": "~123031744", "severity": "medium", "is_false_positive": false, "confidence": 0.65, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:51:35.904152+00:00", "event": "case_created", "alert_id": "~123031744", "case_id": "~83505256"}
+{"ts": "2026-08-11T16:52:41.374663+00:00", "event": "enrichment_complete", "case_id": "~83505256", "report_count": 6}
+{"ts": "2026-08-11T16:52:44.860462+00:00", "event": "verdict_complete", "case_id": "~83505256", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:52:44.860677+00:00", "event": "containment_refused", "case_id": "~83505256", "target": "192.168.10.30", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:52:45.176040+00:00", "event": "comment_posted", "case_id": "~83505256"}
+{"ts": "2026-08-11T16:52:45.176344+00:00", "event": "alert_received", "alert_id": "~81924184", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:52:48.406535+00:00", "event": "triage_complete", "alert_id": "~81924184", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:52:49.199039+00:00", "event": "case_created", "alert_id": "~81924184", "case_id": "~329261088"}
+{"ts": "2026-08-11T16:53:21.604391+00:00", "event": "enrichment_complete", "case_id": "~329261088", "report_count": 3}
+{"ts": "2026-08-11T16:53:27.044709+00:00", "event": "verdict_complete", "case_id": "~329261088", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:53:27.472585+00:00", "event": "comment_posted", "case_id": "~329261088"}
+{"ts": "2026-08-11T16:53:27.472922+00:00", "event": "alert_received", "alert_id": "~163856400", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:53:30.629001+00:00", "event": "triage_complete", "alert_id": "~163856400", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:53:31.486333+00:00", "event": "case_created", "alert_id": "~163856400", "case_id": "~83550312"}
+{"ts": "2026-08-11T16:53:45.746373+00:00", "event": "enrichment_complete", "case_id": "~83550312", "report_count": 3}
+{"ts": "2026-08-11T16:53:50.143142+00:00", "event": "verdict_complete", "case_id": "~83550312", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:53:50.638953+00:00", "event": "comment_posted", "case_id": "~83550312"}
+{"ts": "2026-08-11T16:53:50.639293+00:00", "event": "alert_received", "alert_id": "~81932376", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:53:53.699216+00:00", "event": "triage_complete", "alert_id": "~81932376", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:53:54.656047+00:00", "event": "alert_dismissed", "alert_id": "~81932376", "confidence": 0.75}
+{"ts": "2026-08-11T16:53:54.656218+00:00", "event": "alert_received", "alert_id": "~163844296", "title": "PfSense Perimeter Block"}
+{"ts": "2026-08-11T16:53:57.544704+00:00", "event": "triage_complete", "alert_id": "~163844296", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:53:58.670811+00:00", "event": "case_created", "alert_id": "~163844296", "case_id": "~165339248"}
+{"ts": "2026-08-11T16:54:15.939877+00:00", "event": "enrichment_complete", "case_id": "~165339248", "report_count": 3}
+{"ts": "2026-08-11T16:54:20.321221+00:00", "event": "verdict_complete", "case_id": "~165339248", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T16:54:20.847444+00:00", "event": "comment_posted", "case_id": "~165339248"}
+{"ts": "2026-08-11T16:54:20.847726+00:00", "event": "alert_received", "alert_id": "~81948760", "title": "JuiceShop XSS Attack"}
+{"ts": "2026-08-11T16:54:23.736852+00:00", "event": "triage_complete", "alert_id": "~81948760", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:54:24.863096+00:00", "event": "case_created", "alert_id": "~81948760", "case_id": "~329310240"}
+{"ts": "2026-08-11T16:54:57.223251+00:00", "event": "enrichment_complete", "case_id": "~329310240", "report_count": 3}
+{"ts": "2026-08-11T16:55:01.391207+00:00", "event": "verdict_complete", "case_id": "~329310240", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:55:01.391452+00:00", "event": "containment_refused", "case_id": "~329310240", "target": "172.16.0.1", "reason": "policy guard: RFC1918 private address \u2014 internal host, blocking causes self-inflicted outage", "verdict": "malicious", "confidence": 0.9}
+{"ts": "2026-08-11T16:55:02.003339+00:00", "event": "comment_posted", "case_id": "~329310240"}
+{"ts": "2026-08-11T16:55:02.003629+00:00", "event": "alert_received", "alert_id": "~122900592", "title": "JuiceShop XSS Attack"}
+{"ts": "2026-08-11T16:55:04.734671+00:00", "event": "triage_complete", "alert_id": "~122900592", "severity": "high", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:55:05.030708+00:00", "event": "case_created", "alert_id": "~122900592", "case_id": "~124408056"}
+{"ts": "2026-08-11T16:55:22.287971+00:00", "event": "enrichment_complete", "case_id": "~124408056", "report_count": 3}
+{"ts": "2026-08-11T16:55:28.031240+00:00", "event": "verdict_complete", "case_id": "~124408056", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:55:28.031500+00:00", "event": "containment_refused", "case_id": "~124408056", "target": "100.101.27.63", "reason": "policy guard: Tailscale CGNAT range \u2014 our own administrative access path", "verdict": "malicious", "confidence": 0.95}
+{"ts": "2026-08-11T16:55:28.185365+00:00", "event": "comment_posted", "case_id": "~124408056"}
+{"ts": "2026-08-11T16:55:28.185701+00:00", "event": "alert_received", "alert_id": "~122921072", "title": "Directory Traversal / LFI Attempt on Juice Shop"}
+{"ts": "2026-08-11T16:55:32.895156+00:00", "event": "triage_complete", "alert_id": "~122921072", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:55:33.200221+00:00", "event": "case_created", "alert_id": "~122921072", "case_id": "~83603560"}
+{"ts": "2026-08-11T16:56:05.566051+00:00", "event": "enrichment_complete", "case_id": "~83603560", "report_count": 3}
+{"ts": "2026-08-11T16:56:08.562077+00:00", "event": "verdict_complete", "case_id": "~83603560", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:56:08.562286+00:00", "event": "containment_refused", "case_id": "~83603560", "target": "100.99.54.59", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:56:09.346037+00:00", "event": "comment_posted", "case_id": "~83603560"}
+{"ts": "2026-08-11T16:56:09.346346+00:00", "event": "alert_received", "alert_id": "~163930296", "title": "Directory Traversal / LFI Attempt on Juice Shop"}
+{"ts": "2026-08-11T16:56:14.060132+00:00", "event": "triage_complete", "alert_id": "~163930296", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:56:15.370169+00:00", "event": "case_created", "alert_id": "~163930296", "case_id": "~329351200"}
+{"ts": "2026-08-11T16:56:29.608284+00:00", "event": "enrichment_complete", "case_id": "~329351200", "report_count": 3}
+{"ts": "2026-08-11T16:56:32.032687+00:00", "event": "verdict_complete", "case_id": "~329351200", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:56:32.032901+00:00", "event": "containment_refused", "case_id": "~329351200", "target": "100.99.54.59", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:56:32.520047+00:00", "event": "comment_posted", "case_id": "~329351200"}
+{"ts": "2026-08-11T16:56:32.520277+00:00", "event": "alert_received", "alert_id": "~286785568", "title": "Cross-Site Scripting (XSS) Attempt on Juice Shop"}
+{"ts": "2026-08-11T16:56:35.211912+00:00", "event": "triage_complete", "alert_id": "~286785568", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:56:35.528496+00:00", "event": "case_created", "alert_id": "~286785568", "case_id": "~83628136"}
+{"ts": "2026-08-11T16:56:49.800045+00:00", "event": "enrichment_complete", "case_id": "~83628136", "report_count": 3}
+{"ts": "2026-08-11T16:56:52.213520+00:00", "event": "verdict_complete", "case_id": "~83628136", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:56:52.213727+00:00", "event": "containment_refused", "case_id": "~83628136", "target": "100.99.54.59", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:56:52.687738+00:00", "event": "comment_posted", "case_id": "~83628136"}
+{"ts": "2026-08-11T16:56:52.688025+00:00", "event": "alert_received", "alert_id": "~163946680", "title": "Path Traversal / LFI Attempt on Juice Shop"}
+{"ts": "2026-08-11T16:56:55.828577+00:00", "event": "triage_complete", "alert_id": "~163946680", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:56:56.707509+00:00", "event": "case_created", "alert_id": "~163946680", "case_id": "~83648616"}
+{"ts": "2026-08-11T16:57:10.913087+00:00", "event": "enrichment_complete", "case_id": "~83648616", "report_count": 3}
+{"ts": "2026-08-11T16:57:13.333002+00:00", "event": "verdict_complete", "case_id": "~83648616", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:57:13.333182+00:00", "event": "containment_refused", "case_id": "~83648616", "target": "100.99.54.59", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:57:13.829506+00:00", "event": "comment_posted", "case_id": "~83648616"}
+{"ts": "2026-08-11T16:57:13.829747+00:00", "event": "alert_received", "alert_id": "~163954872", "title": "Cross-Site Scripting (XSS) Attempt on Juice Shop"}
+{"ts": "2026-08-11T16:57:16.509974+00:00", "event": "triage_complete", "alert_id": "~163954872", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:57:16.843115+00:00", "event": "case_created", "alert_id": "~163954872", "case_id": "~329388064"}
+{"ts": "2026-08-11T16:57:31.108680+00:00", "event": "enrichment_complete", "case_id": "~329388064", "report_count": 3}
+{"ts": "2026-08-11T16:57:33.520068+00:00", "event": "verdict_complete", "case_id": "~329388064", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:57:33.520368+00:00", "event": "containment_refused", "case_id": "~329388064", "target": "100.99.54.59", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:57:34.007637+00:00", "event": "comment_posted", "case_id": "~329388064"}
+{"ts": "2026-08-11T16:57:34.007921+00:00", "event": "alert_received", "alert_id": "~122937456", "title": "Path Traversal / LFI Attempt on Juice Shop"}
+{"ts": "2026-08-11T16:57:37.136523+00:00", "event": "triage_complete", "alert_id": "~122937456", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1078"}
+{"ts": "2026-08-11T16:57:38.016001+00:00", "event": "case_created", "alert_id": "~122937456", "case_id": "~206524616"}
+{"ts": "2026-08-11T16:57:55.253535+00:00", "event": "enrichment_complete", "case_id": "~206524616", "report_count": 3}
+{"ts": "2026-08-11T16:57:57.665131+00:00", "event": "verdict_complete", "case_id": "~206524616", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:57:57.665355+00:00", "event": "containment_refused", "case_id": "~206524616", "target": "100.99.54.59", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:57:58.168998+00:00", "event": "comment_posted", "case_id": "~206524616"}
+{"ts": "2026-08-11T16:57:58.169311+00:00", "event": "alert_received", "alert_id": "~81997912", "title": "Cross-Site Scripting (XSS) Attempt on Juice Shop"}
+{"ts": "2026-08-11T16:58:00.827611+00:00", "event": "triage_complete", "alert_id": "~81997912", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1190"}
+{"ts": "2026-08-11T16:58:01.179490+00:00", "event": "case_created", "alert_id": "~81997912", "case_id": "~83697768"}
+{"ts": "2026-08-11T16:58:15.412655+00:00", "event": "enrichment_complete", "case_id": "~83697768", "report_count": 3}
+{"ts": "2026-08-11T16:58:17.826828+00:00", "event": "verdict_complete", "case_id": "~83697768", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:58:17.827035+00:00", "event": "containment_refused", "case_id": "~83697768", "target": "100.99.54.59", "reason": "policy guard: explicitly protected lab asset", "verdict": "malicious", "confidence": 1}
+{"ts": "2026-08-11T16:58:18.316951+00:00", "event": "comment_posted", "case_id": "~83697768"}
+{"ts": "2026-08-11T16:58:18.317267+00:00", "event": "alert_received", "alert_id": "~82006104", "title": "Suspicious PowerShell Execution Detected"}
+{"ts": "2026-08-11T16:58:22.082159+00:00", "event": "triage_complete", "alert_id": "~82006104", "severity": "medium", "is_false_positive": false, "confidence": 0.75, "mitre_technique": "T1059.001"}
+{"ts": "2026-08-11T16:58:22.340261+00:00", "event": "case_created", "alert_id": "~82006104", "case_id": "~165404784"}
+{"ts": "2026-08-11T16:58:24.501551+00:00", "event": "enrichment_complete", "case_id": "~165404784", "report_count": 0}
+{"ts": "2026-08-11T16:58:25.374745+00:00", "event": "comment_posted", "case_id": "~165404784"}
+{"ts": "2026-08-11T16:58:25.374990+00:00", "event": "alert_received", "alert_id": "~164028432", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:58:28.417707+00:00", "event": "triage_complete", "alert_id": "~164028432", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:58:29.386888+00:00", "event": "alert_dismissed", "alert_id": "~164028432", "confidence": 0.75}
+{"ts": "2026-08-11T16:58:29.387090+00:00", "event": "alert_received", "alert_id": "~164057288", "title": "Suspicious PowerShell Execution Detected"}
+{"ts": "2026-08-11T16:58:37.733452+00:00", "event": "triage_complete", "alert_id": "~164057288", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1059.001"}
+{"ts": "2026-08-11T16:58:38.401601+00:00", "event": "case_created", "alert_id": "~164057288", "case_id": "~247320576"}
+{"ts": "2026-08-11T16:58:40.570286+00:00", "event": "enrichment_complete", "case_id": "~247320576", "report_count": 0}
+{"ts": "2026-08-11T16:58:41.421453+00:00", "event": "comment_posted", "case_id": "~247320576"}
+{"ts": "2026-08-11T16:58:41.421653+00:00", "event": "alert_received", "alert_id": "~164225240", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:58:44.483500+00:00", "event": "triage_complete", "alert_id": "~164225240", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:58:45.433089+00:00", "event": "alert_dismissed", "alert_id": "~164225240", "confidence": 0.75}
+{"ts": "2026-08-11T16:58:45.433307+00:00", "event": "alert_received", "alert_id": "~164188360", "title": "Suspicious PowerShell Execution Detected"}
+{"ts": "2026-08-11T16:58:54.304108+00:00", "event": "triage_complete", "alert_id": "~164188360", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1059.001"}
+{"ts": "2026-08-11T16:58:55.453599+00:00", "event": "case_created", "alert_id": "~164188360", "case_id": "~165457960"}
+{"ts": "2026-08-11T16:58:57.600708+00:00", "event": "enrichment_complete", "case_id": "~165457960", "report_count": 0}
+{"ts": "2026-08-11T16:58:58.473921+00:00", "event": "comment_posted", "case_id": "~165457960"}
+{"ts": "2026-08-11T16:58:58.474168+00:00", "event": "alert_received", "alert_id": "~164266200", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:01.550494+00:00", "event": "triage_complete", "alert_id": "~164266200", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:02.490995+00:00", "event": "alert_dismissed", "alert_id": "~164266200", "confidence": 0.75}
+{"ts": "2026-08-11T16:59:02.491212+00:00", "event": "alert_received", "alert_id": "~287092768", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:05.468750+00:00", "event": "triage_complete", "alert_id": "~287092768", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:06.510661+00:00", "event": "alert_dismissed", "alert_id": "~287092768", "confidence": 0.75}
+{"ts": "2026-08-11T16:59:06.510948+00:00", "event": "alert_received", "alert_id": "~123568168", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:09.546401+00:00", "event": "triage_complete", "alert_id": "~123568168", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:10.523272+00:00", "event": "alert_dismissed", "alert_id": "~123568168", "confidence": 0.75}
+{"ts": "2026-08-11T16:59:10.523465+00:00", "event": "alert_received", "alert_id": "~287105056", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:12.823299+00:00", "event": "triage_complete", "alert_id": "~287105056", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:13.539192+00:00", "event": "alert_dismissed", "alert_id": "~287105056", "confidence": 0.85}
+{"ts": "2026-08-11T16:59:13.539375+00:00", "event": "alert_received", "alert_id": "~163848256", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:15.904358+00:00", "event": "triage_complete", "alert_id": "~163848256", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:16.552585+00:00", "event": "alert_dismissed", "alert_id": "~163848256", "confidence": 0.85}
+{"ts": "2026-08-11T16:59:16.552760+00:00", "event": "alert_received", "alert_id": "~204808272", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:18.909322+00:00", "event": "triage_complete", "alert_id": "~204808272", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:19.575523+00:00", "event": "alert_dismissed", "alert_id": "~204808272", "confidence": 0.85}
+{"ts": "2026-08-11T16:59:19.575695+00:00", "event": "alert_received", "alert_id": "~163844232", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:22.585933+00:00", "event": "triage_complete", "alert_id": "~163844232", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:23.592459+00:00", "event": "alert_dismissed", "alert_id": "~163844232", "confidence": 0.75}
+{"ts": "2026-08-11T16:59:23.592622+00:00", "event": "alert_received", "alert_id": "~163856520", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:25.737870+00:00", "event": "triage_complete", "alert_id": "~163856520", "severity": "low", "is_false_positive": true, "confidence": 0.95, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:26.603112+00:00", "event": "alert_dismissed", "alert_id": "~163856520", "confidence": 0.95}
+{"ts": "2026-08-11T16:59:26.603284+00:00", "event": "alert_received", "alert_id": "~81961008", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:29.562783+00:00", "event": "triage_complete", "alert_id": "~81961008", "severity": "low", "is_false_positive": true, "confidence": 0.85, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:30.626067+00:00", "event": "alert_dismissed", "alert_id": "~81961008", "confidence": 0.85}
+{"ts": "2026-08-11T16:59:30.626235+00:00", "event": "alert_received", "alert_id": "~204816384", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:33.659109+00:00", "event": "triage_complete", "alert_id": "~204816384", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:34.637267+00:00", "event": "alert_dismissed", "alert_id": "~204816384", "confidence": 0.75}
+{"ts": "2026-08-11T16:59:34.637483+00:00", "event": "alert_received", "alert_id": "~163868736", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:37.439585+00:00", "event": "triage_complete", "alert_id": "~163868736", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:37.651510+00:00", "event": "alert_dismissed", "alert_id": "~163868736", "confidence": 0.75}
+{"ts": "2026-08-11T16:59:37.651704+00:00", "event": "alert_received", "alert_id": "~245784648", "title": "Suricata alert"}
+{"ts": "2026-08-11T16:59:40.457728+00:00", "event": "triage_complete", "alert_id": "~245784648", "severity": "low", "is_false_positive": true, "confidence": 0.75, "mitre_technique": "N/A"}
+{"ts": "2026-08-11T16:59:40.659634+00:00", "event": "alert_dismissed", "alert_id": "~245784648", "confidence": 0.75}
+{"ts": "2026-08-11T16:59:40.659813+00:00", "event": "alert_received", "alert_id": "~163876928", "title": "Port Scan Detected by PfSense"}
+{"ts": "2026-08-11T16:59:43.237231+00:00", "event": "triage_complete", "alert_id": "~163876928", "severity": "medium", "is_false_positive": false, "confidence": 0.85, "mitre_technique": "T1046"}
+{"ts": "2026-08-11T16:59:43.676224+00:00", "event": "case_created", "alert_id": "~163876928", "case_id": "~247324672"}
+{"ts": "2026-08-11T17:00:31.011870+00:00", "event": "enrichment_complete", "case_id": "~247324672", "report_count": 6}
+{"ts": "2026-08-11T17:00:35.499060+00:00", "event": "verdict_complete", "case_id": "~247324672", "verdict": "benign", "confidence": 1}
+{"ts": "2026-08-11T17:00:35.924148+00:00", "event": "comment_posted", "case_id": "~247324672"}
+{"ts": "2026-08-11T17:00:35.924513+00:00", "event": "alert_received", "alert_id": "~122929240", "title": "Suricata alert"}
+{"ts": "2026-08-11T17:00:38.468276+00:00", "event": "pipeline_stopped", "reason": "interrupted", "processed": 166}

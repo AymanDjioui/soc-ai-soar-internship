@@ -1,0 +1,76 @@
+# WATCHDOG / dead-man switch — Suricata EVE -> Redis -> Logstash -> suricata-alerts-*
+#
+# Fires when NO Suricata event has arrived for 60 min during lab hours.
+# Measured cadence: ~3163 docs/active hour (~53/min). 60 min = very large margin.
+#
+# This is the highest-value watchdog in the lab: Suricata is the primary
+# detection sensor feeding TheHive. If this pipeline dies, the SOC is blind
+# but every dashboard still looks "green" — there are simply no new alerts,
+# which is indistinguishable from "no attacks" without this rule.
+#
+# The Redis leg has already failed silently 3 times in this project.
+#
+# Remediation when this fires:
+#   1. pfSense: redis-cli -h 127.0.0.1 ping             (Redis alive?)
+#   2. pfSense: redis-cli -h 127.0.0.1 llen suricata    (backing up = Logstash down)
+#   3. pfSense: Suricata running on em0 (WAN) and em2 (DMZ)?
+#   4. ELK:     docker logs logstash --tail 50          (redis input connected?)
+
+name: watchdog_suricata_eve
+type: flatline
+index: suricata-alerts-*
+
+threshold: 1
+timeframe:
+  minutes: 60
+use_count_query: true
+
+# Lab hours only (08:00-19:59 UTC); paused outside. Must match every minute
+# of the range - an interval like "*/10" never fires (see
+# watchdog_pfsense_filterlog.yaml for the ElastAlert croniter explanation).
+limit_execution: "* 8-19 * * *"
+
+realert:
+  hours: 6
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "PIPELINE DOWN: Suricata EVE (suricata-alerts-*) silent 60min"
+  type: "pipeline-health"
+  source: "elastalert2-watchdog"
+  severity: 2
+  tlp: 2
+  pap: 2
+  status: "New"
+  follow: true
+  tags:
+    - "watchdog"
+    - "pipeline-health"
+    - "suricata"
+    - "redis"
+    - "detection-blind"
+  description: |
+    No Suricata events reached Elasticsearch for 60 minutes during lab hours.
+
+    Path: Suricata (em0/em2) -> eve.json -> Redis list 'suricata' on pfSense:6379
+          -> Logstash redis input -> suricata-alerts-*
+
+    THIS MEANS THE SOC IS BLIND. No IDS alert can reach TheHive while this is true,
+    and the absence of alerts looks identical to an absence of attacks.
+
+    Triage:
+      1. pfSense: redis-cli -h 127.0.0.1 ping
+      2. pfSense: redis-cli -h 127.0.0.1 llen suricata
+         (a growing list means Redis is fine and Logstash is not consuming)
+      3. pfSense: Suricata instances up on em0 (WAN) and em2 (DMZ)?
+      4. ELK:     docker logs logstash --tail 50
+
+    Note: the Redis leg of this path has failed silently 3 times previously.
+
+alert_text_type: alert_text_only
+alert_text: |
+  Source   : Suricata EVE (suricata-alerts-*)
+  Condition: 0 documents in 60 minutes during lab hours
+  Meaning  : IDS detection pipeline is down - SOC is blind

@@ -1,0 +1,24 @@
+{
+  "id": "04-powershell-ua",
+  "source": "notes/12.md",
+  "note": "Our own Invoke-WebRequest tripping an INFO signature.",
+  "alert": {
+    "event_type": "alert",
+    "src_ip": "192.168.10.30",
+    "dest_ip": "217.160.0.187",
+    "in_iface": "em1",
+    "alert": {
+      "signature": "ET INFO Windows Powershell User-Agent Usage",
+      "signature_id": 2025644,
+      "category": "Not Suspicious Traffic",
+      "severity": 3
+    }
+  },
+  "ground_truth": {
+    "is_false_positive": true,
+    "severity": "low",
+    "mitre_technique": "N/A",
+    "must_not_auto_block": true,
+    "rationale": "Informational only; internal source. Benign admin activity."
+  }
+}

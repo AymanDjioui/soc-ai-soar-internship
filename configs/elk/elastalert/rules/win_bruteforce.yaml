@@ -1,0 +1,97 @@
+# Windows logon brute force (Security 4625, "an account failed to log on")
+#
+# Fixed 2026-08-10 after checking every referenced field against the live data.
+# Four defects were found and corrected:
+#
+#   1. query_key was `source.ip`, which exists in ZERO documents in windows-logs-*.
+#      Winlogbeat puts the client address at winlog.event_data.IpAddress (608 docs).
+#      With a non-existent query_key the frequency rule cannot group by attacker,
+#      so "5 failures from the same source" was never actually being counted per source.
+#
+#   2. The TheHive observable mapped `ip: source.ip`, so alerts arrived with NO IP
+#      observable. Cortex had nothing to enrich and the SOAR orchestrator had no
+#      containment target, which is why these alerts showed "Observables 0".
+#
+#   3. alert_text_args referenced source.ip, so the Source IP line rendered empty.
+#
+#   4. The filter matched event_id 4625 on ANY channel. Microsoft-Windows-EventSystem
+#      also emits a 4625 on the Application channel that has nothing to do with logons
+#      (it carries SuppressDuplicateDuration). 4 of the 11 matching documents were this
+#      unrelated event, so roughly a third of the rule's input was noise.
+#      Now scoped to the Security channel.
+#
+# Note: IpAddress is a text field with a .keyword subfield, so query_key must use
+# the .keyword form or grouping silently fails again.
+
+name: win_logon_bruteforce
+index: windows-logs-*
+type: frequency
+num_events: 5
+timeframe:
+  minutes: 5
+
+query_key: winlog.event_data.IpAddress.keyword
+
+filter:
+  - bool:
+      must:
+        - term:
+            winlog.event_id: "4625"
+        - term:
+            winlog.channel.keyword: "Security"
+      must_not:
+        # Local logon failures report "-" instead of an address. Without this they
+        # all collapse into one bucket and can trip the threshold on their own.
+        - term:
+            winlog.event_data.IpAddress.keyword: "-"
+
+realert:
+  minutes: 10
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Windows Logon Brute-Force Detected"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1110"
+    - "windows"
+    - "brute-force"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    Multiple failed logon attempts detected from the same source
+    (MITRE T1110 - Brute Force).
+
+    - Source IP: {0}
+    - Target Account: {1}
+    - Host: {2}
+    - Failure Reason: {3}
+    - Logon Type: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - winlog.event_data.IpAddress
+    - winlog.event_data.TargetUserName
+    - host.name
+    - winlog.event_data.FailureReason
+    - winlog.event_data.LogonType
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "winlog.event_data.IpAddress"
+  - other: "winlog.event_data.TargetUserName"
+  - other: "host.name"
+
+alert_text_args:
+  - winlog.event_data.IpAddress
+  - winlog.event_data.TargetUserName
+  - host.name
+  - winlog.event_data.FailureReason
+  - winlog.event_data.LogonType
+  - "@timestamp"
+alert_text_type: alert_text_only

@@ -1,0 +1,23 @@
+{
+  "id": "06-cred-dump-sam",
+  "source": "notes/11.md",
+  "note": "reg save HKLM\\SAM - real credential dumping, not blocked by Defender.",
+  "alert": {
+    "event_type": "sysmon",
+    "index": "windows-logs-*",
+    "EventID": 1,
+    "Computer": "DESKTOP-FK7RO72",
+    "host_ip": "192.168.10.30",
+    "Image": "C:\\Windows\\System32\\reg.exe",
+    "CommandLine": "reg save HKLM\\SAM C:\\Users\\Public\\sam.save",
+    "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+    "User": "DESKTOP-FK7RO72\\Administrator"
+  },
+  "ground_truth": {
+    "is_false_positive": false,
+    "severity": "high",
+    "mitre_technique": "T1003.002",
+    "must_not_auto_block": true,
+    "rationale": "Host-based event on an internal asset; no external IP to block. Requires host containment, not a firewall rule."
+  }
+}

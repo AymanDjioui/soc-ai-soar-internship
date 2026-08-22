@@ -1,0 +1,33 @@
+{
+  "cases_queried_live": 334,
+  "cutoff_warnings": [],
+  "dataset_version": "dataset-b-candidates-v2-2026-08-21",
+  "eligible_candidate_count": 226,
+  "excluded_created_after_cutoff": 0,
+  "exclusion_counts": {
+    "explicitly_synthetic_or_test_case": 15,
+    "handling_restriction_incompatible": 8,
+    "still_open": 85
+  },
+  "manifest_hash": "25facfdef786f18b19c0ea99e2baeaedcf08dd3b91d45d3c0c6dca9e9b87e106",
+  "preflight": {
+    "output_dir_gitignored": true,
+    "raw_api_response_logged": false,
+    "read_only_methods_only": true,
+    "snapshot_cutoff_established": true,
+    "thehive_auth": true
+  },
+  "review_subset_size": 60,
+  "run_at": "2026-08-21T21:37:09.470289+00:00",
+  "snapshot_cutoff_epoch_ms": 1787342602473,
+  "snapshot_cutoff_iso": "2026-08-21T20:03:22.473747+00:00",
+  "v1_vs_v2_comparison": {
+    "added_in_v2_count": 0,
+    "added_in_v2_reason": null,
+    "removed_from_v2_count": 0,
+    "removed_from_v2_reasons": {},
+    "unchanged_count": 226,
+    "v1_case_count": 226,
+    "v2_case_count": 226
+  }
+}

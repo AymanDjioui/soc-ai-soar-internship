@@ -1,0 +1,137 @@
+{
+  "built_at": "2026-08-21T21:00:29.582049+00:00",
+  "case_count": 25,
+  "cases": {
+    "a01-c2-beacon": {
+      "content_hash": "c9af00ddb349eba6df10b9dd52f4101b38199f2d8b7827b7869cb8b00ca80510",
+      "incident_group_id": "grp-a01-c2-beacon",
+      "review_status": "pending"
+    },
+    "a02-cobalt-strike": {
+      "content_hash": "76e106794b2dce451aed5023b47a4e2c282e152b91e0049675fd237811d144d6",
+      "incident_group_id": "grp-a02-cobalt-strike",
+      "review_status": "pending"
+    },
+    "a03-asyncrat": {
+      "content_hash": "f01751706bb0f4e7d9c3f7c3157271a15854ba603be5e981b06290c2ed77e9d9",
+      "incident_group_id": "grp-a03-asyncrat",
+      "review_status": "pending"
+    },
+    "a04-adaptixc2": {
+      "content_hash": "104c7996e68ab42b37f6845c044b0fa042686b2284b9103b1ed15f3203fc97b4",
+      "incident_group_id": "grp-a04-adaptixc2",
+      "review_status": "pending"
+    },
+    "a05-c2-known-bad": {
+      "content_hash": "c46ab3f699c1187fa6f96ec2444bad4e845ff413339b57175cfd881a199c12ec",
+      "incident_group_id": "grp-a05-c2-known-bad",
+      "review_status": "pending"
+    },
+    "a06-partial-rule-match": {
+      "content_hash": "f0fa915494aade1ca2e88d7f198718fbc495f0f88e2d031048043ebe56e72886",
+      "incident_group_id": "grp-a06-partial-rule-match",
+      "review_status": "pending"
+    },
+    "a07-low-confidence": {
+      "content_hash": "0dba011119aa90c9f96881345aca00e3d1c393e57cf2d704e94a3ab72111d048",
+      "incident_group_id": "grp-a07-low-confidence",
+      "review_status": "pending"
+    },
+    "a08-sqli": {
+      "content_hash": "d57d2cf45ed3eb083f5e1ede5d5eaefc9822963b416399b0253df50465d97a51",
+      "incident_group_id": "grp-a08-sqli",
+      "review_status": "pending"
+    },
+    "a09-inconclusive": {
+      "content_hash": "da8abdbffaf58e1f1b2871f4499189e8c4366e85e1452fd2c84002051f0badd6",
+      "incident_group_id": "grp-a09-inconclusive",
+      "review_status": "pending"
+    },
+    "a10-missing-evidence": {
+      "content_hash": "e2a5e573566902820359d507677f82821a6fd9b6eb04669bd9be674de4c49a33",
+      "incident_group_id": "grp-a10-missing-evidence",
+      "review_status": "pending"
+    },
+    "a11-conflicting-history": {
+      "content_hash": "05f659c650dbc0630a7e2f8a8249b89afafe979faa00ba0e0196ec6cdcc60f3e",
+      "incident_group_id": "grp-a11-conflicting-history",
+      "review_status": "pending"
+    },
+    "a12-tool-failure": {
+      "content_hash": "7c668ebca32b081574d84b2c41170b4dffe414c1d81654ddddcc7ceac322eca5",
+      "incident_group_id": "grp-a12-tool-failure",
+      "review_status": "pending"
+    },
+    "a13-malformed-schema": {
+      "content_hash": "38280f435ae8024231788b9bd07b0dbf3513c5658f583371765ca543ef01e4e4",
+      "incident_group_id": "grp-a13-malformed-schema",
+      "review_status": "pending"
+    },
+    "a14-insufficient-corroboration": {
+      "content_hash": "d2268f4f862909478576428350f2c28ef94f0c87285811fa430875b78cc9ea5c",
+      "incident_group_id": "grp-a14-insufficient-corroboration",
+      "review_status": "pending"
+    },
+    "a15-ambiguous-target": {
+      "content_hash": "46f8b883b4212b1bca0c701e9fd746f39e06dbea3d95908086facc2fdbe63cf9",
+      "incident_group_id": "grp-a15-ambiguous-target",
+      "review_status": "pending"
+    },
+    "a16-private-target-refusal": {
+      "content_hash": "06dc1a8781982c5200c4e31da297cf03cdc8443237a44ed8c2bade55410d4716",
+      "incident_group_id": "grp-a16-private-target-refusal",
+      "review_status": "pending"
+    },
+    "a17-containment-unverified": {
+      "content_hash": "994cb1a072f97a672cc6c07e55c9514fd703693d3164863cc442c00aefb41be0",
+      "incident_group_id": "grp-a17-containment-unverified",
+      "review_status": "pending"
+    },
+    "a18-duplicate-processing": {
+      "content_hash": "f7b796e45643f941a512e93088f0208b5b2841da0441b8ff76f85cc670d2bdc2",
+      "incident_group_id": "grp-a18-duplicate-processing",
+      "review_status": "pending"
+    },
+    "a19-not-armed": {
+      "content_hash": "9ce8f48c77e7193351f7950a548c693d3228e6bc316a973601c2e36d24e050c2",
+      "incident_group_id": "grp-a19-not-armed",
+      "review_status": "pending"
+    },
+    "a20-close-verified": {
+      "content_hash": "e3104f3505884b431878e3d8b9f21f3d4c5105d51378ad47d7c115e732e50bbd",
+      "incident_group_id": "grp-a20-close-verified",
+      "review_status": "pending"
+    },
+    "a21-attack-signature-veto": {
+      "content_hash": "714171a1be9e4c6d418c54a6d8716f4c857db5e8dd3622befca2b43e6e31efce",
+      "incident_group_id": "grp-a21-attack-signature-veto",
+      "review_status": "pending"
+    },
+    "a22-high-risk-technique": {
+      "content_hash": "435662db15c3003d9bef350ba5e1aae59a91aec89e698dca84822471c9a51da1",
+      "incident_group_id": "grp-a22-high-risk-technique",
+      "review_status": "pending"
+    },
+    "a23-prompt-injection": {
+      "content_hash": "01ae6a530c8a760ccb332cae484abb1e23234f8e4e3fda3f1fc3800e0505fa71",
+      "incident_group_id": "grp-a23-prompt-injection",
+      "review_status": "pending"
+    },
+    "a24-rag-insufficient-history": {
+      "content_hash": "2b78034930c9b8c56e7f61c610f51822738d87d269cef81b11c7159529b5dd5b",
+      "incident_group_id": "grp-a24-rag-insufficient-history",
+      "review_status": "pending"
+    },
+    "a25-stale-evidence": {
+      "content_hash": "de40e3693f44dccee076c721cd81fb28a0b01c8216eaf9fb7ae295f309e08797",
+      "incident_group_id": "grp-a25-stale-evidence",
+      "review_status": "pending"
+    }
+  },
+  "dataset_name": "dataset-a-synthetic",
+  "dataset_version": "dataset-a-synthetic-v0-2026-08-21",
+  "manifest_hash": "9179f0d97a08b3e6efd221baa125d11da60539e9331a6cab411f380a4d261330",
+  "manifest_version": 1,
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "schema_version": "phase7-v1"
+}

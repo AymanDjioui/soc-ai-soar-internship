@@ -1,0 +1,57 @@
+name: win_scheduled_task_persistence
+index: windows-logs-*
+type: any
+
+filter:
+  - bool:
+      must:
+        - term:
+            winlog.event_id: "4698"
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Scheduled Task Created (Persistence)"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1053.005"
+    - "windows"
+    - "persistence"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A new scheduled task was created on the system
+    (MITRE T1053.005 - Scheduled Task/Job). Attackers commonly
+    use scheduled tasks to maintain persistence after reboot.
+
+    - Host: {0}
+    - Task Name: {1}
+    - Created By: {2}
+    - Task Content/Command: {3}
+    - Timestamp: {4}
+
+  description_args:
+    - host.name
+    - winlog.event_data.TaskName
+    - winlog.event_data.SubjectUserName
+    - winlog.event_data.TaskContent
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+  - other: "winlog.event_data.TaskName"
+
+alert_text_args:
+  - host.name
+  - winlog.event_data.TaskName
+  - winlog.event_data.SubjectUserName
+  - winlog.event_data.TaskContent
+  - "@timestamp"
+alert_text_type: alert_text_only

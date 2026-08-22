@@ -1,0 +1,91 @@
+name: juiceshop_sqli
+index: juiceshop-docker-*
+type: any
+
+filter:
+  - bool:
+      minimum_should_match: 1
+      should:
+        - query_string:
+            query: >
+              access_log.request_uri:(*UNION* OR *union* OR *%27* OR *%22* OR *SELECT* OR *select*
+              OR *DROP* OR *drop* OR *INSERT* OR *insert* OR *sleep* OR *benchmark*
+              OR *order*by* OR *ORDER*BY*)
+              OR access_log.request_body:(*UNION* OR *union* OR *SELECT* OR *select*
+              OR *DROP* OR *drop* OR *INSERT* OR *insert* OR *sleep* OR *benchmark*)
+            analyze_wildcard: true
+        # Boolean/comment-based bypass patterns (e.g. classic ' OR 1=1-- admin
+        # login bypass) don't contain any SQL keyword above and are invisible to
+        # the analyzed .text tokenizer (punctuation is stripped as token
+        # boundaries), so these run against the unanalyzed .keyword sub-field
+        # instead. Found 2026-08-18: a real admin-account-takeover payload via
+        # Burp completely evaded the keyword-only filter above.
+        - wildcard:
+            access_log.request_body.keyword:
+              value: "*' OR*"
+        - wildcard:
+            access_log.request_body.keyword:
+              value: "*' AND*"
+        - wildcard:
+            access_log.request_body.keyword:
+              value: "*'--*"
+        - wildcard:
+            access_log.request_body.keyword:
+              value: "*';*"
+        - wildcard:
+            access_log.request_uri.keyword:
+              value: "*'*OR*"
+        - wildcard:
+            access_log.request_uri.keyword:
+              value: "*'--*"
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "SQL Injection Attempt on Juice Shop"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "OWASP:A03:2021"
+    - "juiceshop"
+    - "dmz"
+    - "sqli"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A request containing SQLi payload patterns was detected against
+    the Juice Shop application (OWASP A03:2021 - Injection).
+
+    - Client IP: {0}
+    - Request URI: {1}
+    - Request Method: {2}
+    - Request Body: {3}
+    - User-Agent: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - access_log.client_ip
+    - access_log.request_uri
+    - access_log.request_method
+    - access_log.request_body
+    - access_log.http_user_agent
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "access_log.client_ip"
+  - other: "access_log.request_uri"
+
+alert_text_args:
+  - access_log.client_ip
+  - access_log.request_uri
+  - access_log.request_method
+  - access_log.request_body
+  - access_log.http_user_agent
+  - "@timestamp"
+alert_text_type: alert_text_only

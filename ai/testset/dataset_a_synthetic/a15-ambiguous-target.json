@@ -1,0 +1,76 @@
+{
+  "alert": {
+    "description": "Otherwise clean positive-control shape, but no containment target could be determined (e.g. the only IP-typed observable is ambiguous/untagged).",
+    "severity": 2,
+    "title": "C2 Beacon Detected, no resolvable target"
+  },
+  "case_uid": "a15-ambiguous-target",
+  "dataset_version": "dataset-a-synthetic-v0-2026-08-21",
+  "event_time": "2026-08-21T12:00:00Z",
+  "expected_primary_reason": "AMBIGUOUS_TARGET",
+  "expected_tier": "L2",
+  "fixtures": {
+    "_provenance": "synthetic",
+    "containment_executed": false,
+    "containment_target": null,
+    "tools_used": [
+      "search_past_cases",
+      "run_analyzer"
+    ],
+    "trace": [
+      {
+        "action": "search_past_cases",
+        "result": {
+          "hint": "prior TruePositive case matched this indicator"
+        }
+      },
+      {
+        "action": "run_analyzer",
+        "result": {
+          "status": "Success",
+          "taxonomies": [
+            {
+              "level": "malicious",
+              "namespace": "synthetic",
+              "predicate": "verdict",
+              "value": "malicious"
+            }
+          ]
+        }
+      }
+    ],
+    "verdict": {
+      "confidence": 0.9,
+      "key_evidence": "JA3 match",
+      "mitre_technique": "T1071.001",
+      "reason": "beacon pattern",
+      "severity": "high",
+      "verdict": "malicious"
+    }
+  },
+  "forbidden_reason_codes": [],
+  "incident_group_id": "grp-a15-ambiguous-target",
+  "label_confidence": "high",
+  "label_notes": "Spec-derived: target_unambiguous gate fails when fixtures.containment_target is falsy \u2014 l1_policy.py appends BOTH AMBIGUOUS_TARGET and MISSING_EVIDENCE for that one gate failure.",
+  "label_source": "specification_derived_pending_human",
+  "must_not_auto_contain": true,
+  "must_remain_open": true,
+  "observables": [
+    {
+      "data": "6.6.7.2",
+      "dataType": "ip",
+      "tags": []
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [
+    "AMBIGUOUS_TARGET",
+    "MISSING_EVIDENCE"
+  ],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "specification-derived-synthetic"
+}

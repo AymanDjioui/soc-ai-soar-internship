@@ -1,0 +1,56 @@
+name: linux_ssh_bruteforce
+index: linux-lan-logs-*
+type: frequency
+num_events: 5
+timeframe:
+  minutes: 5
+query_key: sender_ip
+
+filter:
+  - bool:
+      must:
+        - term:
+            syslog_program: "sshd"
+        - query_string:
+            query: 'syslog_message:(*Failed password*)'
+
+realert:
+  minutes: 10
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "SSH Brute-Force Detected (Linux)"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1110"
+    - "linux"
+    - "brute-force"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    Multiple failed SSH login attempts detected from the same source
+    (MITRE T1110 - Brute Force).
+
+    - Source: {0}
+    - Log Message: {1}
+    - Timestamp: {2}
+
+  description_args:
+    - sender_ip
+    - syslog_message
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "sender_ip"
+  - other: "syslog_message"
+
+alert_text_args:
+  - sender_ip
+  - syslog_message
+  - "@timestamp"
+alert_text_type: alert_text_only

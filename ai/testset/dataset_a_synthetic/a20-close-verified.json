@@ -1,0 +1,84 @@
+{
+  "alert": {
+    "description": "Represents the Phase 3 'verified TruePositive closure' success path \u2014 containment AND the subsequent case-closure step both independently verified.",
+    "severity": 3,
+    "title": "C2 Beacon Detected, closure independently verified"
+  },
+  "case_uid": "a20-close-verified",
+  "dataset_version": "dataset-a-synthetic-v0-2026-08-21",
+  "event_time": "2026-08-21T12:00:00Z",
+  "expected_primary_reason": "CASE_CLOSE_VERIFIED",
+  "expected_tier": "L1",
+  "fixtures": {
+    "_provenance": "synthetic",
+    "containment_executed": true,
+    "containment_target": "6.6.7.6",
+    "tools_used": [
+      "search_past_cases",
+      "run_analyzer"
+    ],
+    "trace": [
+      {
+        "action": "search_past_cases",
+        "result": {
+          "hint": "prior TruePositive case matched this indicator"
+        }
+      },
+      {
+        "action": "run_analyzer",
+        "result": {
+          "status": "Success",
+          "taxonomies": [
+            {
+              "level": "malicious",
+              "namespace": "synthetic",
+              "predicate": "verdict",
+              "value": "malicious"
+            }
+          ]
+        }
+      }
+    ],
+    "verdict": {
+      "confidence": 0.97,
+      "key_evidence": "JA3 match",
+      "mitre_technique": "T1071.001",
+      "reason": "beacon pattern",
+      "severity": "high",
+      "verdict": "malicious"
+    }
+  },
+  "forbidden_reason_codes": [],
+  "incident_group_id": "grp-a20-close-verified",
+  "label_confidence": "high",
+  "label_notes": "KNOWN GAP, spec-derived and documented, not fabricated: l1_policy.evaluate_l1_closure_eligibility() (Phase 3) is the function that OUGHT to emit a success-path code on verified closure, but grep-confirmed: Reason.CASE_CLOSE_VERIFIED is declared and classified POLICY_DECISION, yet NEVER actually appended to any reasons list anywhere in l1_policy.py or agent_orchestrator.py today (a successful closure currently returns an EMPTY reason_codes list, relying on eligible=True + already_closed alone). This case documents the intended success-path label per the audit's own closure-verification requirement; fixing the emission gap is a policy change, out of scope here. Also NOT reachable via run_policy_replay() at all \u2014 closure simulation isn't wired into batch replay (see replay_harness.py's own docstring, Phase 7A scope).",
+  "label_source": "specification_derived_pending_human",
+  "must_not_auto_contain": false,
+  "must_remain_open": true,
+  "observables": [
+    {
+      "data": "6.6.7.6",
+      "dataType": "ip",
+      "tags": [
+        "src"
+      ]
+    },
+    {
+      "data": "192.168.10.30",
+      "dataType": "ip",
+      "tags": [
+        "dst"
+      ]
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [
+    "CASE_CLOSE_VERIFIED"
+  ],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "specification-derived-synthetic"
+}

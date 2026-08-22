@@ -1,0 +1,24 @@
+{
+  "id": "02-ssdp-false-positive",
+  "source": "notes/12.md",
+  "note": "THE critical case. Benign Windows UPnP broadcast to our own gateway.",
+  "alert": {
+    "event_type": "alert",
+    "src_ip": "192.168.10.30",
+    "dest_ip": "192.168.10.2",
+    "in_iface": "em1",
+    "alert": {
+      "signature": "ET DOS Possible SSDP Amplification Scan in Progress",
+      "signature_id": 2019102,
+      "category": "Attempted Denial of Service",
+      "severity": 2
+    }
+  },
+  "ground_truth": {
+    "is_false_positive": true,
+    "severity": "low",
+    "mitre_technique": "N/A",
+    "must_not_auto_block": true,
+    "rationale": "Internal host -> own gateway, normal UPnP. Blocking = self-inflicted outage."
+  }
+}

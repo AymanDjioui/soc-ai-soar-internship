@@ -1,0 +1,55 @@
+name: win_admin_group_modification
+index: windows-logs-*
+type: any
+
+filter:
+  - term:
+      winlog.event_id: "4732"
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "User Added to Privileged Group"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1098"
+    - "windows"
+    - "privilege-escalation"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A user was added to a security-enabled local group
+    (MITRE T1098 - Account Manipulation).
+
+    - Host: {0}
+    - Target Group: {1}
+    - Member Added: {2}
+    - Changed By: {3}
+    - Timestamp: {4}
+
+  description_args:
+    - host.name
+    - winlog.event_data.TargetUserName
+    - winlog.event_data.MemberName
+    - winlog.event_data.SubjectUserName
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+  - other: "winlog.event_data.TargetUserName"
+  - other: "winlog.event_data.MemberName"
+
+alert_text_args:
+  - host.name
+  - winlog.event_data.TargetUserName
+  - winlog.event_data.MemberName
+  - winlog.event_data.SubjectUserName
+  - "@timestamp"
+alert_text_type: alert_text_only

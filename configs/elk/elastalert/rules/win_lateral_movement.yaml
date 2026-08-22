@@ -1,0 +1,75 @@
+name: win_lateral_movement
+index: windows-logs-*
+type: any
+
+filter:
+  - bool:
+      must:
+        - term:
+            winlog.event_id: "4624"
+        - term:
+            winlog.event_data.LogonType: "3"
+      must_not:
+        - term:
+            winlog.event_data.TargetUserName: "ANONYMOUS LOGON"
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Windows Network Logon (Possible Lateral Movement)"
+  type: "external"
+  source: "elastalert2"
+  severity: 4
+  tags:
+    - "MITRE:T1021"
+    - "windows"
+    - "lateral-movement"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A network logon (Logon Type 3 - used by SMB, admin shares, PsExec,
+    and WMI-based remote execution) was detected (MITRE T1021 - Remote
+    Services). This is the standard signature of an attacker pivoting
+    from a compromised host to another internal system using stolen
+    or dumped credentials.
+
+    Check whether the account below appears in a recent
+    `win_powershell` alert (Invoke-Mimikatz / credential dumping
+    pattern) or `win_admin_group` alert from the same or a related
+    host — if so, this logon is very likely using credentials
+    harvested earlier in the same intrusion, not legitimate
+    administration.
+
+    - Target Host: {0}
+    - Account Used: {1}
+    - Source Network Address: {2}
+    - Source Port: {3}
+    - Logon Type: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - host.name
+    - winlog.event_data.TargetUserName
+    - winlog.event_data.IpAddress
+    - winlog.event_data.IpPort
+    - winlog.event_data.LogonType
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+  - other: "winlog.event_data.TargetUserName"
+  - ip: "winlog.event_data.IpAddress"
+
+alert_text_args:
+  - host.name
+  - winlog.event_data.TargetUserName
+  - winlog.event_data.IpAddress
+  - winlog.event_data.IpPort
+  - winlog.event_data.LogonType
+  - "@timestamp"
+alert_text_type: alert_text_only

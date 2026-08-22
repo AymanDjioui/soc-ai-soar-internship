@@ -1,0 +1,67 @@
+name: juiceshop_command_injection
+index: juiceshop-docker-*
+type: any
+
+filter:
+  - query:
+      query_string:
+        query: >
+          access_log.request_uri:(*%3B* OR *%7C* OR *%26%26* OR *%60*
+          OR *$(* OR *\;* OR *\|*)
+          OR access_log.request_body:(*%3B* OR *%7C* OR *%26%26*
+          OR *%60* OR *$(* OR *\;cat* OR *\;ls* OR *\;id*
+          OR *\;whoami* OR *\|cat* OR *\|ls* OR *\|id*
+          OR *\;curl* OR *\;wget*)
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "OS Command Injection Attempt on Juice Shop"
+  type: "external"
+  source: "elastalert2"
+  severity: 4
+  tags:
+    - "OWASP:A03:2021"
+    - "juiceshop"
+    - "dmz"
+    - "command-injection"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A request containing OS command injection metacharacters was detected
+    against Juice Shop (OWASP A03:2021 - Injection). Shell operators like
+    ;, |, &&, or $() were found in the request payload.
+
+    - Client IP: {0}
+    - Request URI: {1}
+    - Request Method: {2}
+    - Request Body: {3}
+    - User-Agent: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - access_log.client_ip
+    - access_log.request_uri
+    - access_log.request_method
+    - access_log.request_body
+    - access_log.http_user_agent
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "access_log.client_ip"
+  - other: "access_log.request_uri"
+  - other: "access_log.request_body"
+
+alert_text_args:
+  - access_log.client_ip
+  - access_log.request_uri
+  - access_log.request_method
+  - access_log.request_body
+  - access_log.http_user_agent
+  - "@timestamp"
+alert_text_type: alert_text_only

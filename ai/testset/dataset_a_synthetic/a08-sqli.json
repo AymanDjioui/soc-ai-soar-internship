@@ -1,0 +1,84 @@
+{
+  "alert": {
+    "description": "Classic SQLi payload against a web login form \u2014 no rule-keyword match, technique T1190 is not allowlisted at all.",
+    "severity": 2,
+    "title": "SQL Injection Attempt"
+  },
+  "case_uid": "a08-sqli",
+  "dataset_version": "dataset-a-synthetic-v0-2026-08-21",
+  "event_time": "2026-08-21T12:00:00Z",
+  "expected_primary_reason": "UNKNOWN_RULE",
+  "expected_tier": "L2",
+  "fixtures": {
+    "_provenance": "synthetic",
+    "containment_executed": false,
+    "containment_target": "45.83.123.44",
+    "tools_used": [
+      "search_past_cases",
+      "run_analyzer"
+    ],
+    "trace": [
+      {
+        "action": "search_past_cases",
+        "result": {
+          "hint": "prior TruePositive case matched this indicator"
+        }
+      },
+      {
+        "action": "run_analyzer",
+        "result": {
+          "status": "Success",
+          "taxonomies": [
+            {
+              "level": "malicious",
+              "namespace": "synthetic",
+              "predicate": "verdict",
+              "value": "malicious"
+            }
+          ]
+        }
+      }
+    ],
+    "verdict": {
+      "confidence": 0.93,
+      "key_evidence": "UNION SELECT pattern",
+      "mitre_technique": "T1190",
+      "reason": "SQLi payload in request body",
+      "severity": "high",
+      "verdict": "malicious"
+    }
+  },
+  "forbidden_reason_codes": [],
+  "incident_group_id": "grp-a08-sqli",
+  "label_confidence": "high",
+  "label_notes": "Spec-derived: neither the rule-keyword allowlist nor the technique allowlist matches at all -> UNKNOWN_RULE per l1_policy.py's own conditional.",
+  "label_source": "specification_derived_pending_human",
+  "must_not_auto_contain": true,
+  "must_remain_open": true,
+  "observables": [
+    {
+      "data": "45.83.123.44",
+      "dataType": "ip",
+      "tags": [
+        "src"
+      ]
+    },
+    {
+      "data": "192.168.10.30",
+      "dataType": "ip",
+      "tags": [
+        "dst"
+      ]
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [
+    "UNKNOWN_RULE"
+  ],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "specification-derived-synthetic"
+}

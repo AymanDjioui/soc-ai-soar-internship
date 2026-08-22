@@ -1,0 +1,54 @@
+name: win_new_service_installed
+index: windows-logs-*
+type: any
+
+filter:
+  - term:
+      winlog.event_id: "7045"
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "New Windows Service Installed"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1543.003"
+    - "windows"
+    - "persistence"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A new service was installed on the system (MITRE T1543.003 -
+    Create or Modify System Process: Windows Service).
+
+    - Host: {0}
+    - Service Name: {1}
+    - Service File: {2}
+    - Account: {3}
+    - Timestamp: {4}
+
+  description_args:
+    - host.name
+    - winlog.event_data.ServiceName
+    - winlog.event_data.ImagePath
+    - winlog.event_data.AccountName
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+  - other: "winlog.event_data.ServiceName"
+
+alert_text_args:
+  - host.name
+  - winlog.event_data.ServiceName
+  - winlog.event_data.ImagePath
+  - winlog.event_data.AccountName
+  - "@timestamp"
+alert_text_type: alert_text_only

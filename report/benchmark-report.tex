@@ -1,0 +1,518 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{caption}
+
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\newcommand{\best}[1]{\textbf{#1}}
+
+\title{\textbf{Choosing a Local Language Model for Automated\\ Security Alert Triage}\\[0.4em]
+\large Benchmark Report}
+\author{Ayman Djioui \\ \small SOC Internship, Devoteam}
+\date{August 2026}
+
+\begin{document}
+\maketitle
+
+\section{What this document is about}
+
+Our internship project builds a small Security Operations Center in a lab network.
+A firewall and an intrusion detection system watch the traffic, the logs go into
+Elasticsearch, and when something suspicious appears an alert is created
+automatically in a case management tool called TheHive.
+
+The problem with this setup is the same problem real SOCs have. The system produces
+far more alerts than anyone can read. Most of them are harmless. Somebody still has
+to look at each one and decide whether it matters. That first pass is called Tier-1
+triage and it is slow, repetitive work.
+
+We wanted to know whether a language model running on our own machine could do that
+first pass. Not to replace the analyst, but to write a draft assessment so a human
+starts from something instead of from nothing.
+
+The model has to run locally. Sending security alerts from a client network to an
+external API is not acceptable, because those alerts contain internal addresses,
+hostnames and attack details. Everything described here runs on hardware we control.
+
+This document explains how we chose the model, what data we tested it on, and what
+we found. The short version is that the smallest model we tested won, and it kept
+winning even after we gave it much larger competitors and better hardware.
+
+\section{What we ask the model to do}
+
+For each alert the model must return four things:
+
+\begin{itemize}[nosep]
+  \item \textbf{Is this a false positive?} True or false.
+  \item \textbf{Severity.} One of low, medium, high, critical.
+  \item \textbf{MITRE ATT\&CK technique.} The identifier of the attack technique,
+        taken from a fixed list, or N/A when no technique applies.
+  \item \textbf{Recommended action.} A short sentence for the analyst.
+\end{itemize}
+
+The answer must come back as structured data, not as a paragraph of text, because
+the rest of our pipeline reads it as JSON. We enforce this with a feature called
+schema-constrained decoding, which restricts the model so that it can only produce
+output matching a shape we define in advance.
+
+One point matters for everything that follows. The model never decides whether to
+block anything. It produces an assessment. A separate piece of ordinary code decides
+whether any action is allowed. We made that separation after an early test where a
+model recommended blocking one of our own internal Windows machines because it was
+sending normal network discovery traffic. That result is what convinced us the
+decision had to sit in code rather than in the model.
+
+\section{The evaluation data}
+
+To compare models we needed a fixed set of alerts with known correct answers.
+We built seven test cases from our own lab. They are real events, captured from the
+running system, not invented examples.
+
+\subsection{Why seven cases, and how they were chosen}
+
+The cases were chosen to cover the different log sources we actually collect and,
+more importantly, to include the specific mistakes we expected a model to make.
+Three of them are traps. Two look dangerous but are harmless. One looks harmless but
+is a genuine attack. A model that only ever answers ``this is an attack'' scores
+badly on this set, which is exactly what we wanted.
+
+\begin{table}[h]
+\centering
+\small
+\caption{The seven evaluation cases}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Case} & \textbf{Source} & \textbf{What it is} & \textbf{Correct answer} \\
+\midrule
+01 testmyids     & Suricata IDS  & Signature fires on a harmless    & not FP, medium \\
+                 &               & test request to testmyids.com    &                \\
+02 ssdp          & Suricata IDS  & Internal Windows host sending    & \best{false positive}, low \\
+                 &               & normal SSDP discovery traffic    &                \\
+03 attack resp.  & Suricata IDS  & External host, response pattern  & not FP, medium \\
+                 &               & to an internal LAN machine       &                \\
+04 powershell    & Suricata IDS  & Internal host with a PowerShell  & \best{false positive}, low \\
+                 &               & user agent going outbound        &                \\
+05 sqli          & Juice Shop    & Login request with the payload   & not FP, critical, \\
+                 & web logs      & \texttt{' OR 1=1--}              & T1190 \\
+06 cred dump     & Windows       & \texttt{reg save HKLM\textbackslash SAM}
+                                                                    & not FP, high, \\
+                 & Sysmon        & run by Administrator             & T1003.002 \\
+07 nmap scan     & Suricata IDS  & Port scan against the exposed    & not FP, medium, \\
+                 &               & web application in the DMZ       & T1046 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Cases 02 and 04 are the important ones. Both involve internal machines doing normal
+things that happen to match an intrusion detection signature. In a real SOC these
+are the alerts that waste the most time, and they are also the ones where a wrong
+automated decision does the most damage, because blocking an internal host takes
+part of the network offline.
+
+Case 05 is the opposite trap. A single quote in a login form is easy to miss, and it
+is a real authentication bypass attempt against our deliberately vulnerable web
+application.
+
+\subsection{How we score}
+
+Each case is worth three points, one for each judgement we can check objectively:
+
+\begin{itemize}[nosep]
+  \item false positive, correct or not
+  \item severity, correct or not
+  \item MITRE technique, correct or not
+\end{itemize}
+
+Seven cases times three points gives a maximum of \textbf{21}. We also record
+whether the returned JSON was valid, and how long the answer took.
+
+The recommended action is not scored. There is no single correct wording for it, so
+scoring it would mean grading a sentence by opinion, and that would make the whole
+benchmark subjective.
+
+\subsection{Honest limits of this data}
+
+Seven cases is a small set. One case is worth almost five percent of the total
+score, so small differences between models are not meaningful. We treat this
+benchmark as good enough to rank models clearly apart, and not good enough to argue
+about one or two points.
+
+The test set was also written by the same person who later tuned the prompt. That is
+a real source of bias and we state it rather than hide it.
+
+\section{Experiment 1: comparing five models}
+
+The first question was simply which model to use. We tested five, chosen to cover a
+range of sizes and different developers. At this stage the prompt was plain, with no
+examples given to the model.
+
+We ran this experiment twice on different hardware, first on a virtual machine on a
+laptop using only the processor, and later on a cloud machine with a graphics card.
+The models and the test cases were identical in both runs.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Five models, same prompt, same test cases, two machines}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+& & \multicolumn{2}{c}{\textbf{Score out of 21}} & \multicolumn{2}{c}{\textbf{Time per alert}} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+\textbf{Model} & \textbf{Size} & \textbf{CPU} & \textbf{GPU} & \textbf{CPU} & \textbf{GPU} \\
+\midrule
+\texttt{mistral:7b}   & 4.4 GB & \best{13} & \best{13} & 68.2 s & 2.5 s \\
+\texttt{phi4-mini}    & 2.5 GB & \best{13} & 12        & 24.1 s & 3.5 s \\
+\texttt{llama3.1:8b}  & 4.9 GB & 12        & 12        & 47.5 s & 2.1 s \\
+\texttt{qwen2.5:7b}   & 4.7 GB & 10        & 10        & 43.2 s & 2.1 s \\
+\texttt{llama3.2:3b}  & 2.0 GB & 5         & 6         & 19.6 s & 1.4 s \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{A bigger model is not a better model}
+
+This is the result that surprised us most, and it is the reason this section exists.
+
+Ordered by size, the scores go 5, 13, 13, 10, 12. There is no pattern. The largest
+model we tested, \texttt{llama3.1:8b} with eight billion parameters, did not win. The
+two seven billion parameter models, \texttt{mistral:7b} and \texttt{qwen2.5:7b}, are
+the same size and scored thirty percent apart.
+
+The common advice when running models locally is to pick the biggest one that fits
+in memory. On our task that advice would have been wrong. What separates these
+models is not how many parameters they have but what they were trained on and how
+they were tuned to follow instructions.
+
+We think the reason is that our task is narrow. We are not asking the model to write
+an essay or reason through a long problem. We ask it to read roughly fifteen lines of
+log data and fill in four fields. That kind of task rewards precision and instruction
+following, and those do not scale with parameter count.
+
+\subsection{The smallest model stopped working entirely}
+
+\texttt{llama3.2:3b} returned \emph{the same answer for all seven alerts}. Every time
+it said false positive, severity low, technique T1003.002, whatever we gave it.
+
+It is tempting to record this as twenty four percent accuracy. That would be
+misleading. The model is not partly right, it is not reading the input at all. It
+scored anything above zero only because one of the seven cases genuinely is
+T1003.002, so it was accidentally correct once.
+
+This tells us there is a floor below which a model cannot do this task at all,
+somewhere between three and four billion parameters for this family. We only saw it
+because we deliberately included a model we expected to be too small. Its very low
+response time is worthless, since speed means nothing when the answer ignores the
+question.
+
+\subsection{Different models are good at different parts}
+
+\texttt{qwen2.5:7b} was the worst model at spotting false positives, three out of
+seven, but the best at identifying the MITRE technique, four out of seven. Capability
+is not one single number. For us the false positive column matters most, because that
+is the judgement that can lead to blocking traffic, so we weighted it accordingly
+when choosing.
+
+\section{Experiment 2: the prompt matters more than the model}
+
+Having picked \texttt{mistral:7b}, we varied how we asked rather than what we asked.
+Two things changed:
+
+\begin{itemize}[nosep]
+  \item \textbf{Few-shot examples.} Instead of only instructions, we included two
+        complete worked examples in the prompt, one harmless alert and one real
+        attack, each with the correct answer.
+  \item \textbf{A restricted answer list.} Instead of letting the model write any
+        MITRE identifier it liked, we gave it a fixed list and made anything outside
+        that list impossible to produce.
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Same model, four configurations (measured on the laptop CPU)}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+\textbf{Examples} & \textbf{Answer list} & \textbf{False pos.} & \textbf{Severity}
+  & \textbf{Technique} & \textbf{Total} \\
+\midrule
+few-shot  & restricted & 7/7 & \best{6/7} & \best{6/7} & \best{19/21 (90\%)} \\
+few-shot  & free       & 7/7 & 5/7 & 5/7 & 17/21 (81\%) \\
+zero-shot & restricted & 7/7 & 4/7 & 3/7 & 14/21 (67\%) \\
+zero-shot & free       & 7/7 & 4/7 & 2/7 & 13/21 (62\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The comparison worth making is this one:
+
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Changing from the second best model to the best model & \best{+1 point} \\
+Changing from the worst prompt to the best prompt     & \best{+6 points} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Working on the prompt was six times more useful than working on the choice of model.
+For a project with a deadline this is the single most practical thing we learned.
+Time spent comparing models has a much lower return than time spent on how the
+question is asked.
+
+\subsection{Why the restricted answer list helps}
+
+Without it, the models invented technique identifiers that look real but do not
+exist, such as T1132.002 and T1048.007. A reader who does not know the ATT\&CK
+catalogue by heart would not notice. Restricting the list makes an invalid answer
+physically impossible to generate.
+
+It does not make the model understand anything, though. It only removes one class of
+error. The model still has to choose the right entry, which is why the restriction
+only pays off properly when combined with the worked examples.
+
+\subsection{The model never says it does not know}
+
+We deliberately added an OTHER option to the list, plus a field where the model could
+explain its reasoning, so that an unfamiliar attack could be flagged for a human
+instead of forced into a wrong category.
+
+\textbf{OTHER was chosen zero times out of twenty one opportunities.} The model
+always produced a confident answer, including when it was wrong.
+
+This has a practical consequence for anyone building on this. You cannot rely on a
+model telling you when it is unsure. If you need to detect uncertainty you have to
+measure it from outside, for example from the confidence value or by comparing two
+models, and not by politely giving the model a way to opt out.
+
+\section{Experiment 3: larger and newer models on better hardware}
+
+Experiments 1 and 2 ran on a processor, where a very large model was not practical to
+test. Once we had a machine with a graphics card and 24 GB of video memory, we could
+finally answer the obvious objection: was \texttt{mistral:7b} chosen because it was
+the best, or because it was the only thing our hardware could run?
+
+To avoid choosing opponents we expected to beat, we took the candidate list from a
+public recommendation of the best local models for security work rather than picking
+them ourselves.
+
+\subsection{Two of the recommended models do not fit}
+
+\begin{center}
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Model} & \textbf{Weights} & \textbf{Runs on a 24 GB card?} \\
+\midrule
+\texttt{qwen3.6:35b} (the top recommendation) & 23.9 GB & No \\
+\texttt{llama3.3:70b}                         & 42.5 GB & No \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The most recommended model needs 23.9 GB of weights on a card with 24 GB, which
+leaves nothing for the working memory the model needs while running. It would have to
+push part of itself back onto the processor, which removes the whole benefit of the
+graphics card.
+
+This is worth stating plainly. General recommendations for the best model are written
+without any reference to what hardware the reader actually has.
+
+\subsection{Results}
+
+All models below were tested with the same prompt, the same restricted answer list
+and the same seven cases.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Larger and newer models against the current one}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Model} & \textbf{Size} & \textbf{JSON} & \textbf{False pos.}
+  & \textbf{Sev.} & \textbf{Total} & \textbf{Time} \\
+\midrule
+\texttt{mistral:7b}      & \best{4.4 GB} & 7/7 & \best{7/7} & 5/7 & \best{19/21} & 2.8 s \\
+\texttt{qwen3.5:27b}     & 17 GB  & 7/7 & 7/7 & 3/7 & 14/21 & 48.9 s \\
+\texttt{qwen3-coder:30b} & 18 GB  & 7/7 & 5/7 & 4/7 & 14/21 & 2.4 s \\
+\texttt{gemma4:12b}      & 7.6 GB & 7/7 & 6/7 & 3/7 & 12/21 & 57.6 s \\
+\texttt{qwen3:30b-a3b}   & 18 GB  & \best{6/7} & 3/7 & 2/7 & 10/21 & 23.5 s \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Every one of them lost, and not narrowly. The model we already had is four times
+smaller than the closest competitors and scored five points higher.
+
+This is the second time the same result appeared. In Experiment 1 the biggest model
+did not win. Here, with a newer generation of models, more memory available and
+candidates selected by somebody else, the smallest model won again. We consider this
+the strongest single result in the report, because it would have been easy for it to
+go the other way.
+
+\subsection{Three failures worth describing}
+
+Aggregate scores hide what actually went wrong. Three examples show why we do not
+simply trust a higher benchmark number.
+
+\paragraph{A model that contradicted itself.}
+On the port scan case, \texttt{qwen3.5:27b} filled the technique field with T1547.001,
+which is about programs starting automatically at boot and has nothing to do with
+scanning. In the same answer, its own explanation said the activity matched T1592,
+gathering information about a target. The correct answer was T1046. Three different
+techniques in one response.
+
+The restricted list guarantees a valid answer. It does not guarantee a considered
+one. When the model's preferred answer is not on the list, it does not complain, it
+quietly substitutes something that is on the list, even when that contradicts its own
+explanation. Anyone reading only the technique field would never see this.
+
+\paragraph{A model that invented the source of an attack.}
+On the same case, \texttt{gemma4:12b} wrote that an internal administrator on our VPN
+had run the scan and marked the whole alert as a false positive. The scan came from
+outside. The model had taken the description of our network from the prompt and
+applied it to traffic that did not match it.
+
+This is the more dangerous direction of error. A false alarm wastes an analyst's
+time. This kind of mistake makes a real attack disappear silently, and no format
+restriction can catch it.
+
+\paragraph{A model that returned nothing at all.}
+\texttt{qwen3:30b-a3b} produced an empty response on one case after waiting almost
+forty six seconds. It was not malformed output, there was simply no output.
+
+We had previously concluded that constrained decoding was completely reliable,
+because across fifty six earlier runs every answer was valid. That conclusion was
+too strong and this result corrects it. The guarantee is that \emph{if} the model
+produces something, it will match the required shape. There is no guarantee that it
+produces anything. Any system built on this has to handle an empty answer as a normal
+possibility.
+
+\section{Processor against graphics card}
+
+The same model, the same prompt and the same test cases were run on three machines.
+Only the hardware changed. The model file was byte for byte identical on all three,
+which we verified by checksum.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Same work, three machines}
+\begin{tabular}{@{}lllrr@{}}
+\toprule
+\textbf{Machine} & \textbf{Processing} & \textbf{Cores or card}
+  & \textbf{Time per alert} & \textbf{Score} \\
+\midrule
+Laptop virtual machine & CPU only & 4 cores          & 74.1 s & 19/21 \\
+AWS \texttt{m7i-flex.large} & CPU only & about 1 core & 116.1 s & 19/21 \\
+Google Cloud \texttt{g2-standard-4} & \best{NVIDIA L4} & 24 GB card
+  & \best{2.5 s} & 19/21 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The graphics card version is about seventy times faster than the AWS processor
+machine, and the score did not change.
+
+This matters more than it looks. Before this test, one full alert took our pipeline
+514 seconds from start to finish, and the backlog of 206 unprocessed alerts in
+TheHive would have needed about twenty eight hours of computation. On the graphics
+card the same backlog takes roughly twenty minutes. The delay was a hardware problem,
+not a problem with our design.
+
+\subsection{Two details that are easy to get wrong}
+
+\textbf{The first request is slow.} Loading the model into the card takes about
+thirty seven seconds. After that, answers take two and a half seconds. If the machine
+sits idle the model is unloaded and the next request pays the loading cost again.
+For a live demonstration the model has to be warmed up first.
+
+\textbf{Identical scores do not mean identical answers.} The three machines all
+scored 19 out of 21, but they did not fail on the same cases. The processor version
+got the severity right on case 01 and the technique wrong on case 03. The graphics
+card version did the opposite. The model gives exactly the same answer every time on
+the same machine, but not across machines, because the two kinds of hardware compute
+in slightly different ways and close decisions can tip either way.
+
+The practical conclusion is that a benchmark result belongs to a combination of model,
+prompt, answer format \emph{and} hardware. Changing the machine means the benchmark
+should be run again rather than assumed to still hold.
+
+\section{What we chose and why}
+
+We use \textbf{\texttt{mistral:7b}}.
+
+\begin{itemize}[nosep]
+  \item It scored highest overall, 19 out of 21.
+  \item It got every false positive right, seven out of seven. This is the judgement
+        we care about most, because it is the one that can lead to blocking traffic.
+  \item It got every MITRE technique right, seven out of seven.
+  \item It answers in about 2.5 seconds on the graphics card.
+  \item At 4.4 GB it leaves most of the card free, so there is room to grow later.
+\end{itemize}
+
+It is not the fastest model available. \texttt{phi4-mini} is smaller and was quicker
+on the processor. We chose accuracy on false positives over speed, because a wrong
+answer here has a real cost and a slightly slower answer does not.
+
+The important point is that this is now a tested decision rather than a forced one.
+We gave the model a graphics card with five times the memory it needs and four
+larger, newer competitors chosen by somebody else, and it still won.
+
+\section{What we would not claim}
+
+\begin{itemize}
+  \item \textbf{Seven cases is a small sample.} A single case is worth almost five
+        percent. The ranking between models is clear, the exact percentages are not
+        precise.
+  \item \textbf{Each model saw each case once.} We have no measure of variation.
+        Answers are repeatable on the same machine, but that does not tell us how
+        close the model was to answering differently.
+  \item \textbf{The prompt was tuned for \texttt{mistral:7b}.} The competitors in
+        Experiment 3 were tested using a prompt developed for the model they were
+        competing against. This probably works against them, and a fairer comparison
+        would tune the prompt separately for each. We did not do that.
+  \item \textbf{The processor comparison was never like for like.} The laptop had
+        four real cores and the AWS machine about one. We wanted a machine with four
+        cores for a fair test but it was not available on the account we had.
+  \item \textbf{The test set and the prompt share an author.} That is a bias, and the
+        results should be read with it in mind.
+  \item \textbf{Two recommended models were excluded on memory, not beaten.}
+        \texttt{qwen3.6:35b} and \texttt{llama3.3:70b} were never tested.
+\end{itemize}
+
+\section{Conclusion}
+
+Three results are worth carrying forward.
+
+\textbf{Size did not predict quality.} A 4.4 GB model beat competitors up to 18 GB,
+twice, on two different generations of model and two different machines. For a narrow
+task with a fixed answer format, how a model was trained matters more than how large
+it is.
+
+\textbf{How you ask beats what you ask.} Improving the prompt was worth six points.
+Choosing a better model was worth one. If we had to spend our remaining time on one
+of the two, it would be the prompt.
+
+\textbf{Hardware changed the speed and not the answer.} Moving to a graphics card
+made the system about seventy times faster with the same score, which turned a
+pipeline that was too slow to use into one that responds in a few seconds.
+
+The most useful thing we found, though, was not in the scores. It was watching a
+model recommend blocking one of our own machines, and watching another one describe an
+external attacker as an internal administrator. Neither mistake shows up as invalid
+output, and neither would be caught by a stricter answer format. That is the reason
+the decision to block anything sits in ordinary code that we can read and test, and
+never in the model.
+
+\end{document}

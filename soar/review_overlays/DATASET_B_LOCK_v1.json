@@ -1,0 +1,158 @@
+{
+  "lock_id": "dataset-b-v2-phase7e-final-v1",
+  "locked_at": "2026-08-22T10:12:45.196475+00:00",
+  "locked_by": "adjudication (offline, network_guard() active throughout)",
+  "scope": "Phase 7E finalized 60-case Dataset B review sample -- reviewer-a/reviewer-b primary decisions + adjudication overrides for 15 cases (2 corrected per project-owner review)",
+  "protocol_deviation": {
+    "cases": [
+      "dsb-c-11b8b89478",
+      "dsb-c-23ed74f43f"
+    ],
+    "resolution": "reviewer-a's original decision accepted as sole authoritative primary decision; no reviewer-b decision created; excluded from all inter-reviewer agreement stats",
+    "effective_clean_dual_review_denominator": 18
+  },
+  "preliminary_reviewer_agreement_PRESERVED_UNCHANGED": {
+    "scope": "18 clean dual-reviewed cases, computed BEFORE adjudication -- carried forward verbatim, never recomputed against post-adjudication labels",
+    "n": 18,
+    "agreements": 14,
+    "disagreements": 4,
+    "exact_agreement_rate": 0.7778,
+    "exact_agreement_pct": "77.8%"
+  },
+  "final_label_set": {
+    "total_cases": 60,
+    "missing": 0,
+    "status_counts": {
+      "approved": 35,
+      "excluded": 21,
+      "disputed": 4
+    },
+    "tier_counts": {
+      "L2": 39,
+      "null": 21,
+      "L1": 0
+    },
+    "source_breakdown": {
+      "adjudication": 15,
+      "reviewer-a_primary": 24,
+      "reviewer-b_primary": 21
+    },
+    "approved_count_contributing_to_safety_metrics": 35,
+    "disputed_excluded_from_safety_metrics": 4,
+    "excluded_from_safety_metrics_entirely": 21
+  },
+  "adjudication_summary": {
+    "total_adjudicated": 15,
+    "approved_L2": 8,
+    "excluded": 3,
+    "disputed_L2_final_no_change": 4,
+    "L1_approvals": 0,
+    "final_disputed_case_uids": [
+      "dsb-c-4a309f2549",
+      "dsb-c-8d06d04a08",
+      "dsb-c-c851a89a34",
+      "dsb-c-ec8679e908"
+    ],
+    "corrections_applied_by_project_owner": [
+      "dsb-c-1a1e45f08c added as excluded (consistency with dsb-c-ce88041225/dsb-c-dc1b7c7233)",
+      "dsb-c-ec8679e908 changed from proposed excluded to final disputed/L2"
+    ]
+  },
+  "rubric_validation": "15 / 15 adjudication decisions PASS review_rubric.validate_decision() -- 0 failures",
+  "test_suite": {
+    "runner": "each soar/test_*.py executed individually via ./.venv/bin/python3 (no shared pytest runner exists in this repo); each script's own PASS/FAIL counter and exit code used",
+    "files_run": 12,
+    "total_passed": 632,
+    "total_failed": 0,
+    "all_exit_codes_zero": true,
+    "per_file": {
+      "test_containment_verification.py": {
+        "passed": 50,
+        "failed": 0
+      },
+      "test_cortex_metadata.py": {
+        "passed": 26,
+        "failed": 0
+      },
+      "test_idempotency.py": {
+        "passed": 34,
+        "failed": 0
+      },
+      "test_l1_policy.py": {
+        "passed": 57,
+        "failed": 0
+      },
+      "test_l2_assignment.py": {
+        "passed": 87,
+        "failed": 0
+      },
+      "test_notifications.py": {
+        "passed": 96,
+        "failed": 0
+      },
+      "test_pfsense_verify.py": {
+        "passed": 23,
+        "failed": 0
+      },
+      "test_phase7d.py": {
+        "passed": 49,
+        "failed": 0
+      },
+      "test_replay_harness.py": {
+        "passed": 66,
+        "failed": 0
+      },
+      "test_review_dataset.py": {
+        "passed": 32,
+        "failed": 0
+      },
+      "test_sanitization.py": {
+        "passed": 38,
+        "failed": 0
+      },
+      "test_truepositive_closure.py": {
+        "passed": 74,
+        "failed": 0
+      }
+    }
+  },
+  "content_hashes_sha256": {
+    "candidate_manifest": {
+      "path": "ai/testset/dataset_b_candidates_v2/MANIFEST.json",
+      "sha256": "f941454f346b531d5a64c601626d42e62c0b4a3dfd1992bfb6ea9cc70b9d50bd"
+    },
+    "review_sample_manifest": {
+      "path": "ai/testset/dataset_b_candidates_v2/REVIEW_SAMPLE_MANIFEST.json",
+      "sha256": "e01aa57eb263afd163a564c10fa6735b52eba79d7e50775bf434d33a7419d850"
+    },
+    "assignments_v2": {
+      "path": "soar/review_overlays/ASSIGNMENTS_v2.json",
+      "sha256": "fa51244eb64c713165da26b68f8812b8b526a2ea962cce93bbfc3409f46f3aef"
+    },
+    "reviewer_a_overlay": {
+      "path": "soar/review_overlays/reviewer-a.jsonl",
+      "sha256": "2353fee5a9c693bf44e9a5a0ba338dcf5f212672d10eb3208abc5339e64570e0"
+    },
+    "reviewer_b_overlay": {
+      "path": "soar/review_overlays/reviewer-b.jsonl",
+      "sha256": "7fe167a274d31316f4cbbd23f385d84999fef4b860df857e3b68f4676fe460aa"
+    },
+    "adjudication_overlay": {
+      "path": "soar/review_overlays/adjudication.jsonl",
+      "sha256": "a0f6c2c01b1bd2035b4782c5399562eeb1a7078e27694a539e1e18fa7529ae89"
+    },
+    "final_labels": {
+      "path": "soar/review_overlays/FINAL_LABELS_v1.json",
+      "sha256": "9d622d60a37759d8fad4594fe0100b53412eb9fbfea3dc07cdaa464514bc3a1c"
+    },
+    "adjudication_proposals_record": {
+      "path": "soar/review_overlays/ADJUDICATION-PROPOSALS.json",
+      "sha256": "26f8e4ccfce822ab8831129bee33aa615bf6952672d28d3d7430b4abe3df154a"
+    }
+  },
+  "not_done": [
+    "Phase 8 not started.",
+    "No credentials accessed, no live infrastructure (TheHive/Cortex/pfSense/Ollama) contacted.",
+    "Original reviewer-a.jsonl / reviewer-b.jsonl were never modified -- byte-identical before and after this lock (independently re-verified by hash)."
+  ]
+}

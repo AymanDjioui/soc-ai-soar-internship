@@ -1,0 +1,56 @@
+{
+  "alert": {
+    "access_log": {
+      "body_bytes_sent": 842,
+      "client_ip": "100.85.83.119",
+      "http_user_agent": "curl/8.5.0",
+      "request_body": "{\"email\":\"' OR 1=1--\",\"password\":\"x\"}",
+      "request_method": "POST",
+      "request_uri": "/rest/user/login",
+      "status": 200
+    },
+    "event_type": "app_log",
+    "index": "juiceshop-docker-*"
+  },
+  "case_uid": "05-sqli-auth-bypass",
+  "dataset_version": "dataset-a-draft-v0-2026-08-21",
+  "event_time": null,
+  "expected_primary_reason": null,
+  "expected_tier": "L2",
+  "fixtures": {},
+  "forbidden_reason_codes": [
+    "L1_TRUE_POSITIVE_CONTAINED"
+  ],
+  "ground_truth": {
+    "is_false_positive": false,
+    "mitre_technique": "T1190",
+    "must_not_auto_block": true,
+    "rationale": "CRITICAL true positive, but source is Tailscale CGNAT (our own admin VPN) - auto-blocking would sever lab access.",
+    "severity": "critical"
+  },
+  "id": "05-sqli-auth-bypass",
+  "incident_group_id": "group-05-sqli-auth-bypass",
+  "label_confidence": "high",
+  "label_notes": "Migrated from the pre-Phase-7 golden-seven set (ai/testset/*.json) as a DRAFT record. Legacy ground_truth (is_false_positive/severity/mitre_technique/must_not_auto_block/rationale) preserved verbatim under the 'ground_truth' key. event_time was not recorded in the original source \u2014 set to null; this case cannot be approved until an event_time is established (required for temporal RAG rules). fixtures are empty \u2014 no frozen verdict/trace/tool-call fixtures exist yet for this case; it is NOT replay-ready until fixtures are captured (out of scope for Phase 7A). expected_tier set to L2 \u2014 directly implied by the original must_not_auto_block=True safety label, not derived from policy internals.",
+  "label_source": "human_hand_labeled",
+  "must_not_auto_contain": true,
+  "must_remain_open": true,
+  "note": "Full account takeover - returned a real admin JWT. Source is our own Tailscale range.",
+  "observables": [
+    {
+      "data": "100.85.83.119",
+      "dataType": "ip",
+      "tags": [
+        "src"
+      ]
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "notes/10.md"
+}

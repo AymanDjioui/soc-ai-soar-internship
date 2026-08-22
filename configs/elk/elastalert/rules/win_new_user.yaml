@@ -1,0 +1,52 @@
+name: win_new_account_creation
+index: windows-logs-*
+type: any
+
+filter:
+  - term:
+      winlog.event_id: "4720"
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "New Local/Domain Account Created"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1136"
+    - "windows"
+    - "persistence"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A new user account was created (MITRE T1136), a common technique for
+    establishing persistent access. Verify this matches expected
+    provisioning activity.
+
+    - Host: {0}
+    - New Account Name: {1}
+    - Created By: {2}
+    - Timestamp: {3}
+
+  description_args:
+    - host.name
+    - winlog.event_data.TargetUserName
+    - winlog.event_data.SubjectUserName
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+  - other: "winlog.event_data.TargetUserName"
+
+alert_text_args:
+  - host.name
+  - winlog.event_data.TargetUserName
+  - winlog.event_data.SubjectUserName
+  - "@timestamp"
+alert_text_type: alert_text_only

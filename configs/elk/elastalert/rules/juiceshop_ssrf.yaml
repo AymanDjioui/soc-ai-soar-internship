@@ -1,0 +1,67 @@
+name: juiceshop_ssrf
+index: juiceshop-docker-*
+type: any
+
+filter:
+  - query:
+      query_string:
+        query: >
+          access_log.request_uri:(*127.0.0.1* OR *localhost*
+          OR *0.0.0.0* OR *169.254.169.254* OR *10.0.*
+          OR *172.16.* OR *192.168.* OR *%2F%2F127*)
+          OR access_log.request_body:(*127.0.0.1* OR *localhost*
+          OR *0.0.0.0* OR *169.254.169.254* OR *10.0.*
+          OR *172.16.* OR *192.168.* OR *%2F%2F127*)
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Server-Side Request Forgery (SSRF) Attempt on Juice Shop"
+  type: "external"
+  source: "elastalert2"
+  severity: 4
+  tags:
+    - "OWASP:A10:2021"
+    - "juiceshop"
+    - "dmz"
+    - "ssrf"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A request attempting to reach internal/loopback addresses was detected
+    against Juice Shop (OWASP A10:2021 - Server-Side Request Forgery).
+    Attacker may be trying to access internal services or cloud metadata.
+
+    - Client IP: {0}
+    - Request URI: {1}
+    - Request Method: {2}
+    - Request Body: {3}
+    - User-Agent: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - access_log.client_ip
+    - access_log.request_uri
+    - access_log.request_method
+    - access_log.request_body
+    - access_log.http_user_agent
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "access_log.client_ip"
+  - other: "access_log.request_uri"
+  - other: "access_log.request_body"
+
+alert_text_args:
+  - access_log.client_ip
+  - access_log.request_uri
+  - access_log.request_method
+  - access_log.request_body
+  - access_log.http_user_agent
+  - "@timestamp"
+alert_text_type: alert_text_only

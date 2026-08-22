@@ -1,0 +1,30 @@
+# Local Python environment
+.venv/
+__pycache__/
+*.pyc
+
+# Production idempotency store — real operational state, never committed
+idempotency_store/
+
+# Live-checkpoint isolated idempotency stores (Phase 5.5/5.6) — preserved on
+# disk as evidence, but never committed: may reference real (masked) case
+# numbers and internal identifiers from the live TheHive/Cortex instance.
+LIVE_CHECKPOINT_*/
+
+# Audit trail — operational log, not source
+soar_audit.jsonl
+
+# Phase 7 dataset build artifacts — RAW exports from live TheHive must never
+# be committed under any circumstance (they exist only as an intermediate,
+# pre-sanitization artifact on the machine that ran the export). Only the
+# reviewed, sanitized, schema-validated case files under ai/testset/ are
+# ever committed, and only after explicit dataset-lock approval.
+ai/testset/**/raw_export/
+ai/testset/**/*.raw.json
+**/*_raw_export/
+**/dataset_b_raw/
+
+# Never commit a real API key/credential file, however it might get named
+*.env
+soar.env
+KILL_SWITCH

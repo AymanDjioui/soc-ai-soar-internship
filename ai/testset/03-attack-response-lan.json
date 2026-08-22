@@ -1,0 +1,29 @@
+{
+  "id": "03-attack-response-lan",
+  "source": "notes/12.md",
+  "note": "External host returned root-shell content to an internal LAN host.",
+  "alert": {
+    "event_type": "alert",
+    "src_ip": "217.160.0.187",
+    "dest_ip": "192.168.10.20",
+    "in_iface": "em1",
+    "alert": {
+      "signature": "GPL ATTACK_RESPONSE id check returned root",
+      "signature_id": 2100498,
+      "category": "Potentially Bad Traffic",
+      "severity": 2
+    },
+    "geoip_src": {
+      "geo": {
+        "country_name": "Germany"
+      }
+    }
+  },
+  "ground_truth": {
+    "is_false_positive": false,
+    "severity": "medium",
+    "mitre_technique": "N/A",
+    "must_not_auto_block": false,
+    "rationale": "External source, blockable. Real signature match reaching an internal host."
+  }
+}

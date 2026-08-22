@@ -1,0 +1,70 @@
+name: win_defender_av_tampering
+index: windows-logs-*
+type: any
+
+filter:
+  - bool:
+      should:
+        - term:
+            winlog.event_id: "5001"
+        - term:
+            winlog.event_id: "5010"
+        - term:
+            winlog.event_id: "5012"
+        - bool:
+            must:
+              - term:
+                  winlog.event_id: "4688"
+              - query_string:
+                  query: >
+                    winlog.event_data.CommandLine:(*DisableRealtimeMonitoring*
+                    OR *Set-MpPreference* OR *DisableBehaviorMonitoring*
+                    OR *DisableIOAVProtection* OR *DisableBlockAtFirstSeen*)
+      minimum_should_match: 1
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Windows Defender / Antivirus Tampering Detected"
+  type: "external"
+  source: "elastalert2"
+  severity: 4
+  tags:
+    - "MITRE:T1562.001"
+    - "windows"
+    - "defense-evasion"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    Windows Defender real-time protection was disabled or tampered with
+    (MITRE T1562.001 - Impair Defenses: Disable or Modify Tools).
+    This is a strong indicator of pre-attack preparation.
+
+    - Host: {0}
+    - Event ID: {1}
+    - Command Line: {2}
+    - Account: {3}
+    - Timestamp: {4}
+
+  description_args:
+    - host.name
+    - winlog.event_id
+    - winlog.event_data.CommandLine
+    - winlog.event_data.SubjectUserName
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+
+alert_text_args:
+  - host.name
+  - winlog.event_id
+  - winlog.event_data.CommandLine
+  - winlog.event_data.SubjectUserName
+  - "@timestamp"
+alert_text_type: alert_text_only

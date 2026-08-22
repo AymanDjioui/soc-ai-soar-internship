@@ -1,0 +1,17 @@
+=== BASELINE ATTEMPT (safetyMode=auto, expect blocked, from kali attacker box) ===
+Wed Aug 19 02:32:26 PM UTC 2026
+register: 201 pwnmkgolj@test.local
+upload: 500 <html>
+  <head>
+    <meta charset='utf-8'> 
+    <title>Error: EACCES: permission denied, open &#39;uploads/complaints/../../build/app.js&#39;</title>
+    <style>* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+}
+
+body {
+  padding: 80px 100px;
+  font: 13px "Helvetica Neue", "Lucida Grande", "Arial";
+  ba

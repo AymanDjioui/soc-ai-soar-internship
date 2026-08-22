@@ -1,0 +1,37 @@
+{
+  "cases_queried": 334,
+  "dataset_version": "dataset-b-candidates-v0-2026-08-21",
+  "duplicate_case_uids": 0,
+  "duplicate_content_groups": 0,
+  "eligible_candidate_count": 226,
+  "exclusion_counts": {
+    "explicitly_synthetic_or_test_case": 15,
+    "handling_restriction_incompatible": 8,
+    "still_open": 85
+  },
+  "historical_disposition_distribution": {
+    "FalsePositive": 72,
+    "Other": 9,
+    "TruePositive": 145
+  },
+  "incident_group_distribution": {
+    "largest_group_size": 60,
+    "singleton_groups": 70,
+    "total_groups": 82
+  },
+  "manifest_hash": "1a933d0ca211ba0c48ae2b7dc7a917144dbf4a7cf48ffb7e246fba77a0d23b03",
+  "preflight": {
+    "output_dir_gitignored": true,
+    "raw_api_response_logged": false,
+    "read_only_methods_only": true,
+    "thehive_auth": true
+  },
+  "review_subset_size": 60,
+  "run_at": "2026-08-21T20:03:22.473747+00:00",
+  "severity_distribution": {
+    "1": 1,
+    "2": 176,
+    "3": 49
+  },
+  "temporal_ordering_violations": 0
+}

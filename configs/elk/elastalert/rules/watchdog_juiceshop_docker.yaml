@@ -1,0 +1,75 @@
+# WATCHDOG / dead-man switch — Juice Shop -> Logstash:5517 -> juiceshop-docker-*
+#
+# Fires when NO Juice Shop access log has arrived for 4 h during lab hours.
+# Measured cadence: ~3 docs/active hour - the SPARSEST source in the lab.
+#
+# IMPORTANT CAVEAT: Juice Shop only logs when someone actually browses or
+# attacks it. Silence here is genuinely ambiguous - it may mean the victim
+# app is down, or simply that nobody touched it. This watchdog is therefore
+# advisory (severity 1) and deliberately wide-windowed. Do not treat it with
+# the same weight as the Suricata watchdog.
+#
+# Remediation when this fires:
+#   1. DMZ: is the Juice Shop container running on 172.16.0.10:80?
+#   2. Verify: curl -s -o /dev/null -w '%{http_code}' http://100.70.145.65:8080
+#   3. Check the docker logging driver is still shipping to Logstash:5517
+#   4. ELK:  docker logs logstash --tail 50
+
+name: watchdog_juiceshop_docker
+type: flatline
+index: juiceshop-docker-*
+
+threshold: 1
+timeframe:
+  hours: 4
+use_count_query: true
+
+# Lab hours only (08:00-19:59 UTC); paused outside. Must match every minute
+# of the range - an interval like "*/10" never fires (see
+# watchdog_pfsense_filterlog.yaml for the ElastAlert croniter explanation).
+limit_execution: "* 8-19 * * *"
+
+realert:
+  hours: 12
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "PIPELINE QUIET: Juice Shop (juiceshop-docker-*) silent 4h"
+  type: "pipeline-health"
+  source: "elastalert2-watchdog"
+  severity: 1
+  tlp: 2
+  pap: 2
+  status: "New"
+  follow: true
+  tags:
+    - "watchdog"
+    - "pipeline-health"
+    - "juiceshop"
+    - "advisory"
+  description: |
+    No Juice Shop access logs reached Elasticsearch for 4 hours during lab hours.
+
+    Path: Juice Shop (DMZ 172.16.0.10) -> docker log driver -> TCP 5517
+          -> Logstash -> juiceshop-docker-*
+
+    Detections affected:
+      juiceshop_sqli, juiceshop_xss, juiceshop_lfi_directory_traversal
+
+    AMBIGUOUS BY DESIGN: Juice Shop only logs when someone browses or attacks it.
+    Silence may mean the app is down, or simply that nobody touched it.
+    Advisory only - verify before treating as an incident.
+
+    Triage:
+      1. Is the Juice Shop container running on 172.16.0.10:80?
+      2. curl -s -o /dev/null -w '%{http_code}' http://100.70.145.65:8080
+      3. Is the docker logging driver still shipping to Logstash:5517?
+      4. ELK: docker logs logstash --tail 50
+
+alert_text_type: alert_text_only
+alert_text: |
+  Source   : Juice Shop access logs (juiceshop-docker-*)
+  Condition: 0 documents in 4 hours during lab hours
+  Meaning  : victim app down OR simply untouched - verify before escalating

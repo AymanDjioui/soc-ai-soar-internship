@@ -1,0 +1,74 @@
+name: pfsense_portscan
+index: soc-logs-*
+type: cardinality
+cardinality_field: dst_port
+min_cardinality: 15
+timeframe:
+  minutes: 1
+query_key: src_ip
+
+filter:
+  - term:
+      reason: "match"
+  - bool:
+      must_not:
+        # Tailscale keepalive/relay traffic — not a scan
+        - term:
+            dst_port: 41641
+        # SSDP/UPnP and general multicast broadcast noise — not a scan
+        - term:
+            dst_ip: "239.255.255.250"
+        - term:
+            dst_ip: "224.0.0.0/4"
+
+realert:
+  minutes: 10
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Port Scan Detected by PfSense"
+  type: "external"
+  source: "elastalert2"
+  sourceRef: "portscan-{0}-{1}"
+  sourceRef_args:
+    - src_ip
+    - dedup_bucket
+  severity: 2
+  tags:
+    - "MITRE:T1046"
+    - "pfsense"
+    - "reconnaissance"
+    - "port-scan"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    Multiple connection attempts from the same source IP across different
+    ports detected by PfSense firewall (MITRE T1046 - Network Service Discovery).
+
+    - Source IP: {0}
+    - Destination IP: {1}
+    - Destination Port: {2}
+    - Direction: {3}
+    - Timestamp: {4}
+
+  description_args:
+    - src_ip
+    - dst_ip
+    - dst_port
+    - direction
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "src_ip"
+  - ip: "dst_ip"
+
+alert_text_args:
+  - src_ip
+  - dst_ip
+  - dst_port
+  - direction
+  - "@timestamp"
+alert_text_type: alert_text_only

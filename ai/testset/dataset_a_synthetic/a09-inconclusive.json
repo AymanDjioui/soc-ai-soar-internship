@@ -1,0 +1,56 @@
+{
+  "alert": {
+    "description": "The verdict itself is 'inconclusive' \u2014 l1_disposition() escalates every non-malicious verdict to L2 (Phase 6); 'inconclusive' specifically maps to NOVEL_CASE.",
+    "severity": 2,
+    "title": "Unusual outbound beaconing pattern, unclassified"
+  },
+  "case_uid": "a09-inconclusive",
+  "dataset_version": "dataset-a-synthetic-v0-2026-08-21",
+  "event_time": "2026-08-21T12:00:00Z",
+  "expected_primary_reason": "NOVEL_CASE",
+  "expected_tier": "L2",
+  "fixtures": {
+    "_provenance": "synthetic",
+    "verdict": {
+      "confidence": 0.5,
+      "key_evidence": "ambiguous timing",
+      "mitre_technique": "N/A",
+      "reason": "pattern does not match a known technique",
+      "severity": "high",
+      "verdict": "inconclusive"
+    }
+  },
+  "forbidden_reason_codes": [],
+  "incident_group_id": "grp-a09-inconclusive",
+  "label_confidence": "high",
+  "label_notes": "Spec-derived directly from agent_orchestrator.l1_disposition()'s non-malicious branch: `NOVEL_CASE if v=='inconclusive' else UNKNOWN_RULE`.",
+  "label_source": "specification_derived_pending_human",
+  "must_not_auto_contain": true,
+  "must_remain_open": true,
+  "observables": [
+    {
+      "data": "8.8.4.4",
+      "dataType": "ip",
+      "tags": [
+        "src"
+      ]
+    },
+    {
+      "data": "192.168.10.30",
+      "dataType": "ip",
+      "tags": [
+        "dst"
+      ]
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [
+    "NOVEL_CASE"
+  ],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "specification-derived-synthetic"
+}

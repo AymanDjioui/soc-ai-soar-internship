@@ -1,0 +1,84 @@
+{
+  "alert": {
+    "description": "C2 Beacon Detected \u2014 synthetic positive control.",
+    "severity": 3,
+    "title": "C2 Beacon Detected"
+  },
+  "case_uid": "a01-c2-beacon",
+  "dataset_version": "dataset-a-synthetic-v0-2026-08-21",
+  "event_time": "2026-08-21T12:00:00Z",
+  "expected_primary_reason": "L1_TRUE_POSITIVE_CONTAINED",
+  "expected_tier": "L1",
+  "fixtures": {
+    "_provenance": "synthetic",
+    "containment_executed": true,
+    "containment_target": "5.5.5.5",
+    "tools_used": [
+      "search_past_cases",
+      "run_analyzer"
+    ],
+    "trace": [
+      {
+        "action": "search_past_cases",
+        "result": {
+          "hint": "prior TruePositive case matched this indicator"
+        }
+      },
+      {
+        "action": "run_analyzer",
+        "result": {
+          "status": "Success",
+          "taxonomies": [
+            {
+              "level": "malicious",
+              "namespace": "synthetic",
+              "predicate": "verdict",
+              "value": "malicious"
+            }
+          ]
+        }
+      }
+    ],
+    "verdict": {
+      "confidence": 0.9,
+      "key_evidence": "periodic beacon + JA3 match",
+      "mitre_technique": "T1071.001",
+      "reason": "beacon pattern matches known C2 signature",
+      "severity": "high",
+      "verdict": "malicious"
+    }
+  },
+  "forbidden_reason_codes": [],
+  "incident_group_id": "grp-a01-c2-beacon",
+  "label_confidence": "high",
+  "label_notes": "Positive control: every l1_policy.evaluate_l1_malicious_eligibility() gate (schema valid, malicious verdict, confidence>=0.85, allowlisted rule+T1071.001 technique, both required tools used, no tool errors, tool-derived corroboration present, no conflicting history, unambiguous external target, guard-allowed, not already processed, armed) is designed to pass per the WRITTEN gate list in l1_policy.py's own docstring \u2014 independently verified not executed.",
+  "label_source": "specification_derived_pending_human",
+  "must_not_auto_contain": false,
+  "must_remain_open": true,
+  "observables": [
+    {
+      "data": "5.5.5.5",
+      "dataType": "ip",
+      "tags": [
+        "src"
+      ]
+    },
+    {
+      "data": "192.168.10.30",
+      "dataType": "ip",
+      "tags": [
+        "dst"
+      ]
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [
+    "L1_TRUE_POSITIVE_CONTAINED"
+  ],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "specification-derived-synthetic"
+}

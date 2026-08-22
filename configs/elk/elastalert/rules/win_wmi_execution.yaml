@@ -1,0 +1,63 @@
+name: win_wmi_remote_execution
+index: windows-logs-*
+type: any
+
+filter:
+  - bool:
+      must:
+        - term:
+            winlog.event_id: "4688"
+        - query_string:
+            query: 'winlog.event_data.ParentProcessName:*WmiPrvSE*'
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "WMI Remote Execution Detected"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1047"
+    - "windows"
+    - "execution"
+    - "lateral-movement"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A child process was spawned by WmiPrvSE.exe, indicating potential
+    remote code execution via WMI (MITRE T1047 - Windows Management
+    Instrumentation). WMI is commonly abused for lateral movement.
+
+    - Host: {0}
+    - Parent Process: {1}
+    - Spawned Process: {2}
+    - Command Line: {3}
+    - Account: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - host.name
+    - winlog.event_data.ParentProcessName
+    - winlog.event_data.NewProcessName
+    - winlog.event_data.CommandLine
+    - winlog.event_data.SubjectUserName
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+  - other: "winlog.event_data.NewProcessName"
+
+alert_text_args:
+  - host.name
+  - winlog.event_data.ParentProcessName
+  - winlog.event_data.NewProcessName
+  - winlog.event_data.CommandLine
+  - winlog.event_data.SubjectUserName
+  - "@timestamp"
+alert_text_type: alert_text_only

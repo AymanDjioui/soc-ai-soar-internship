@@ -1,0 +1,98 @@
+# Suricata high severity alerts -> TheHive
+#
+# Fixed 2026-08-11. This rule had `realert: 5 minutes` with NO `query_key`, which
+# silences the ENTIRE RULE after a single match, not one source. On an index that
+# receives hundreds of events per hour, one noisy internal alert made the rule deaf
+# to everything else for the next five minutes.
+#
+# Measured impact on the day it was found:
+#     qualifying Suricata alerts : 18
+#     alerts delivered to TheHive:  0
+#
+# A real external attack (testmyids, 217.160.0.187, GPL ATTACK_RESPONSE SID 2100498)
+# was seen by the rule (`hits=2`) and produced `matches=0` because it landed inside a
+# silence window opened by unrelated internal traffic minutes earlier.
+#
+# With query_key, realert applies PER SOURCE IP: a chatty internal host can no longer
+# suppress an unrelated external attacker. src_ip is a text field, so the .keyword
+# subfield is required or the grouping silently does nothing.
+
+name: Suricata High Severity Alert
+type: any
+index: suricata-alerts-*
+
+query_key: src_ip.keyword
+
+filter:
+  - bool:
+      must:
+        - term:
+            event_type: "alert"
+        - range:
+            alert.severity:
+              lte: 2
+
+realert:
+  minutes: 5
+
+alert_text_type: alert_text_only
+alert_text: |
+  Signature: {0}
+  Category:  {1}
+  Severity:  {2}
+  Source IP: {3}
+  Dest IP:   {4}
+  Country:   {5}
+  Time:      {6}
+alert_text_args:
+  - alert.signature
+  - alert.category
+  - alert.severity
+  - src_ip
+  - dest_ip
+  - geoip_src.geo.country_name
+  - "@timestamp"
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Suricata alert"
+  type: "suricata"
+  source: "elk-elastalert"
+  # Stable per source+signature+10min-bucket ref so repeats within the window
+  # merge into one TheHive alert instead of flooding as duplicates.
+  sourceRef: "suricata-{0}-{1}-{2}"
+  sourceRef_args:
+    - alert.signature_id
+    - src_ip
+    - dedup_bucket
+  severity: 2
+  tlp: 2
+  pap: 2
+  status: "New"
+  follow: True
+  tags:
+    - elk
+    - elastalert
+    - suricata
+    - auto
+
+  description_args:
+    - alert.signature
+    - alert.category
+    - alert.severity
+    - src_ip
+    - dest_ip
+    - geoip_src.geo.country_name
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: src_ip
+    tags:
+      - src
+      - suricata
+  - ip: dest_ip
+    tags:
+      - dst
+      - suricata

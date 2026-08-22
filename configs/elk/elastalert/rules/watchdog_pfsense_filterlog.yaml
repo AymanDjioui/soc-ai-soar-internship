@@ -1,0 +1,77 @@
+# WATCHDOG / dead-man switch — pfSense filterlog -> Logstash:5514 -> soc-logs-*
+#
+# Fires when NO firewall log has arrived for 30 min during lab hours.
+# Measured cadence: ~127 docs/active hour (~2/min). 30 min = ~60x margin.
+#
+# This rule exists because of a real, undetected outage: on 2026-08-06 pfSense
+# syslogd stopped forwarding to ELK. filterlog was running and writing
+# /var/log/filter.log locally, so the firewall looked healthy, but soc-logs-*
+# received nothing for ~2 days. It was found by accident, not by detection.
+#
+# Remediation when this fires:
+#   1. pfSense: ps aux | grep syslogd            (is it running?)
+#   2. pfSense: grep '@' /var/etc/syslog.d/pfSense.conf   (remote target present?)
+#   3. pfSense: tcpdump -ni tailscale0 'dst port 5514'    (packets leaving?)
+#   4. Fix:     /usr/local/sbin/pfSsh.php playback svc restart syslogd
+#      (do NOT use killall -HUP syslogd — it kills the daemon on this build)
+
+name: watchdog_pfsense_filterlog
+type: flatline
+index: soc-logs-*
+
+threshold: 1
+timeframe:
+  minutes: 30
+use_count_query: true
+
+# Lab VMs are only powered on during work sessions, so silence outside those
+# hours is expected, not a fault. This cron evaluates normally (every run_every,
+# = 1 min) between 08:00-19:59 UTC and pauses the rule outside that range.
+#
+# The cron MUST match every minute of the active range ("* 8-19"), not an
+# interval like "*/10". ElastAlert computes croniter(expr) from *now*, so an
+# interval longer than run_every always looks like a future slot, the rule
+# re-pauses, and because has_run_once is still False it returns before ever
+# running (elastalert.py:1254). "*/10 8-19 * * *" never fires at all.
+limit_execution: "* 8-19 * * *"
+
+# One alert per outage, not one every minute.
+realert:
+  hours: 6
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "PIPELINE DOWN: pfSense filterlog (soc-logs-*) silent 30min"
+  type: "pipeline-health"
+  source: "elastalert2-watchdog"
+  severity: 1
+  tlp: 2
+  pap: 2
+  status: "New"
+  follow: true
+  tags:
+    - "watchdog"
+    - "pipeline-health"
+    - "pfsense"
+    - "soc-logs"
+  description: |
+    No pfSense firewall logs reached Elasticsearch for 30 minutes during lab hours.
+
+    Path: pfSense filterlog -> syslogd -> UDP 5514 -> Logstash -> soc-logs-*
+
+    Triage:
+      1. pfSense: ps aux | grep syslogd
+      2. pfSense: grep '@' /var/etc/syslog.d/pfSense.conf
+      3. pfSense: tcpdump -ni tailscale0 'dst port 5514'
+      4. ELK:     docker ps | grep logstash
+
+    Known fix: /usr/local/sbin/pfSsh.php playback svc restart syslogd
+    WARNING: killall -HUP syslogd terminates the daemon on this build.
+
+alert_text_type: alert_text_only
+alert_text: |
+  Source   : pfSense filterlog (soc-logs-*)
+  Condition: 0 documents in 30 minutes during lab hours
+  Meaning  : firewall log ingestion has stopped

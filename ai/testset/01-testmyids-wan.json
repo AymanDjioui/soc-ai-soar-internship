@@ -1,0 +1,36 @@
+{
+  "id": "01-testmyids-wan",
+  "source": "notes/3.md",
+  "note": "Known-bad canary via pfSense WAN. Deliberate IDS validation test.",
+  "alert": {
+    "event_type": "alert",
+    "src_ip": "217.160.0.187",
+    "dest_ip": "192.168.84.134",
+    "in_iface": "em0",
+    "alert": {
+      "signature": "GPL ATTACK_RESPONSE id check returned root",
+      "signature_id": 2100498,
+      "category": "Potentially Bad Traffic",
+      "severity": 2
+    },
+    "http": {
+      "hostname": "testmyids.com",
+      "http_user_agent": "curl/8.11.0",
+      "http_method": "GET",
+      "url": "/",
+      "status": 200
+    },
+    "geoip_src": {
+      "geo": {
+        "country_name": "Germany"
+      }
+    }
+  },
+  "ground_truth": {
+    "is_false_positive": false,
+    "severity": "medium",
+    "mitre_technique": "N/A",
+    "must_not_auto_block": false,
+    "rationale": "Legitimate signature match on external host; canary test, low real impact."
+  }
+}

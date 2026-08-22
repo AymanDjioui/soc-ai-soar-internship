@@ -1,0 +1,58 @@
+{
+  "model": "phi4-mini",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a Tier-1 SOC analyst for a lab network. Be precise and conservative.\n\nNetwork context:\n- 192.168.10.0/24 = internal LAN. 192.168.10.2 = pfSense gateway.\n  192.168.10.20 = Linux host. 192.168.10.30 = Windows host.\n- 172.16.0.0/24 = DMZ. 172.16.0.10 = OWASP Juice Shop (deliberately vulnerable).\n- 100.64.0.0/10 = Tailscale VPN (administrative access, usually legitimate).\n- Internal-to-internal traffic on common discovery protocols (SSDP/UPnP/mDNS)\n  is normally benign in this environment.\n\nReturn ONLY a JSON object. No prose, no markdown fences."
+    },
+    {
+      "role": "user",
+      "content": "{\n  \"event_type\": \"alert\",\n  \"src_ip\": \"192.168.10.30\",\n  \"dest_ip\": \"192.168.10.2\",\n  \"in_iface\": \"em1\",\n  \"alert\": {\n    \"signature\": \"ET DOS Possible SSDP Amplification Scan in Progress\",\n    \"signature_id\": 2019102,\n    \"category\": \"Attempted Denial of Service\",\n    \"severity\": 2\n  },\n  \"@timestamp\": \"2026-07-28T10:56:40.155012Z\"\n}"
+    }
+  ],
+  "format": {
+    "type": "object",
+    "properties": {
+      "summary": {
+        "type": "string"
+      },
+      "severity": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+        ]
+      },
+      "is_false_positive": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number"
+      },
+      "mitre_technique": {
+        "type": "string"
+      },
+      "recommended_action": {
+        "type": "string"
+      },
+      "safe_to_auto_block": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "summary",
+      "severity",
+      "is_false_positive",
+      "confidence",
+      "mitre_technique",
+      "recommended_action",
+      "safe_to_auto_block"
+    ]
+  },
+  "stream": false,
+  "options": {
+    "temperature": 0
+  }
+}

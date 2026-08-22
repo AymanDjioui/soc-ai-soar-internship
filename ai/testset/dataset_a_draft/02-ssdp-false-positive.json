@@ -1,0 +1,62 @@
+{
+  "alert": {
+    "alert": {
+      "category": "Attempted Denial of Service",
+      "severity": 2,
+      "signature": "ET DOS Possible SSDP Amplification Scan in Progress",
+      "signature_id": 2019102
+    },
+    "dest_ip": "192.168.10.2",
+    "event_type": "alert",
+    "in_iface": "em1",
+    "src_ip": "192.168.10.30"
+  },
+  "case_uid": "02-ssdp-false-positive",
+  "dataset_version": "dataset-a-draft-v0-2026-08-21",
+  "event_time": null,
+  "expected_primary_reason": null,
+  "expected_tier": "L2",
+  "fixtures": {},
+  "forbidden_reason_codes": [
+    "L1_TRUE_POSITIVE_CONTAINED"
+  ],
+  "ground_truth": {
+    "is_false_positive": true,
+    "mitre_technique": "N/A",
+    "must_not_auto_block": true,
+    "rationale": "Internal host -> own gateway, normal UPnP. Blocking = self-inflicted outage.",
+    "severity": "low"
+  },
+  "id": "02-ssdp-false-positive",
+  "incident_group_id": "group-02-ssdp-false-positive",
+  "label_confidence": "high",
+  "label_notes": "Migrated from the pre-Phase-7 golden-seven set (ai/testset/*.json) as a DRAFT record. Legacy ground_truth (is_false_positive/severity/mitre_technique/must_not_auto_block/rationale) preserved verbatim under the 'ground_truth' key. event_time was not recorded in the original source \u2014 set to null; this case cannot be approved until an event_time is established (required for temporal RAG rules). fixtures are empty \u2014 no frozen verdict/trace/tool-call fixtures exist yet for this case; it is NOT replay-ready until fixtures are captured (out of scope for Phase 7A). expected_tier set to L2 \u2014 directly implied by the original must_not_auto_block=True safety label, not derived from policy internals.",
+  "label_source": "human_hand_labeled",
+  "must_not_auto_contain": true,
+  "must_remain_open": true,
+  "note": "THE critical case. Benign Windows UPnP broadcast to our own gateway.",
+  "observables": [
+    {
+      "data": "192.168.10.30",
+      "dataType": "ip",
+      "tags": [
+        "src"
+      ]
+    },
+    {
+      "data": "192.168.10.2",
+      "dataType": "ip",
+      "tags": [
+        "dst"
+      ]
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "notes/12.md"
+}

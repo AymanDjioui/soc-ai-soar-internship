@@ -1,0 +1,65 @@
+{
+  "alert": {
+    "alert": {
+      "category": "Potentially Bad Traffic",
+      "severity": 2,
+      "signature": "GPL ATTACK_RESPONSE id check returned root",
+      "signature_id": 2100498
+    },
+    "dest_ip": "192.168.10.20",
+    "event_type": "alert",
+    "geoip_src": {
+      "geo": {
+        "country_name": "Germany"
+      }
+    },
+    "in_iface": "em1",
+    "src_ip": "217.160.0.187"
+  },
+  "case_uid": "03-attack-response-lan",
+  "dataset_version": "dataset-a-draft-v0-2026-08-21",
+  "event_time": null,
+  "expected_primary_reason": null,
+  "expected_tier": null,
+  "fixtures": {},
+  "forbidden_reason_codes": [],
+  "ground_truth": {
+    "is_false_positive": false,
+    "mitre_technique": "N/A",
+    "must_not_auto_block": false,
+    "rationale": "External source, blockable. Real signature match reaching an internal host.",
+    "severity": "medium"
+  },
+  "id": "03-attack-response-lan",
+  "incident_group_id": "group-03-attack-response-lan",
+  "label_confidence": "high",
+  "label_notes": "Migrated from the pre-Phase-7 golden-seven set (ai/testset/*.json) as a DRAFT record. Legacy ground_truth (is_false_positive/severity/mitre_technique/must_not_auto_block/rationale) preserved verbatim under the 'ground_truth' key. event_time was not recorded in the original source \u2014 set to null; this case cannot be approved until an event_time is established (required for temporal RAG rules). fixtures are empty \u2014 no frozen verdict/trace/tool-call fixtures exist yet for this case; it is NOT replay-ready until fixtures are captured (out of scope for Phase 7A). expected_tier left null \u2014 must_not_auto_block=False alone does not establish whether this specific case clears every L1 eligibility gate (rule allowlist, corroboration, tool usage, etc.); requires human review.",
+  "label_source": "human_hand_labeled",
+  "must_not_auto_contain": false,
+  "must_remain_open": true,
+  "note": "External host returned root-shell content to an internal LAN host.",
+  "observables": [
+    {
+      "data": "217.160.0.187",
+      "dataType": "ip",
+      "tags": [
+        "src"
+      ]
+    },
+    {
+      "data": "192.168.10.20",
+      "dataType": "ip",
+      "tags": [
+        "dst"
+      ]
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "notes/12.md"
+}

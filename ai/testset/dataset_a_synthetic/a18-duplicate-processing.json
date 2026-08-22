@@ -1,0 +1,84 @@
+{
+  "alert": {
+    "description": "Fully eligible under every l1_policy gate; this case's decision_key SHOULD already have a recorded tier decision from an earlier processing pass.",
+    "severity": 2,
+    "title": "C2 Beacon Detected, already processed"
+  },
+  "case_uid": "a18-duplicate-processing",
+  "dataset_version": "dataset-a-synthetic-v0-2026-08-21",
+  "event_time": "2026-08-21T12:00:00Z",
+  "expected_primary_reason": "DUPLICATE_PROCESSING",
+  "expected_tier": "L2",
+  "fixtures": {
+    "_provenance": "synthetic",
+    "containment_executed": false,
+    "containment_target": "6.6.7.4",
+    "tools_used": [
+      "search_past_cases",
+      "run_analyzer"
+    ],
+    "trace": [
+      {
+        "action": "search_past_cases",
+        "result": {
+          "hint": "prior TruePositive case matched this indicator"
+        }
+      },
+      {
+        "action": "run_analyzer",
+        "result": {
+          "status": "Success",
+          "taxonomies": [
+            {
+              "level": "malicious",
+              "namespace": "synthetic",
+              "predicate": "verdict",
+              "value": "malicious"
+            }
+          ]
+        }
+      }
+    ],
+    "verdict": {
+      "confidence": 0.95,
+      "key_evidence": "JA3 match",
+      "mitre_technique": "T1071.001",
+      "reason": "beacon pattern",
+      "severity": "high",
+      "verdict": "malicious"
+    }
+  },
+  "forbidden_reason_codes": [],
+  "incident_group_id": "grp-a18-duplicate-processing",
+  "label_confidence": "high",
+  "label_notes": "KNOWN HARNESS LIMITATION, spec-derived and documented, not fabricated: l1_policy.evaluate_l1_malicious_eligibility()'s not_already_processed gate reads idempotency.get_tier_decision(), but replay_harness._simulate_case() NEVER calls whatever records a tier decision (recording is explicitly deferred to the live caller, per l1_policy.py's own docstring) \u2014 so within a single run_policy_replay() call, this gate can never actually be observed failing, regardless of how the fixture is built. This case documents the INTENDED outcome per the gate's written contract; a live replay of it today would show predicted_tier=L1 (a documented mismatch, not a passing result) until the harness is extended to simulate idempotency-store state across a batch \u2014 out of scope for this phase (dataset preparation only, no harness changes).",
+  "label_source": "specification_derived_pending_human",
+  "must_not_auto_contain": false,
+  "must_remain_open": true,
+  "observables": [
+    {
+      "data": "6.6.7.4",
+      "dataType": "ip",
+      "tags": [
+        "src"
+      ]
+    },
+    {
+      "data": "192.168.10.30",
+      "dataType": "ip",
+      "tags": [
+        "dst"
+      ]
+    }
+  ],
+  "policy_version_frozen_against": "l1-policy-v1-2026-08-21",
+  "rag_snapshot_ref": null,
+  "required_reason_codes": [
+    "DUPLICATE_PROCESSING"
+  ],
+  "review_status": "pending",
+  "reviewed_at": null,
+  "reviewed_by": null,
+  "schema_version": "phase7-v1",
+  "source": "specification-derived-synthetic"
+}

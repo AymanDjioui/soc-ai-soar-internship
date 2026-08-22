@@ -1,0 +1,3 @@
+############ [ALPINE, lab setup] disable safetyMode on FRESH container + restart ############
+  safetyMode: disabled # Options: enabled disabled auto
+juice-shop

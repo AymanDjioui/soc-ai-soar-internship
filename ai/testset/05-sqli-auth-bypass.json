@@ -1,0 +1,25 @@
+{
+  "id": "05-sqli-auth-bypass",
+  "source": "notes/10.md",
+  "note": "Full account takeover - returned a real admin JWT. Source is our own Tailscale range.",
+  "alert": {
+    "event_type": "app_log",
+    "index": "juiceshop-docker-*",
+    "access_log": {
+      "client_ip": "100.85.83.119",
+      "request_method": "POST",
+      "request_uri": "/rest/user/login",
+      "status": 200,
+      "request_body": "{\"email\":\"' OR 1=1--\",\"password\":\"x\"}",
+      "http_user_agent": "curl/8.5.0",
+      "body_bytes_sent": 842
+    }
+  },
+  "ground_truth": {
+    "is_false_positive": false,
+    "severity": "critical",
+    "mitre_technique": "T1190",
+    "must_not_auto_block": true,
+    "rationale": "CRITICAL true positive, but source is Tailscale CGNAT (our own admin VPN) - auto-blocking would sever lab access."
+  }
+}

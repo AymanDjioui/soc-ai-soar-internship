@@ -1,0 +1,59 @@
+name: win_suspicious_powershell
+index: windows-logs-*
+type: any
+
+filter:
+  - bool:
+      must:
+        - term:
+            winlog.event_id: "4104"
+      should:
+        - query_string:
+            query: >
+              winlog.event_data.ScriptBlockText:(*Invoke-Mimikatz*
+              OR *bypass* OR *IEX* OR *Invoke-Expression*
+              OR *Net.WebClient* OR *DownloadString*
+              OR *EncodedCommand* OR *-enc * OR *powershell -e*
+              OR *Invoke-WebRequest* OR *Start-Process*)
+      minimum_should_match: 1
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Suspicious PowerShell Execution Detected"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1059.001"
+    - "windows"
+    - "execution"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    Suspicious PowerShell script block execution detected
+    (MITRE T1059.001 - Command and Scripting Interpreter: PowerShell).
+
+    - Host: {0}
+    - Script Block: {1}
+    - Timestamp: {2}
+
+  description_args:
+    - host.name
+    - winlog.event_data.ScriptBlockText
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+  - other: "winlog.event_data.ScriptBlockText"
+
+alert_text_args:
+  - host.name
+  - winlog.event_data.ScriptBlockText
+  - "@timestamp"
+alert_text_type: alert_text_only

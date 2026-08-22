@@ -1,0 +1,66 @@
+name: pfsense_dns_tunneling
+index: soc-logs-*
+type: frequency
+num_events: 50
+timeframe:
+  minutes: 5
+query_key: src_ip
+
+filter:
+  - bool:
+      must:
+        - term:
+            dst_port: "53"
+        - term:
+            protocol: "udp"
+
+realert:
+  minutes: 15
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Potential DNS Tunneling / Exfiltration Detected"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1071.004"
+    - "MITRE:T1048"
+    - "pfsense"
+    - "dns-tunneling"
+    - "exfiltration"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    An abnormally high volume of DNS queries was detected from a single
+    host (MITRE T1071.004 - Application Layer Protocol: DNS /
+    T1048 - Exfiltration Over Alternative Protocol).
+    This may indicate DNS tunneling for C2 or data exfiltration.
+
+    - Source IP: {0}
+    - Destination IP: {1}
+    - Destination Port: {2}
+    - Action: {3}
+    - Timestamp: {4}
+
+  description_args:
+    - src_ip
+    - dst_ip
+    - dst_port
+    - action
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "src_ip"
+  - ip: "dst_ip"
+
+alert_text_args:
+  - src_ip
+  - dst_ip
+  - dst_port
+  - action
+  - "@timestamp"
+alert_text_type: alert_text_only

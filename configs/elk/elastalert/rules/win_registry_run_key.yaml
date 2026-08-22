@@ -1,0 +1,68 @@
+name: win_registry_run_key_persistence
+index: windows-logs-*
+type: any
+
+filter:
+  - bool:
+      must:
+        - term:
+            winlog.event_id: "4657"
+        - query_string:
+            query: >
+              winlog.event_data.ObjectName:(*CurrentVersion\\Run*
+              OR *CurrentVersion\\RunOnce*
+              OR *CurrentVersion\\RunOnceEx*
+              OR *CurrentVersion\\Explorer\\Shell Folders*
+              OR *CurrentVersion\\Explorer\\User Shell Folders*)
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Registry Run Key Modified (Persistence)"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1547.001"
+    - "windows"
+    - "persistence"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A Registry Autostart Run Key was modified
+    (MITRE T1547.001 - Boot or Logon Autostart Execution: Registry Run Keys).
+    This is the most common persistence mechanism used by malware.
+
+    - Host: {0}
+    - Registry Key: {1}
+    - New Value: {2}
+    - Modified By: {3}
+    - Process: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - host.name
+    - winlog.event_data.ObjectName
+    - winlog.event_data.NewValue
+    - winlog.event_data.SubjectUserName
+    - winlog.event_data.ProcessName
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - other: "host.name"
+  - other: "winlog.event_data.ObjectName"
+  - other: "winlog.event_data.ObjectValueName"
+
+alert_text_args:
+  - host.name
+  - winlog.event_data.ObjectName
+  - winlog.event_data.NewValue
+  - winlog.event_data.SubjectUserName
+  - winlog.event_data.ProcessName
+  - "@timestamp"
+alert_text_type: alert_text_only

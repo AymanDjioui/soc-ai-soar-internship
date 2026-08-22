@@ -1,0 +1,139 @@
+# Project-root gitignore — covers paths OUTSIDE soar/ that soar/.gitignore
+# (scoped to the soar/ subtree) cannot reach. See soar/.gitignore for the
+# soar-internal exclusions (idempotency store, live-checkpoint stores, venv).
+#
+# Extended 2026-08-22 during the repository-hygiene / private-GitHub-prep pass.
+# See REPO-CLEANUP-REPORT.md and docs/SECURITY.md for the reasoning behind
+# each block below.
+
+# ---------------------------------------------------------------------------
+# Python environments / caches (any depth)
+# ---------------------------------------------------------------------------
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------------------------------------------------------------------------
+# Secrets / credentials
+# ---------------------------------------------------------------------------
+# Real env files anywhere in the tree — but keep the sanitized templates.
+.env
+.env.*
+!.env.example
+!**/*.env.example
+**/*.env
+!**/*.env.example
+soar.env
+soar/soar.env
+soar/KILL_SWITCH
+
+# MCP server config — local tool wiring only (absolute local paths), and has
+# carried credentials for other users/projects in the past. Never committed.
+.mcp.json
+
+# Claude Code / Codex local settings — settings.local.json has previously
+# contained plaintext SSH passwords in its Bash permission allow-list
+# (see REPO-CLEANUP-REPORT.md, finding: .claude/settings.local.json).
+.claude/settings.local.json
+.codex/
+
+# Private keys and other credential-shaped files, wherever they appear.
+*.pem
+*.key
+!configs/pfsense/*.key.example
+id_rsa*
+id_ed25519*
+*.ppk
+*_rsa
+*_ed25519
+
+# Real operational configs with live credentials — kept local only, per the
+# project's standing decision (see CLAUDE.md). Sanitized `*.example` templates
+# next to each of these ARE tracked; only the real files are excluded.
+configs/elk/.env
+configs/elk/docker-compose.yml
+configs/elk/elastalert/config.yaml
+configs/pfsense/
+
+# NOTE 2026-08-22: /e2e_soc_orchestrator.py (repo root) previously had a
+# hardcoded, plaintext TheHive API key and was excluded here as a hard
+# blocker. That key has since been manually revoked (confirmed dead) and
+# the file has been sanitized to read THEHIVE_API_KEY from the environment
+# only, failing closed if unset — see docs/SECURITY.md. It is no longer
+# excluded; it is now eligible for tracking like any other source file.
+
+# ---------------------------------------------------------------------------
+# Runtime / operational state
+# ---------------------------------------------------------------------------
+*.log
+soar/idempotency_store/
+soar/LIVE_CHECKPOINT_*/
+soar/soar_audit.jsonl
+soar/__pycache__/
+soar/.venv/
+
+# ---------------------------------------------------------------------------
+# Backups
+# ---------------------------------------------------------------------------
+soar/backups/
+*.bak
+*.bak-*
+*.bak.*
+
+# ---------------------------------------------------------------------------
+# graphify cache (regenerable)
+# ---------------------------------------------------------------------------
+graphify-out/cache/
+
+# ---------------------------------------------------------------------------
+# Benchmark raw results (large, regenerable from ai/benchmark.py + prompts/)
+# ---------------------------------------------------------------------------
+ai/results/raw/
+ai/results/raw-*/
+
+# ---------------------------------------------------------------------------
+# Phase 7B/7D: sanitized Dataset B CANDIDATE records, derived from real
+# historical TheHive cases. Every record is pseudonymized/redacted before
+# being written (see soar/export_dataset_b_candidates*.py), but these
+# directories stay gitignored until formally reviewed, approved, and locked
+# — "sanitized" and "cleared for commit" are not the same thing for real
+# customer/incident-derived data. Only the LOCKED, aggregate outputs
+# (soar/review_overlays/FINAL_LABELS_v1.json,
+# soar/review_overlays/DATASET_B_LOCK_v1.json) are tracked.
+ai/testset/dataset_b_candidates/
+ai/testset/dataset_b_candidates_v2/
+
+# Any raw (pre-sanitization) export artifact must never be committed under
+# any circumstance, wherever it ends up.
+ai/testset/**/raw_export/
+ai/testset/**/*.raw.json
+**/*_raw_export/
+**/dataset_b_raw/
+
+# Review-process working files / drafts — intermediate reviewer state.
+# Only the final locked outputs above are tracked.
+soar/review_overlays/*
+!soar/review_overlays/FINAL_LABELS_v1.json
+!soar/review_overlays/DATASET_B_LOCK_v1.json
+
+# ---------------------------------------------------------------------------
+# Large third-party binaries (not project source; not meaningfully
+# version-controllable)
+# ---------------------------------------------------------------------------
+redteam-mcp/burp-proxy/*.jar
+
+# ---------------------------------------------------------------------------
+# Editor / OS temporary files
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/*
+!.vscode/extensions.json

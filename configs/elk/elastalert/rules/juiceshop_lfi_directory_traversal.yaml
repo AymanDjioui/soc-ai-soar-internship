@@ -1,0 +1,63 @@
+name: juiceshop_lfi_directory_traversal
+index: juiceshop-docker-*
+type: any
+
+filter:
+  - query:
+      query_string:
+        query: >
+          access_log.request_uri:(*passwd* OR *shadow* OR *boot.ini*
+          OR *win.ini* OR *etc* OR *2e*2e* OR *2f* OR *5c*)
+          OR access_log.http_referrer:(*passwd* OR *etc*)
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Path Traversal / LFI Attempt on Juice Shop"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "OWASP:A01:2021"
+    - "juiceshop"
+    - "dmz"
+    - "lfi"
+    - "path-traversal"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    A request containing a Path Traversal / LFI payload was detected against
+    the Juice Shop application (OWASP A01:2021 - Broken Access Control).
+
+    - Client IP: {0}
+    - Request URI: {1}
+    - Request Method: {2}
+    - HTTP Status: {3}
+    - User-Agent: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - access_log.client_ip
+    - access_log.request_uri
+    - access_log.request_method
+    - access_log.status
+    - access_log.http_user_agent
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "access_log.client_ip"
+  - other: "access_log.request_uri"
+
+alert_text_args:
+  - access_log.client_ip
+  - access_log.request_uri
+  - access_log.request_method
+  - access_log.status
+  - access_log.http_user_agent
+  - "@timestamp"
+alert_text_type: alert_text_only

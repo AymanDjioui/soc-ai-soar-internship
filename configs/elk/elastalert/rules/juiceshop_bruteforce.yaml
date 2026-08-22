@@ -1,0 +1,65 @@
+name: juiceshop_login_bruteforce
+index: juiceshop-docker-*
+type: frequency
+num_events: 10
+timeframe:
+  minutes: 2
+query_key: access_log.client_ip
+
+filter:
+  - bool:
+      must:
+        - query_string:
+            query: 'access_log.request_uri:*rest\/user\/login*'
+        - term:
+            access_log.status: "401"
+
+realert:
+  minutes: 10
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Juice Shop Login Brute-Force Detected"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "OWASP:A07:2021"
+    - "juiceshop"
+    - "dmz"
+    - "brute-force"
+    - "broken-authentication"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    Multiple failed login attempts detected against the Juice Shop
+    login endpoint from the same source IP
+    (OWASP A07:2021 - Identification and Authentication Failures).
+
+    - Client IP: {0}
+    - Request URI: {1}
+    - HTTP Status: {2}
+    - User-Agent: {3}
+    - Timestamp: {4}
+
+  description_args:
+    - access_log.client_ip
+    - access_log.request_uri
+    - access_log.status
+    - access_log.http_user_agent
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "access_log.client_ip"
+  - other: "access_log.request_uri"
+
+alert_text_args:
+  - access_log.client_ip
+  - access_log.request_uri
+  - access_log.status
+  - access_log.http_user_agent
+  - "@timestamp"
+alert_text_type: alert_text_only

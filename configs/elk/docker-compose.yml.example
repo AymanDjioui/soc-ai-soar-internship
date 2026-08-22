@@ -1,0 +1,105 @@
+# Sanitized template for configs/elk/docker-compose.yml. The real file is
+# gitignored (it has carried hardcoded Kibana encryption keys in the past —
+# see docs/SECURITY.md). Copy this to docker-compose.yml, keep the
+# ${VAR} references for anything sourced from .env, and generate fresh
+# encryption keys locally, e.g.:
+#   openssl rand -hex 32
+#
+# NOTE: this compose file predates the 2026-07-16 migration of Suricata EVE
+# delivery to native Redis output (see CLAUDE.md / PROJECT-STATE.md). The
+# logstash service below still exposes the old 5515/5516 syslog/EVE ports,
+# which are now dead — update this template (and the real file) if/when the
+# compose stack is refreshed to match the current architecture.
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch
+    restart: unless-stopped
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=${CLUSTER_NAME}
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=false
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "${ES_PORT}:9200"
+    networks:
+      - elk
+    mem_limit: ${MEM_LIMIT}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -u elastic:${ELASTIC_PASSWORD} http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"'"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: kibana
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${KIBANA_ENCRYPTEDSAVEDOBJECTS_KEY}
+      - XPACK_SECURITY_ENCRYPTIONKEY=${KIBANA_SECURITY_ENCRYPTIONKEY}
+      - XPACK_REPORTING_ENCRYPTIONKEY=${KIBANA_REPORTING_ENCRYPTIONKEY}
+    ports:
+      - "${KIBANA_PORT}:5601"
+    networks:
+      - elk
+    mem_limit: ${MEM_LIMIT}
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    container_name: logstash
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      - xpack.monitoring.enabled=false
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/geoip:/usr/share/logstash/geoip:ro
+    ports:
+      - "5044:5044"   # Beats input
+      - "5514:5514/udp"  # Syslog input (pfSense)
+      # NOTE: 5515(udp)/5516(tcp) EVE-JSON inputs retired 2026-07-16 when
+      # Suricata moved to native Redis output — remove once this compose
+      # file is refreshed. Not needed for the current redis input pipeline.
+    networks:
+      - elk
+    mem_limit: ${MEM_LIMIT}
+  elastalert:
+    image: jertel/elastalert2:2.19.0
+    container_name: elastalert
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+    command: ["--verbose"]
+    volumes:
+      - ./elastalert/config.yaml:/opt/elastalert/config.yaml:ro
+      - ./elastalert/rules:/opt/elastalert/rules:ro
+      - ./elastalert/patches/thehive.py:/usr/local/lib/python3.12/site-packages/elastalert/alerters/thehive.py:ro
+    networks:
+      - elk
+volumes:
+  es_data:
+    driver: local
+networks:
+  elk:
+    driver: bridge

@@ -1,0 +1,68 @@
+# WATCHDOG / dead-man switch — Winlogbeat -> Logstash:5044 -> windows-logs-*
+#
+# Fires when NO Windows event has arrived for 90 min during lab hours.
+# Measured cadence: ~162 docs/active hour (~2.7/min). 90 min = ~240x margin.
+#
+# Covers the endpoint telemetry that win_bruteforce / win_powershell /
+# win_new_user / win_new_service / win_admin_group all depend on. If Winlogbeat
+# stops, all five of those detections silently stop firing.
+#
+# Remediation when this fires:
+#   1. Windows VM powered on?  (most common cause - not a fault)
+#   2. Windows: Get-Service winlogbeat            (service running?)
+#   3. Windows: winlogbeat test output            (can it reach Logstash:5044?)
+#   4. ELK:     docker logs logstash --tail 50    (beats input listening?)
+
+name: watchdog_windows_logs
+type: flatline
+index: windows-logs-*
+
+threshold: 1
+timeframe:
+  minutes: 90
+use_count_query: true
+
+# Lab hours only (08:00-19:59 UTC); paused outside. Must match every minute
+# of the range - an interval like "*/10" never fires (see
+# watchdog_pfsense_filterlog.yaml for the ElastAlert croniter explanation).
+limit_execution: "* 8-19 * * *"
+
+realert:
+  hours: 12
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "PIPELINE DOWN: Winlogbeat (windows-logs-*) silent 90min"
+  type: "pipeline-health"
+  source: "elastalert2-watchdog"
+  severity: 1
+  tlp: 2
+  pap: 2
+  status: "New"
+  follow: true
+  tags:
+    - "watchdog"
+    - "pipeline-health"
+    - "winlogbeat"
+    - "windows"
+  description: |
+    No Windows events reached Elasticsearch for 90 minutes during lab hours.
+
+    Path: Windows VM -> Winlogbeat -> Logstash:5044 -> windows-logs-*
+
+    Detections disabled while this is true:
+      win_bruteforce, win_powershell, win_new_user, win_new_service, win_admin_group
+
+    Triage:
+      1. Is the Windows VM powered on? (most common cause - expected, not a fault)
+      2. Windows: Get-Service winlogbeat
+      3. Windows: winlogbeat test output
+      4. ELK:     docker logs logstash --tail 50
+
+alert_text_type: alert_text_only
+alert_text: |
+  Source   : Winlogbeat (windows-logs-*)
+  Condition: 0 documents in 90 minutes during lab hours
+  Meaning  : Windows endpoint telemetry has stopped - 5 detections disabled

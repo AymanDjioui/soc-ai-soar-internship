@@ -1,0 +1,67 @@
+name: pfsense_suspicious_outbound
+index: soc-logs-*
+type: any
+
+filter:
+  - bool:
+      must:
+        - query_string:
+            query: 'direction:out'
+        - query_string:
+            query: >
+              dst_port:(4444 OR 5555 OR 6666 OR 7777 OR 8888
+              OR 1234 OR 9999 OR 1337 OR 31337 OR 6667
+              OR 6697 OR 4443 OR 2222)
+
+realert:
+  minutes: 10
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Suspicious Outbound Connection to Known Bad Port"
+  type: "external"
+  source: "elastalert2"
+  severity: 3
+  tags:
+    - "MITRE:T1571"
+    - "MITRE:T1095"
+    - "pfsense"
+    - "c2"
+    - "reverse-shell"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    An outbound connection to a port commonly associated with reverse
+    shells, C2 frameworks, or IRC botnets was detected
+    (MITRE T1571 - Non-Standard Port / T1095 - Non-Application Layer Protocol).
+
+    - Source IP: {0}
+    - Destination IP: {1}
+    - Destination Port: {2}
+    - Protocol: {3}
+    - Action: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - src_ip
+    - dst_ip
+    - dst_port
+    - protocol
+    - action
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "src_ip"
+  - ip: "dst_ip"
+
+alert_text_args:
+  - src_ip
+  - dst_ip
+  - dst_port
+  - protocol
+  - action
+  - "@timestamp"
+alert_text_type: alert_text_only

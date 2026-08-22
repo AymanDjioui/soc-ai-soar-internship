@@ -1,0 +1,71 @@
+# WATCHDOG / dead-man switch — Linux LAN syslog -> Logstash:5518 -> linux-lan-logs-*
+#
+# Fires when NO Linux LAN event has arrived for 4 h during lab hours.
+# Measured cadence: ~5 docs/active hour (~1 per 12 min) - this is a SPARSE
+# source, so the window is deliberately wide. A tighter window would produce
+# false alarms during normal idle periods and train us to ignore watchdogs.
+#
+# Covers linux_root_login and linux_ssh_bruteforce.
+#
+# Remediation when this fires:
+#   1. Linux VM powered on?  (most common cause - not a fault)
+#   2. Linux: systemctl status rsyslog
+#   3. Linux: grep '@100.99.54.59:5518' /etc/rsyslog.conf /etc/rsyslog.d/*
+#   4. ELK:   docker logs logstash --tail 50
+
+name: watchdog_linux_lan_logs
+type: flatline
+index: linux-lan-logs-*
+
+threshold: 1
+timeframe:
+  hours: 4
+use_count_query: true
+
+# Lab hours only (08:00-19:59 UTC); paused outside. Must match every minute
+# of the range - an interval like "*/10" never fires (see
+# watchdog_pfsense_filterlog.yaml for the ElastAlert croniter explanation).
+limit_execution: "* 8-19 * * *"
+
+realert:
+  hours: 12
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "PIPELINE DOWN: Linux LAN syslog (linux-lan-logs-*) silent 4h"
+  type: "pipeline-health"
+  source: "elastalert2-watchdog"
+  severity: 1
+  tlp: 2
+  pap: 2
+  status: "New"
+  follow: true
+  tags:
+    - "watchdog"
+    - "pipeline-health"
+    - "linux"
+    - "rsyslog"
+  description: |
+    No Linux LAN events reached Elasticsearch for 4 hours during lab hours.
+
+    Path: Linux LAN VM -> rsyslog -> UDP 5518 -> Logstash -> linux-lan-logs-*
+
+    Detections disabled while this is true:
+      linux_root_login, linux_ssh_bruteforce
+
+    This is a sparse source (~5 events/active hour), so the window is wide by
+    design to avoid false alarms during normal idle periods.
+
+    Triage:
+      1. Is the Linux VM powered on? (most common cause - expected, not a fault)
+      2. Linux: systemctl status rsyslog
+      3. Linux: grep '@100.99.54.59:5518' /etc/rsyslog.conf /etc/rsyslog.d/*
+      4. ELK:   docker logs logstash --tail 50
+
+alert_text_type: alert_text_only
+alert_text: |
+  Source   : Linux LAN syslog (linux-lan-logs-*)
+  Condition: 0 documents in 4 hours during lab hours
+  Meaning  : Linux endpoint telemetry has stopped - 2 detections disabled

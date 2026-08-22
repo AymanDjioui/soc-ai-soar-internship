@@ -1,0 +1,68 @@
+name: pfsense_dmz_breakout
+index: soc-logs-*
+type: any
+
+filter:
+  - bool:
+      must:
+        - query_string:
+            query: 'src_ip:172.16.0.*'
+        - query_string:
+            query: 'dst_ip:192.168.10.*'
+
+realert:
+  minutes: 5
+
+alert:
+  - hivealerter
+
+hive_alert_config:
+  title: "Potential DMZ Breakout Detected"
+  type: "external"
+  source: "elastalert2"
+  sourceRef: "dmzbreakout-{0}-{1}-{2}"
+  sourceRef_args:
+    - src_ip
+    - dst_ip
+    - dedup_bucket
+  severity: 4
+  tags:
+    - "MITRE:T1210"
+    - "pfsense"
+    - "dmz-breakout"
+    - "lateral-movement"
+  tlp: 2
+  status: "New"
+  follow: true
+  description: |
+    Traffic from the DMZ (172.16.0.0/24) to the LAN (192.168.10.0/24) was
+    detected, which may indicate a DMZ breakout attempt
+    (MITRE T1210 - Exploitation of Remote Services).
+
+    - Source IP: {0}
+    - Destination IP: {1}
+    - Destination Port: {2}
+    - Protocol: {3}
+    - Action: {4}
+    - Timestamp: {5}
+
+  description_args:
+    - src_ip
+    - dst_ip
+    - dst_port
+    - protocol
+    - action
+    - "@timestamp"
+
+hive_observable_data_mapping:
+  - ip: "src_ip"
+  - ip: "dst_ip"
+
+alert_text_args:
+  - src_ip
+  - dst_ip
+  - dst_port
+  - protocol
+  - action
+  - "@timestamp"
+alert_text_type: alert_text_only

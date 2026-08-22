@@ -1,0 +1,30 @@
+# Sanitized template for configs/elk/elastalert/config.yaml. The real file
+# is gitignored — it has carried a live, plaintext TheHive API key and
+# Elasticsearch password (see docs/SECURITY.md, REPO-CLEANUP-REPORT.md).
+# Copy this to config.yaml and fill in real values locally; elastalert2
+# does not expand ${VAR} references itself, so real values must be written
+# in directly in the local, gitignored copy.
+
+rules_folder: /opt/elastalert/rules
+
+run_every:
+  minutes: 1
+
+buffer_time:
+  minutes: 5
+
+es_host: elasticsearch
+es_port: 9200
+es_username: elastic
+es_password: ${ELASTIC_PASSWORD}
+use_ssl: false
+verify_certs: false
+
+writeback_index: elastalert_status
+alert_time_limit:
+  days: 2
+hive_connection:
+  hive_host: http://<THEHIVE_HOST>
+  hive_port: 9000
+  hive_apikey: ${THEHIVE_API_KEY}
+  hive_verify: false
