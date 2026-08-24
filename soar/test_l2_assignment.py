@@ -120,9 +120,27 @@ class FakeApiCase:
                     self.case_state.tags.append(t)
 
 
+class FakeApiUser:
+    """api.user.get_current() — configurable for the caller-resolution tests
+    (Phase 8F.1). `current` is whatever get_current() should return;
+    `raises` makes it fail instead (simulating an unreachable/broken call)."""
+    def __init__(self, current=None, raises=False):
+        self.current = current
+        self.raises = raises
+        self.calls = 0
+
+    def get_current(self):
+        self.calls += 1
+        if self.raises:
+            raise RuntimeError("simulated /user/current failure")
+        return self.current
+
+
 class FakeApi:
-    def __init__(self, case_state: FakeCaseState, fail_patch=False):
+    def __init__(self, case_state: FakeCaseState, fail_patch=False,
+                current_user=None, current_user_raises=False):
         self.case = FakeApiCase(case_state, fail=fail_patch)
+        self.user = FakeApiUser(current=current_user, raises=current_user_raises)
 
 
 def make_user_find_fn(users):
@@ -791,6 +809,234 @@ check("comment WAS posted exactly once (genuinely missing evidence)", calls["n"]
 assign_key26 = idempotency.assignment_action_key("~a26", "~c26", L2_LOGIN, "armed")
 rec26 = idempotency.get_status(assign_key26, store_dir=d)
 check("comment_posted now recorded in meta", rec26.get("meta", {}).get("comment_posted") is True, rec26)
+
+
+# ==============================================================================
+# 27-35. Phase 8F.1 fix: caller-identity-aware assignment eligibility.
+# A live test found the case's assignee landing on the automation's OWN
+# service account (TheHive auto-assigns the case creator on promote_to_case)
+# instead of SOAR_L2_LOGIN — the old short-circuit #5 treated ANY non-target
+# non-empty assignee as "existing_analyst" and never overwrote it. The fix
+# adds caller_login (the authenticated API caller for THIS execution,
+# resolved via api.user.get_current()) so ONLY an exact match against our
+# own caller is treated as auto-ownership eligible for reassignment.
+# ==============================================================================
+
+SERVICE_LOGIN = "soar-live-demo@thehive.local"
+OTHER_SERVICE_LOGIN = "some-other-bot@thehive.local"
+
+print("\n=== 27. empty assignee -> assigned to target L2 (unaffected by the fix) ===")
+d = fresh_dir()
+res27 = make_res(); disp27 = make_disposition()
+cs27 = FakeCaseState(status="New", stage="New", assignee=None)
+api27 = FakeApi(cs27, current_user={"login": SERVICE_LOGIN})
+uf27, _ = make_user_find_fn([{"login": L2_LOGIN, "_id": L2_ID, "locked": False}])
+dkey27 = idempotency.decision_key("~a27", "~c27", l1_policy.POLICY_VERSION, "armed")
+tier27 = idempotency.record_tier_decision(dkey27, "L2", store_dir=d)
+reset_l2_cache(); calls = patch_comment(True)
+try:
+    r27 = ao.assign_l2_verified(api27, dkey27, "~a27", "~c27", "armed", res27, disp27,
+                                res27["containment"], tier27, case_state_fn=cs27,
+                                user_find_fn=uf27, store_dir=d)
+finally:
+    unpatch_comment()
+check("empty assignee -> verified True, real assignment made", r27["verified"] is True, r27)
+check("assignee PATCH targeted the L2 user id", any(c.get("assignee") == L2_ID for c in api27.case.update_calls),
+     api27.case.update_calls)
+check("live case now shows the L2 login", cs27.assignee == L2_LOGIN)
+
+print("\n=== 28. already assigned to target L2 -> idempotent success, no PATCH repeated ===")
+d = fresh_dir()
+res28 = make_res(); disp28 = make_disposition()
+cs28 = FakeCaseState(status="New", stage="New", assignee=L2_LOGIN)
+api28 = FakeApi(cs28, current_user={"login": SERVICE_LOGIN})
+uf28, _ = make_user_find_fn([{"login": L2_LOGIN, "_id": L2_ID, "locked": False}])
+dkey28 = idempotency.decision_key("~a28", "~c28", l1_policy.POLICY_VERSION, "armed")
+tier28 = idempotency.record_tier_decision(dkey28, "L2", store_dir=d)
+reset_l2_cache()
+r28 = ao.assign_l2_verified(api28, dkey28, "~a28", "~c28", "armed", res28, disp28,
+                            res28["containment"], tier28, case_state_fn=cs28,
+                            user_find_fn=uf28, store_dir=d)
+check("already-L2 assignee -> verified True, idempotent", r28["verified"] is True, r28)
+check("no assignee PATCH issued at all", not any("assignee" in c for c in api28.case.update_calls),
+     api28.case.update_calls)
+
+print("\n=== 29. automatic service-account ownership -> replaced with target L2 (THE FIX) ===")
+d = fresh_dir()
+res29 = make_res(); disp29 = make_disposition()
+cs29 = FakeCaseState(status="New", stage="New", assignee=SERVICE_LOGIN)
+api29 = FakeApi(cs29, current_user={"login": SERVICE_LOGIN})
+uf29, _ = make_user_find_fn([{"login": L2_LOGIN, "_id": L2_ID, "locked": False}])
+dkey29 = idempotency.decision_key("~a29", "~c29", l1_policy.POLICY_VERSION, "armed")
+tier29 = idempotency.record_tier_decision(dkey29, "L2", store_dir=d)
+reset_l2_cache(); calls = patch_comment(True)
+try:
+    r29 = ao.assign_l2_verified(api29, dkey29, "~a29", "~c29", "armed", res29, disp29,
+                                res29["containment"], tier29, case_state_fn=cs29,
+                                user_find_fn=uf29, store_dir=d)
+finally:
+    unpatch_comment()
+check("assignee == authenticated caller -> verified True, real reassignment made",
+     r29["verified"] is True, r29)
+check("assignee PATCH targeted the L2 user id (not left as the service account)",
+     any(c.get("assignee") == L2_ID for c in api29.case.update_calls), api29.case.update_calls)
+check("live case now shows the L2 login, not the service account", cs29.assignee == L2_LOGIN)
+
+print("\n=== 30. DIFFERENT service account -> preserved, never overwritten ===")
+d = fresh_dir()
+res30 = make_res(); disp30 = make_disposition()
+cs30 = FakeCaseState(status="New", stage="New", assignee=OTHER_SERVICE_LOGIN)
+api30 = FakeApi(cs30, current_user={"login": SERVICE_LOGIN})  # WE are not OTHER_SERVICE_LOGIN
+uf30, _ = make_user_find_fn([{"login": L2_LOGIN, "_id": L2_ID, "locked": False}])
+dkey30 = idempotency.decision_key("~a30", "~c30", l1_policy.POLICY_VERSION, "armed")
+tier30 = idempotency.record_tier_decision(dkey30, "L2", store_dir=d)
+reset_l2_cache(); calls = patch_comment(True)
+try:
+    r30 = ao.assign_l2_verified(api30, dkey30, "~a30", "~c30", "armed", res30, disp30,
+                                res30["containment"], tier30, case_state_fn=cs30,
+                                user_find_fn=uf30, store_dir=d)
+finally:
+    unpatch_comment()
+check("a DIFFERENT service account is treated as existing_analyst, preserved",
+     r30["verified"] is True, r30)
+check("no assignee PATCH issued — the other account's ownership was never overwritten",
+     not any("assignee" in c for c in api30.case.update_calls), api30.case.update_calls)
+check("live case still shows the OTHER service account", cs30.assignee == OTHER_SERVICE_LOGIN)
+
+print("\n=== 31. real human assignee -> preserved, never overwritten (unaffected by the fix) ===")
+d = fresh_dir()
+res31 = make_res(); disp31 = make_disposition()
+cs31 = FakeCaseState(status="New", stage="New", assignee="a.human.analyst@thehive.local")
+api31 = FakeApi(cs31, current_user={"login": SERVICE_LOGIN})
+uf31, _ = make_user_find_fn([{"login": L2_LOGIN, "_id": L2_ID, "locked": False}])
+dkey31 = idempotency.decision_key("~a31", "~c31", l1_policy.POLICY_VERSION, "armed")
+tier31 = idempotency.record_tier_decision(dkey31, "L2", store_dir=d)
+reset_l2_cache(); calls = patch_comment(True)
+try:
+    r31 = ao.assign_l2_verified(api31, dkey31, "~a31", "~c31", "armed", res31, disp31,
+                                res31["containment"], tier31, case_state_fn=cs31,
+                                user_find_fn=uf31, store_dir=d)
+finally:
+    unpatch_comment()
+check("human assignee preserved, verified True", r31["verified"] is True, r31)
+check("no assignee PATCH issued", not any("assignee" in c for c in api31.case.update_calls))
+check("live case still shows the human", cs31.assignee == "a.human.analyst@thehive.local")
+
+print("\n=== 32. /user/current FAILS -> fail closed, existing assignee preserved ===")
+d = fresh_dir()
+res32 = make_res(); disp32 = make_disposition()
+cs32 = FakeCaseState(status="New", stage="New", assignee=SERVICE_LOGIN)
+api32 = FakeApi(cs32, current_user_raises=True)  # /user/current raises
+uf32, _ = make_user_find_fn([{"login": L2_LOGIN, "_id": L2_ID, "locked": False}])
+dkey32 = idempotency.decision_key("~a32", "~c32", l1_policy.POLICY_VERSION, "armed")
+tier32 = idempotency.record_tier_decision(dkey32, "L2", store_dir=d)
+reset_l2_cache(); calls = patch_comment(True)
+try:
+    r32 = ao.assign_l2_verified(api32, dkey32, "~a32", "~c32", "armed", res32, disp32,
+                                res32["containment"], tier32, case_state_fn=cs32,
+                                user_find_fn=uf32, store_dir=d)
+finally:
+    unpatch_comment()
+check("failed /user/current -> still resolves (fails closed, not a crash)", r32["verified"] is True, r32)
+check("no assignee PATCH issued — even though assignee IS literally our own service "
+     "account, an unresolved caller identity must never be treated as safe to overwrite",
+     not any("assignee" in c for c in api32.case.update_calls), api32.case.update_calls)
+check("live case assignee unchanged", cs32.assignee == SERVICE_LOGIN)
+
+print("\n=== 33. ambiguous /user/current response (missing login, wrong type) -> fail closed ===")
+d = fresh_dir()
+for ambiguous in [{}, {"login": None}, {"login": ""}, {"notlogin": "x"}, "not-a-dict", None]:
+    res33 = make_res(); disp33 = make_disposition()
+    cs33 = FakeCaseState(status="New", stage="New", assignee=SERVICE_LOGIN)
+    api33 = FakeApi(cs33, current_user=ambiguous)
+    uf33, _ = make_user_find_fn([{"login": L2_LOGIN, "_id": L2_ID, "locked": False}])
+    dkey33 = idempotency.decision_key(f"~a33-{ambiguous!r}", "~c33", l1_policy.POLICY_VERSION, "armed")
+    tier33 = idempotency.record_tier_decision(dkey33, "L2", store_dir=d)
+    reset_l2_cache(); calls = patch_comment(True)
+    try:
+        r33 = ao.assign_l2_verified(api33, dkey33, f"~a33-{ambiguous!r}", "~c33", "armed",
+                                    res33, disp33, res33["containment"], tier33,
+                                    case_state_fn=cs33, user_find_fn=uf33, store_dir=d)
+    finally:
+        unpatch_comment()
+    check(f"ambiguous get_current()={ambiguous!r} -> fails closed, no PATCH",
+         not any("assignee" in c for c in api33.case.update_calls), (ambiguous, api33.case.update_calls))
+
+print("\n=== 34. replay/idempotency: second call after correction does not re-PATCH ===")
+d = fresh_dir()
+res34 = make_res(); disp34 = make_disposition()
+cs34 = FakeCaseState(status="New", stage="New", assignee=SERVICE_LOGIN)
+api34 = FakeApi(cs34, current_user={"login": SERVICE_LOGIN})
+uf34, _ = make_user_find_fn([{"login": L2_LOGIN, "_id": L2_ID, "locked": False}])
+dkey34 = idempotency.decision_key("~a34", "~c34", l1_policy.POLICY_VERSION, "armed")
+tier34 = idempotency.record_tier_decision(dkey34, "L2", store_dir=d)
+reset_l2_cache(); calls = patch_comment(True)
+try:
+    r34a = ao.assign_l2_verified(api34, dkey34, "~a34", "~c34", "armed", res34, disp34,
+                                 res34["containment"], tier34, case_state_fn=cs34,
+                                 user_find_fn=uf34, store_dir=d)
+    r34b = ao.assign_l2_verified(api34, dkey34, "~a34", "~c34", "armed", res34, disp34,
+                                 res34["containment"], tier34, case_state_fn=cs34,
+                                 user_find_fn=uf34, store_dir=d)
+finally:
+    unpatch_comment()
+check("first call reassigns from the service account to L2", r34a["verified"] is True, r34a)
+check("second (replay) call also verified True (idempotent)", r34b["verified"] is True, r34b)
+check("exactly ONE assignee PATCH issued across both calls",
+     sum(1 for c in api34.case.update_calls if "assignee" in c) == 1, api34.case.update_calls)
+
+print("\n=== 35. correct_auto_ownership_assignment(): zero comment/notification/containment/closure side effects ===")
+cs35 = FakeCaseState(status="New", stage="New", assignee=SERVICE_LOGIN)
+api35 = FakeApi(cs35, current_user={"login": SERVICE_LOGIN})
+calls = patch_comment(True)
+try:
+    r35 = ao.correct_auto_ownership_assignment(api35, "~c35", SERVICE_LOGIN, L2_LOGIN, L2_ID, case_state_fn=cs35)
+finally:
+    unpatch_comment()
+check("correction succeeds", r35["corrected"] is True, r35)
+check("before/after reported correctly", r35["before_assignee"] == SERVICE_LOGIN
+     and r35["after_assignee"] == L2_LOGIN, r35)
+check("posts NO comment of its own — the function has no code path to do so", calls["n"] == 0, calls)
+check("no status/stage field ever included in the PATCH (assignment-only, never closes)",
+     not any(("status" in c or "stage" in c) for c in api35.case.update_calls),
+     api35.case.update_calls)
+check("only the assignee field was ever patched, nothing else",
+     all(set(c.keys()) <= {"assignee"} for c in api35.case.update_calls if "assignee" in c),
+     api35.case.update_calls)
+check("live case now shows the L2 login", cs35.assignee == L2_LOGIN)
+
+print("\n=== 36. correct_auto_ownership_assignment(): mismatched expected-current-assignee refuses ===")
+cs36 = FakeCaseState(status="New", stage="New", assignee="something-unexpected@thehive.local")
+api36 = FakeApi(cs36, current_user={"login": SERVICE_LOGIN})
+r36 = ao.correct_auto_ownership_assignment(api36, "~c36", SERVICE_LOGIN, L2_LOGIN, L2_ID, case_state_fn=cs36)
+check("refuses when live assignee doesn't match the expected precondition",
+     r36["corrected"] is False, r36)
+check("no PATCH issued", not any("assignee" in c for c in api36.case.update_calls))
+
+print("\n=== 37. correct_auto_ownership_assignment(): closed case refuses ===")
+cs37 = FakeCaseState(status="TruePositive", stage="Closed", assignee=SERVICE_LOGIN)
+api37 = FakeApi(cs37, current_user={"login": SERVICE_LOGIN})
+r37 = ao.correct_auto_ownership_assignment(api37, "~c37", SERVICE_LOGIN, L2_LOGIN, L2_ID, case_state_fn=cs37)
+check("refuses on a closed case", r37["corrected"] is False, r37)
+check("no PATCH issued on a closed case", not any("assignee" in c for c in api37.case.update_calls))
+
+print("\n=== 38. correct_auto_ownership_assignment(): replay is idempotent, no duplicate PATCH ===")
+cs38 = FakeCaseState(status="New", stage="New", assignee=SERVICE_LOGIN)
+api38 = FakeApi(cs38, current_user={"login": SERVICE_LOGIN})
+r38a = ao.correct_auto_ownership_assignment(api38, "~c38", SERVICE_LOGIN, L2_LOGIN, L2_ID, case_state_fn=cs38)
+r38b = ao.correct_auto_ownership_assignment(api38, "~c38", SERVICE_LOGIN, L2_LOGIN, L2_ID, case_state_fn=cs38)
+check("first call corrects", r38a["corrected"] is True, r38a)
+check("second (replay) call is an idempotent no-op, still reports corrected=True",
+     r38b["corrected"] is True, r38b)
+check("exactly ONE assignee PATCH issued across both calls",
+     sum(1 for c in api38.case.update_calls if "assignee" in c) == 1, api38.case.update_calls)
+
+print("\n=== 39. correct_auto_ownership_assignment(): /user/current failure fails closed ===")
+cs39 = FakeCaseState(status="New", stage="New", assignee=SERVICE_LOGIN)
+api39 = FakeApi(cs39, current_user_raises=True)
+r39 = ao.correct_auto_ownership_assignment(api39, "~c39", SERVICE_LOGIN, L2_LOGIN, L2_ID, case_state_fn=cs39)
+check("fails closed when the caller identity cannot be resolved", r39["corrected"] is False, r39)
+check("no PATCH issued", not any("assignee" in c for c in api39.case.update_calls))
 
 
 # ==============================================================================

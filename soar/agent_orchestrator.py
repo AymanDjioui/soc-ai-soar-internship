@@ -740,10 +740,118 @@ _L2_CRITICAL_REASON_CODES = {
 }
 
 
+def _resolve_caller_login(api) -> str:
+    """
+    Read-only. Returns the AUTHENTICATED API caller's own login for this
+    execution (via api.user.get_current()), or None if that call fails, is
+    unreachable, or returns missing/ambiguous data. Never raises — any
+    failure here must fail CLOSED: l1_policy.evaluate_l2_assignment_
+    eligibility() only ever treats a live case's existing assignee as "our
+    own service account, safe to reassign" on an EXACT match against a
+    successfully-resolved caller_login. None never matches anything.
+    """
+    try:
+        current = api.user.get_current()
+    except Exception:
+        return None
+    if not isinstance(current, dict):
+        return None
+    login = current.get("login")
+    if not login or not isinstance(login, str):
+        return None
+    return login
+
+
+def correct_auto_ownership_assignment(api, case_id: str, expected_current_assignee: str,
+                                      target_login: str, target_user_id: str,
+                                      caller_login_fn=None, case_state_fn=None) -> dict:
+    """
+    Phase 8F.1 — narrowly-scoped, STANDALONE correction for a case whose
+    assignee is still the automation's own service account (TheHive's
+    auto-assign-the-creator default on promote_to_case()), used to fix a
+    case that assign_l2_verified() already processed once. Deliberately
+    NOT built on assign_l2_verified() — that function's normal path posts
+    an evidence comment for any fresh assignment (correct behavior there),
+    which would be a duplicate, unwanted side effect on a case that
+    already has its original comment/email from the run that created it.
+
+    Modifies ONLY the assignee field via a single api.case.update() call.
+    Never posts a comment, never triggers a responder/notification, never
+    touches status or stage. No code path here can do any of those things.
+
+    All preconditions are required and fail closed:
+      - the LIVE case's current assignee is EXACTLY expected_current_assignee
+      - that assignee is EXACTLY the authenticated caller for THIS
+        execution (api.user.get_current(), never assumed — see
+        _resolve_caller_login())
+      - the case is currently OPEN (stage != "Closed")
+    Already being at target_login is treated as an idempotent no-op (safe
+    replay), not an error.
+
+    Returns {"corrected": bool, "reason": str, "before_assignee": str|None,
+             "after_assignee": str|None}.
+    """
+    caller_login_fn = caller_login_fn or _resolve_caller_login
+    case_state_fn = case_state_fn or (lambda cid: _default_case_state_fn(api, cid))
+
+    caller_login = caller_login_fn(api)
+    if not caller_login:
+        return {"corrected": False,
+               "reason": "could not resolve the authenticated caller identity — fail closed",
+               "before_assignee": None, "after_assignee": None}
+
+    state = case_state_fn(case_id)
+    if not isinstance(state, dict) or not state.get("status"):
+        return {"corrected": False, "reason": "could not query live case state — fail closed",
+               "before_assignee": None, "after_assignee": None}
+
+    raw = state.get("raw") or {}
+    live_assignee = raw.get("assignee")
+    stage = state.get("stage")
+
+    if stage == "Closed":
+        return {"corrected": False, "reason": "case is closed — refusing to modify",
+               "before_assignee": live_assignee, "after_assignee": live_assignee}
+
+    if live_assignee == target_login:
+        return {"corrected": True, "reason": "already the target login — idempotent no-op",
+               "before_assignee": live_assignee, "after_assignee": live_assignee}
+
+    if live_assignee != expected_current_assignee:
+        return {"corrected": False,
+               "reason": f"live assignee {live_assignee!r} does not match the expected "
+                         f"{expected_current_assignee!r} — refusing (precondition failed)",
+               "before_assignee": live_assignee, "after_assignee": live_assignee}
+
+    if live_assignee != caller_login:
+        return {"corrected": False,
+               "reason": f"live assignee {live_assignee!r} is not the authenticated caller "
+                         f"{caller_login!r} for this execution — this is not confirmed "
+                         f"auto-ownership, refusing to overwrite",
+               "before_assignee": live_assignee, "after_assignee": live_assignee}
+
+    try:
+        api.case.update(case_id, {"assignee": target_user_id})
+    except Exception as exc:
+        return {"corrected": False, "reason": f"assignee PATCH failed: {exc}",
+               "before_assignee": live_assignee, "after_assignee": live_assignee}
+
+    verify_state = case_state_fn(case_id)
+    after_assignee = ((verify_state or {}).get("raw") or {}).get("assignee")
+    if after_assignee != target_login:
+        return {"corrected": False,
+               "reason": f"PATCH issued but independent verification shows "
+                         f"{after_assignee!r}, not {target_login!r}",
+               "before_assignee": live_assignee, "after_assignee": after_assignee}
+
+    return {"corrected": True, "reason": "verified", "before_assignee": live_assignee,
+           "after_assignee": after_assignee}
+
+
 def assign_l2_verified(api, dkey: str, alert_id: str, case_id: str, execution_mode: str,
                        res: dict, disposition: dict, containment: dict, tier_record: dict,
                        case_state_fn=None, user_find_fn=None, store_dir: str = None,
-                       l1_fallback: bool = False) -> dict:
+                       l1_fallback: bool = False, caller_login_fn=None) -> dict:
     """
     Phase 4 — verified L2 assignment. Same "never trust the mutation's own
     success alone" philosophy as Phases 2 and 3: `api.case.update()`'s own
@@ -767,12 +875,20 @@ def assign_l2_verified(api, dkey: str, alert_id: str, case_id: str, execution_mo
     still reach a human. The caller (process_alert_agent) passes this ONLY in
     that exact fallback path, never as a general override.
 
-    `case_state_fn`/`user_find_fn` are injectable; tests always supply fakes,
-    so no live TheHive call is ever made by a test. `store_dir` defaults to
-    the real shared idempotency store.
+    `case_state_fn`/`user_find_fn`/`caller_login_fn` are injectable; tests
+    always supply fakes, so no live TheHive call is ever made by a test.
+    `store_dir` defaults to the real shared idempotency store.
+
+    `caller_login_fn` (Phase 8F.1 fix) defaults to `_resolve_caller_login`
+    — resolves the authenticated API caller's own login, used ONLY to tell
+    "the live case is auto-owned by our own service account" (TheHive's
+    default on case creation, not a genuine human assignment — eligible
+    for reassignment) apart from "a real human already owns this case"
+    (preserve, never overwrite).
     """
     store_dir = store_dir or idempotency.DEFAULT_STORE_DIR
     case_state_fn = case_state_fn or (lambda cid: _default_case_state_fn(api, cid))
+    caller_login_fn = caller_login_fn or _resolve_caller_login
     case_link = f"{orch.THEHIVE_URL}/index.html#!/case/{case_id}/details"
 
     def _rich(verified, reason_codes, summary, assigned=None, critical=False):
@@ -790,9 +906,11 @@ def assign_l2_verified(api, dkey: str, alert_id: str, case_id: str, execution_mo
                     "tier record does not require L2 assignment", critical=True)
 
     l2_user = resolve_l2_user(api, user_find_fn=user_find_fn)
+    caller_login = caller_login_fn(api)
     eligibility = l1_policy.evaluate_l2_assignment_eligibility(
         alert_id, case_id, dkey, execution_mode, l2_user,
-        case_state_fn=case_state_fn, store_dir=store_dir, allow_l1_fallback=l1_fallback)
+        case_state_fn=case_state_fn, store_dir=store_dir, allow_l1_fallback=l1_fallback,
+        caller_login=caller_login)
     orch.audit("agent_l2_eligibility", case_id=case_id, eligible=eligibility["eligible"],
                already_satisfied=eligibility["already_satisfied"],
                reason_codes=eligibility["reason_codes"], gates=eligibility["gates"])

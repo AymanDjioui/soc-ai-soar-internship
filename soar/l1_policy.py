@@ -485,7 +485,8 @@ def evaluate_l1_closure_eligibility(alert_id: str, case_id: str, dkey: str,
 def evaluate_l2_assignment_eligibility(alert_id: str, case_id: str, dkey: str,
                                        execution_mode: str, l2_user: dict,
                                        case_state_fn, store_dir: str = None,
-                                       allow_l1_fallback: bool = False) -> dict:
+                                       allow_l1_fallback: bool = False,
+                                       caller_login: str = None) -> dict:
     """
     Positive-eligibility gate for Phase 4 verified L2 assignment.
 
@@ -495,6 +496,17 @@ def evaluate_l2_assignment_eligibility(alert_id: str, case_id: str, dkey: str,
     default — pure/network-free module), same shape as Phase 3's: a dict with
     at least `status`/`stage`/`raw` (the raw TheHive case dict, for reading
     `assignee`), or a falsy/exception result on failure.
+
+    `caller_login` (Phase 8F.1 fix): the AUTHENTICATED API caller's own login
+    for THIS execution — the ALREADY-RESOLVED result of `agent_orchestrator.
+    _resolve_caller_login()`, or None if that resolution failed/was
+    ambiguous. Used ONLY to distinguish "the live case is already owned by
+    a real human" (preserve, never overwrite) from "the live case is owned
+    by our OWN service account because TheHive auto-assigns the case
+    creator" (not a genuine human assignment — eligible for reassignment to
+    SOAR_L2_LOGIN). `caller_login=None` ALWAYS falls into the fail-closed,
+    preserve-existing-assignee branch — a failed/ambiguous caller-identity
+    lookup must never be treated as "safe to overwrite."
 
     Returns {"eligible": bool, "already_satisfied": bool, "satisfied_by":
     str|None, "reason_codes": [...], "gates": {...}, "assign_key": str,
@@ -577,10 +589,24 @@ def evaluate_l2_assignment_eligibility(alert_id: str, case_id: str, dkey: str,
         return _result(True, "already_assigned_live", [Reason.L2_ALREADY_ASSIGNED],
                        {"already_assigned_live": True})
 
-    # ---- Idempotency short-circuit #5: LIVE case already owned by ANOTHER
-    # human analyst — preserve it, never overwrite; human ownership satisfies
-    # the escalation requirement on its own. ----
-    if l2_resolved and case_state_ok and live_assignee and live_assignee != login:
+    # ---- Idempotency short-circuit #5: LIVE case already owned by someone
+    # other than the target L2 login. Phase 8F.1 fix: distinguish two cases.
+    #   (a) that "someone" is OUR OWN authenticated caller for THIS
+    #       execution (exact-match evidence via caller_login, never a
+    #       heuristic like "looks like a service account name") — TheHive
+    #       auto-assigns the case creator on promote_to_case(), which is not
+    #       a genuine human assignment. NOT satisfied — fall through to the
+    #       normal eligibility gates below so the case gets reassigned to
+    #       SOAR_L2_LOGIN.
+    #   (b) anyone/anything else — a real human, a DIFFERENT service
+    #       account, or caller_login=None (the caller-identity lookup
+    #       failed or was ambiguous) — preserve it, never overwrite. Human
+    #       ownership satisfies the escalation requirement on its own, and
+    #       an unresolved caller identity must always fail closed.
+    # ----
+    is_own_service_account = bool(caller_login) and live_assignee == caller_login
+    if (l2_resolved and case_state_ok and live_assignee and live_assignee != login
+            and not is_own_service_account):
         r = _result(True, "existing_analyst", [Reason.L2_ASSIGNED_TO_EXISTING_ANALYST],
                    {"human_owned": True})
         r["existing_assignee"] = live_assignee
