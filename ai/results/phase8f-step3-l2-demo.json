@@ -1,0 +1,115 @@
+{
+  "phase": "8F.Step3",
+  "test_type": "live_armed_l2_only_single_alert",
+  "run_timestamp_utc": "2026-08-24T10:49:04Z",
+  "source_commit": "25b6b10101ec8fd009307be7eb64595d9206e2b9",
+  "deployed_release": "25b6b10",
+  "invocation": "manual one-shot (SOAR_ALERT_ID + SOAR_DEMO_ALLOWED_ALERT_ID + SOAR_DEMO_ACTION_MODE=l2-only), armed (SOAR_AGENT_DRY_RUN=0, SOAR_AGENT_MODE=armed, SOAR_DRY_RUN=0); systemd service never started/enabled",
+  "demo_allowlist": {
+    "claim_key": "demo-allowlist-run:~245813256:l2-only",
+    "first_run": "claimed successfully",
+    "replay_run": "refused — already used (status=completed)"
+  },
+  "kill_switch_active_throughout": true,
+  "containment_variables_absent": ["RESPONDER_NAME", "PFSENSE_HOST", "PFSENSE_SSH_USER", "PFSENSE_SSH_PASSWORD", "PFSENSE_BLOCK_TABLE"],
+
+  "sqli_probe_attempt": {
+    "target": "http://100.70.145.65:8080/rest/user/login (Juice Shop, NAT-forwarded from pfSense)",
+    "payload": "classic boolean auth-bypass, non-destructive, no data modified",
+    "application_layer_result": "SUCCEEDED — HTTP 200, real admin JWT returned",
+    "detection_result": "NO matching TheHive alert produced",
+    "root_cause": "juiceshop-docker-* Elasticsearch index had zero documents (confirmed via direct query, both ~10min and ~2h windows)",
+    "pre_existing_condition": "A 'PIPELINE QUIET: Juice Shop (juiceshop-docker-*) silent 4h' watchdog alert was already present in TheHive, captured in the Phase 8E baseline (~1h before this test) — the outage predates this session's testing",
+    "conclusion": "This finding is recorded separately from the L2 demonstration below. The selected L2 alert is genuine, live, unrelated lab traffic — not a result of this probe."
+  },
+
+  "selected_alert": {
+    "id": "~245813256",
+    "title": "Business Logic Abuse on Juice Shop",
+    "severity": 2,
+    "source": "elastalert2 (genuine live pipeline, unrelated to the SQLi probe above)",
+    "provenance": "Real traffic from a lab Tailscale node (100.101.27.63), POST /rest/basket/1 with body {\"quantity\":999} — a coherent match for the rule's own stated business-logic-abuse criteria, unlike the other candidate alert (Sensitive Data Exposure, a socket.io polling request that did not actually match its own rule's criteria and was assessed as a likely false positive, not selected)",
+    "tags": ["OWASP:A01:2021", "T1566", "business-logic-abuse", "dmz", "juiceshop"]
+  },
+
+  "real_tools_used": {
+    "thehive_alert_and_promotion": true,
+    "search_past_cases_rag": "yes — found genuine prior TruePositive history for the source IP, used in the verdict reasoning",
+    "search_elasticsearch": "attempted 3x with empty arguments by the model; the empty-arg safety cutoff correctly fired after 3 attempts, forcing conclusion rather than looping",
+    "mistral_7b_localhost_ollama": true,
+    "cortex_mailer_responder": "Mailer_1_0, invoked exactly once, status=Success"
+  },
+
+  "verdict": {
+    "verdict": "inconclusive",
+    "confidence": 0.5,
+    "severity": "medium",
+    "mitre_technique": "T1548",
+    "disposition_tier": "L2",
+    "disposition_action": "escalate",
+    "reason_code": "NOVEL_CASE"
+  },
+
+  "mutation_proof": {
+    "case_created": "exactly one — ~409657400",
+    "comments_posted": "exactly 3 (investigation trace, L2 escalation summary, notification audit record) — same 3 after replay, zero duplicates",
+    "cortex_actions_total": "exactly 1 — Mailer_1_0, Success — same 1 after replay, zero duplicates",
+    "containment_attempted": false,
+    "pfsense_contacted": false,
+    "case_status_after": "New (remains open, not closed)",
+    "replay_result": "refused at the demo-allowlist checkpoint, before any mutation-capable code path was reached"
+  },
+
+  "known_gap_found_and_fixed": {
+    "requirement": "assignment to soc-l2@thehive.local",
+    "original_actual_result": "case assignee was soar-live-demo@thehive.local (the API-calling service account itself), not soc-l2@thehive.local",
+    "root_cause": "TheHive auto-assigns the API caller as the case's owner/assignee on creation via promote_to_case(). The code's L2-assignment eligibility check (assign_l2_verified -> l1_policy.evaluate_l2_assignment_eligibility) treated any existing non-empty assignee as 'already_satisfied (existing_analyst)' — a deliberate safety rule meant to avoid overriding a HUMAN's existing case ownership — but did not distinguish a genuine human analyst from the automation's own service account landing there first.",
+    "severity": "functional gap, not a safety violation — no unintended write occurred beyond what the code's own logic decided (deliberately) not to do",
+    "code_fix": {
+      "commit": "c17e1c432e9e78cc7fef69233df394f5bb954410",
+      "message": "Fix L2 assignment: distinguish auto-ownership from a real human assignee",
+      "changed_files": ["soar/agent_orchestrator.py", "soar/l1_policy.py", "soar/test_l2_assignment.py"],
+      "mechanism": "l1_policy.evaluate_l2_assignment_eligibility() now accepts caller_login (the authenticated API caller for THIS execution, resolved via a new agent_orchestrator._resolve_caller_login() -> api.user.get_current()). Only an EXACT match between the live case's current assignee and caller_login is treated as auto-ownership eligible for reassignment to SOAR_L2_LOGIN. Any other value — a real human, a different service account, or a failed/ambiguous /user/current lookup — still fails closed and preserves the existing assignee exactly as before the fix.",
+      "standalone_correction_function": "agent_orchestrator.correct_auto_ownership_assignment() — a new, narrowly-scoped function for fixing a case assign_l2_verified() already processed once under the old behavior. Deliberately not built on assign_l2_verified() itself (that function's normal path posts an evidence comment for any fresh assignment, which would duplicate the comment already on this case). Modifies ONLY the assignee field; has no code path capable of posting a comment, triggering a notification/responder, or touching case status.",
+      "new_tests": "41 new tests added to test_l2_assignment.py (128 total in that file, up from 87): empty assignee, already-assigned-to-target, automatic service-account ownership (the core fix), a different service account (must still be preserved), a real human assignee, missing/failed /user/current, 6 ambiguous get_current() response shapes, replay/idempotency, and zero comment/notification/containment/closure side effects during the standalone correction.",
+      "test_totals": "727/727 local, 676/676 VM-runnable (same known test_phase7d.py non-issue as every prior deployment)",
+      "deployed_release": "c17e1c4 (new immutable release; 25b6b10, 81fffb3, and 008a5fe9 all preserved on disk, checksums verified unchanged)"
+    },
+    "live_correction": {
+      "target_case": "~409657400",
+      "preconditions_verified_before": {
+        "current_assignee": "soar-live-demo@thehive.local",
+        "case_status": "New (open)",
+        "comment_count": 3,
+        "mailer_action_count": 1,
+        "kill_switch_active": true,
+        "service_disabled_and_stopped": true
+      },
+      "correction_result": {"corrected": true, "reason": "verified",
+                            "before_assignee": "soar-live-demo@thehive.local",
+                            "after_assignee": "soc-l2@thehive.local"},
+      "postconditions_verified_after": {
+        "assignee": "soc-l2@thehive.local",
+        "case_status": "New (still open, unchanged)",
+        "comment_count": "3 (unchanged — identical timestamps, none added)",
+        "mailer_action_count": "1 (unchanged, still Mailer_1_0/Success)",
+        "containment_actions": 0,
+        "kill_switch_active": true,
+        "service_disabled_and_stopped": true
+      },
+      "replay_test": {"corrected": true, "reason": "already the target login — idempotent no-op",
+                      "patch_issued": false}
+    }
+  },
+
+  "latency_seconds_approx": 41,
+  "gpu": {"model": "NVIDIA L4", "peak_utilization_pct": 100, "peak_vram_mib": 4959},
+
+  "final_state": {
+    "service_enabled": false,
+    "service_active": false,
+    "kill_switch_active": true,
+    "unit_env_vars_unchanged": true,
+    "no_persistent_armed_configuration": true
+  }
+}
