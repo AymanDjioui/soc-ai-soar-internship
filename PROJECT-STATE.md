@@ -28,6 +28,26 @@ UNTOUCHED. Local backup of the original orchestrator: `soar/backups/`. Demo acco
 the teacher: `soc-l2@thehive.local` / `${SOC_L2_DEMO_PASSWORD}` (password redacted
 2026-08-22, see docs/SECURITY.md; the login itself is not a credential).
 
+**NEW 2026-08-24 — Phase 8G: permanent L2-only worker + Phase 8G.2 armed L1 test
+closed.** `soar/l2_worker.py` is now a permanent systemd service
+(`soar-agent-l2-worker.service`, enabled/active, identity
+`soc-l1-ai-agent@thehive.local`), polling TheHive and running the unchanged
+`agent_orchestrator.py` per alert, hardcoded `l2-only` in code — containment is
+structurally impossible from this path. See `ai/results/phase8g1-*.md` for the
+circuit-breaker redesign and identity rotation, and
+`ai/results/phase8g2-part-b-l1-containment-test.md` for the one controlled armed
+L1-containment test series: 6 real attempts against a live GPU-hosted mistral:7b
+all correctly refused containment (`MISSING_EVIDENCE`) rather than fire on
+incomplete evidence — the gate is proven safe under real load, but no new armed
+block was captured in this series (the test IOC turned out not to be
+independently confirmed malicious by live threat intel — see that file for the
+full honest account). The project's positive containment proof remains the
+2026-08-20 capture referenced above (`202.61.130.163` / case `~328003784`,
+ThreatFox-confirmed, pfctl-verified) — re-verified still live and unchanged as
+part of this closure. Permanent autonomous IP containment remains **disabled**;
+the kill switch is active; no pfSense credentials exist in any permanent
+unit/env file.
+
 ## Who is who
 
 - **Ayman (Djo)** — me, the user you're talking to. Own: ELK, pfSense, Suricata, the AI
