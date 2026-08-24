@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """
 Administrative status/reset interface for the L2 worker's circuit
-breaker (Phase 8G.1). This is the ONLY sanctioned way to clear a trip —
-never delete the CIRCUIT_BREAKER_TRIPPED marker file by hand. A reset
-requires an explicit --reason, is refused if the rolling/epoch-bounded
-action count is still at or above threshold, and writes a sanitized
-audit event either way.
+breakers (Phase 8G.1: case/email; Phase 8H: dedicated containment). This
+is the ONLY sanctioned way to clear a trip — never delete a
+*_CIRCUIT_BREAKER_TRIPPED marker file by hand. A reset requires an
+explicit --reason, is refused if the rolling/epoch-bounded action count
+is still at or above threshold, and writes a sanitized audit event
+either way.
 
 Usage:
     python3 l2_worker_admin.py status
     python3 l2_worker_admin.py reset --reason "soak-test history aged out, verified below threshold"
+    python3 l2_worker_admin.py status --containment
+    python3 l2_worker_admin.py reset --containment --reason "..."
 
 Reads THEHIVE_API_KEY (existence only, not used here directly),
 SOAR_WORKER_WATERMARK_ISO, SOAR_WORKER_STATE_DIR, and SOAR_AUDIT_LOG
@@ -37,8 +40,12 @@ def _watermark_ts():
 def main():
     parser = argparse.ArgumentParser(description="L2 worker circuit-breaker admin interface")
     sub = parser.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("status", help="Read-only circuit-breaker status")
+    status_p = sub.add_parser("status", help="Read-only circuit-breaker status")
+    status_p.add_argument("--containment", action="store_true",
+                          help="Show the dedicated containment breaker instead of case/email")
     reset_p = sub.add_parser("reset", help="Administratively reset a tripped circuit breaker")
+    reset_p.add_argument("--containment", action="store_true",
+                         help="Reset the dedicated containment breaker instead of case/email")
     reset_p.add_argument("--reason", required=True,
                          help="Required, non-empty justification, written to the audit log")
     args = parser.parse_args()
@@ -52,13 +59,21 @@ def main():
     audit_log_path = os.environ.get("SOAR_AUDIT_LOG") or orch.AUDIT_LOG
 
     if args.cmd == "status":
-        status = w.circuit_breaker_status(audit_log_path, store_dir=store_dir, watermark_ts=watermark_ts)
+        if args.containment:
+            status = w.containment_circuit_breaker_status(audit_log_path, store_dir=store_dir,
+                                                           watermark_ts=watermark_ts)
+        else:
+            status = w.circuit_breaker_status(audit_log_path, store_dir=store_dir, watermark_ts=watermark_ts)
         print(json.dumps(status, indent=2))
         return
 
     if args.cmd == "reset":
-        result = w.reset_circuit_breaker(args.reason, audit_log_path, store_dir=store_dir,
-                                         watermark_ts=watermark_ts)
+        if args.containment:
+            result = w.reset_containment_circuit_breaker(args.reason, audit_log_path,
+                                                          store_dir=store_dir, watermark_ts=watermark_ts)
+        else:
+            result = w.reset_circuit_breaker(args.reason, audit_log_path, store_dir=store_dir,
+                                             watermark_ts=watermark_ts)
         print(json.dumps(result, indent=2))
         sys.exit(0 if result.get("reset") else 1)
 

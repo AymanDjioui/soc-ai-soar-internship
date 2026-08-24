@@ -418,7 +418,7 @@ def process_alert_agent(api, alert: dict):
             execution_mode, AGENT_DRY_RUN)
         containment["executed"] = cv["executed"]
         containment["reason_code"] = cv["reason_code"]
-        orch.audit("agent_containment_verification", **cv["audit"])
+        orch.audit("agent_containment_verification", executed=cv["executed"], **cv["audit"])
         print(f"   CONTAINMENT VERIFICATION: executed={cv['executed']} "
               f"reason={cv['reason_code']} (precheck={cv['audit'].get('precheck_result')}, "
               f"postcheck={cv['audit'].get('postcheck_result')})")

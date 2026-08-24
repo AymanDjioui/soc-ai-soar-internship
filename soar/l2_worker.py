@@ -11,14 +11,30 @@ listAlert) and claims (local idempotency); all investigation and every
 actual mutation happens inside the unchanged one-shot orchestrator,
 exactly as already tested and live-verified in Phase 8F.
 
-Containment is impossible from this worker by construction, twice over:
-  1. It always launches the orchestrator with SOAR_DEMO_ACTION_MODE=l2-only
-     set, which agent_orchestrator.demo_allowlist.containment_permitted()
-     forbids unconditionally, regardless of model/policy/config.
-  2. It never sets RESPONDER_NAME/PFSENSE_* in the subprocess environment
-     — those variables simply do not exist in this process's env by
-     deployment design (see the systemd unit: no pfSense/responder
-     variables are ever placed in the worker's EnvironmentFile).
+Action mode is explicit and defaults SAFE: SOAR_WORKER_ACTION_MODE controls
+whether this worker can ever produce a real containment action.
+  - "l2-only" (DEFAULT — used unless explicitly overridden): containment is
+    impossible from this worker by construction, twice over:
+      1. It always launches the orchestrator with SOAR_DEMO_ACTION_MODE=l2-only
+         set, which agent_orchestrator.demo_allowlist.containment_permitted()
+         forbids unconditionally, regardless of model/policy/config.
+      2. It strips RESPONDER_NAME/PFSENSE_* from the subprocess environment
+         even if present upstream.
+  - "l1-containment": SOAR_DEMO_ACTION_MODE is left UNSET for the subprocess
+    (demo_allowlist becomes a full no-op — see its own docstring), and
+    RESPONDER_NAME/PFSENSE_* pass through from this worker's own environment
+    (which must come from a DEDICATED EnvironmentFile — see the systemd
+    unit). This restores the exact code path already validated live on
+    2026-08-20 (202.61.130.163 / case ~328003784): l1_policy.py's own
+    gates (narrow T1071.001-only allowlist, confidence >=0.85, both
+    search_past_cases AND run_analyzer required, corroboration, no
+    conflicting evidence, explicit-armed) are the ONLY authorization for
+    containment — nothing here weakens or bypasses them. In this mode a
+    SEPARATE, dedicated circuit breaker (below) caps how many real
+    containment actions this worker may take per rolling hour, independent
+    of and in addition to the case/email breaker — a genuinely new action
+    class (autonomous firewall mutation) gets its own dedicated rate limit,
+    not a shared one sized for case/email volume.
 
 Concurrency is exactly 1 (sequential, one alert claimed and fully
 processed — success, retry, or dead-letter — before the next poll cycle
@@ -35,6 +51,14 @@ the worker refuses to start without an explicit deployment watermark):
     SOAR_WORKER_EXCLUDED_TAGS     default "synthetic,test,demo,watchdog,pipeline"
     SOAR_WORKER_MAX_CASES_HOUR    default 3  (circuit breaker)
     SOAR_WORKER_MAX_EMAILS_HOUR   default 3  (circuit breaker)
+    SOAR_WORKER_ACTION_MODE       default "l2-only". "l1-containment" enables
+                                   real autonomous IP blocking — see module
+                                   docstring above. Any other value refuses
+                                   to start (fail loud, never silently
+                                   misinterpret a typo as the safe default).
+    SOAR_WORKER_MAX_CONTAINMENTS_HOUR  default 3  (dedicated containment
+                                   circuit breaker, only meaningful in
+                                   l1-containment mode)
     SOAR_WORKER_MAX_RETRIES       default 5  (bounded exponential retry)
     SOAR_WORKER_STATE_DIR         default idempotency.DEFAULT_STORE_DIR
     SOAR_WORKER_ONE_CYCLE         if "1", process at most one poll cycle
@@ -72,8 +96,16 @@ MAX_EMAILS_PER_HOUR = int(os.environ.get("SOAR_WORKER_MAX_EMAILS_HOUR", "3"))
 MAX_RETRIES = int(os.environ.get("SOAR_WORKER_MAX_RETRIES", "5"))
 ONE_CYCLE_ONLY = os.environ.get("SOAR_WORKER_ONE_CYCLE", "") == "1"
 
+ACTION_MODES = ("l2-only", "l1-containment")
+WORKER_ACTION_MODE = os.environ.get("SOAR_WORKER_ACTION_MODE", "l2-only").strip() or "l2-only"
+if WORKER_ACTION_MODE not in ACTION_MODES:
+    sys.exit(f"SOAR_WORKER_ACTION_MODE={WORKER_ACTION_MODE!r} is not one of {ACTION_MODES} — "
+             f"refusing to start rather than silently misinterpret a typo as the safe default")
+MAX_CONTAINMENTS_PER_HOUR = int(os.environ.get("SOAR_WORKER_MAX_CONTAINMENTS_HOUR", "3"))
+
 WORKER_STATE_DIR = os.environ.get("SOAR_WORKER_STATE_DIR") or idempotency.DEFAULT_STORE_DIR
 BREAKER_FILE = os.path.join(WORKER_STATE_DIR, "CIRCUIT_BREAKER_TRIPPED")
+CONTAINMENT_BREAKER_FILE = os.path.join(WORKER_STATE_DIR, "CONTAINMENT_CIRCUIT_BREAKER_TRIPPED")
 HEALTH_FILE = os.path.join(WORKER_STATE_DIR, "l2_worker_health.json")
 
 CLAIM_PREFIX = "l2-worker-claim"
@@ -422,6 +454,160 @@ def reset_circuit_breaker(reason: str, audit_log_path, store_dir: str = None,
 
 
 # ==============================================================================
+# Containment circuit breaker — DEDICATED, separate from the case/email one
+# above, only meaningful in SOAR_WORKER_ACTION_MODE=l1-containment. Real
+# autonomous IP blocking is a different, higher-consequence action class than
+# case creation or email — it gets its own rate limit, its own sticky trip
+# marker, and its own audited-reset-only recovery, on the same
+# max(now-1h, watermark) epoch-bounded counting design as the breaker above.
+# Counts agent_containment_verification audit events with executed=True —
+# a Cortex "Success" report alone is never counted; only an INDEPENDENTLY
+# pfSense-verified block does (see execute_and_verify_containment()).
+# ==============================================================================
+
+_containment_breaker_runtime_state = {"last_heartbeat_ts": 0.0}
+
+
+def reset_containment_breaker_runtime_state_for_tests():
+    _containment_breaker_runtime_state["last_heartbeat_ts"] = 0.0
+
+
+def _containment_heartbeat_due(now: float) -> bool:
+    if now - _containment_breaker_runtime_state["last_heartbeat_ts"] >= HEARTBEAT_INTERVAL_SECONDS:
+        _containment_breaker_runtime_state["last_heartbeat_ts"] = now
+        return True
+    return False
+
+
+def _count_recent_containments(audit_log_path, since_ts) -> int:
+    count = 0
+    try:
+        with open(audit_log_path, encoding="utf-8") as f:
+            for line in f:
+                try:
+                    d = json.loads(line)
+                except (json.JSONDecodeError, ValueError):
+                    continue
+                if d.get("event") != "agent_containment_verification":
+                    continue
+                if d.get("executed") is not True:
+                    continue
+                ts = d.get("ts")
+                if not ts:
+                    continue
+                try:
+                    t = datetime.fromisoformat(str(ts).replace("Z", "+00:00")).timestamp()
+                except ValueError:
+                    continue
+                if t >= since_ts:
+                    count += 1
+    except FileNotFoundError:
+        return 0
+    return count
+
+
+def containment_circuit_breaker_status(audit_log_path, store_dir: str = None, watermark_ts=None) -> dict:
+    """Read-only. Never mutates state, never audits. Safe to call as often as needed."""
+    store_dir = store_dir or WORKER_STATE_DIR
+    breaker_file = os.path.join(store_dir, "CONTAINMENT_CIRCUIT_BREAKER_TRIPPED")
+    since_ts = _counting_floor_ts(watermark_ts)
+    count = _count_recent_containments(audit_log_path, since_ts)
+    tripped = os.path.exists(breaker_file)
+    trip_detail = None
+    if tripped:
+        try:
+            with open(breaker_file, encoding="utf-8") as f:
+                trip_detail = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            trip_detail = {"error": "trip marker unreadable"}
+    return {
+        "tripped": tripped, "trip_detail": trip_detail,
+        "containments_in_window": count, "max_containments_per_window": MAX_CONTAINMENTS_PER_HOUR,
+        "counting_since_iso": datetime.fromtimestamp(since_ts, tz=timezone.utc).isoformat(),
+    }
+
+
+def check_containment_circuit_breaker(audit_log_path, store_dir: str = None, watermark_ts=None) -> dict:
+    """
+    Same shape/semantics as check_circuit_breaker() above, counting real
+    executed containment actions instead of cases/emails. Checked at the
+    START of every poll cycle in l1-containment mode, BEFORE any alert is
+    even fetched — a trip here halts ALL new alert processing for this
+    worker (not just containment), matching the same "something looks
+    anomalous, stop everything" philosophy as the case/email breaker,
+    deliberately simpler than trying to keep L2 escalation running while
+    only containment is blocked.
+    """
+    store_dir = store_dir or WORKER_STATE_DIR
+    breaker_file = os.path.join(store_dir, "CONTAINMENT_CIRCUIT_BREAKER_TRIPPED")
+    now = time.time()
+
+    if os.path.exists(breaker_file):
+        return {"tripped": True,
+               "reason": "containment circuit breaker already tripped — administrative reset required",
+               "containments_last_hour": None, "is_new_trip": False,
+               "heartbeat_due": _containment_heartbeat_due(now)}
+
+    since_ts = _counting_floor_ts(watermark_ts)
+    count = _count_recent_containments(audit_log_path, since_ts)
+
+    if count >= MAX_CONTAINMENTS_PER_HOUR:
+        reason = (f"containment circuit breaker tripped: {count} real containment action(s) since "
+                 f"{datetime.fromtimestamp(since_ts, tz=timezone.utc).isoformat()} "
+                 f"(limit {MAX_CONTAINMENTS_PER_HOUR})")
+        os.makedirs(store_dir, exist_ok=True)
+        with open(breaker_file, "w", encoding="utf-8") as f:
+            f.write(json.dumps({"tripped_at": datetime.now(timezone.utc).isoformat(),
+                               "containments_in_window": count,
+                               "counting_since_iso": datetime.fromtimestamp(
+                                   since_ts, tz=timezone.utc).isoformat()}))
+        _containment_breaker_runtime_state["last_heartbeat_ts"] = now
+        return {"tripped": True, "reason": reason, "containments_last_hour": count,
+               "is_new_trip": True, "heartbeat_due": False}
+
+    return {"tripped": False, "reason": None, "containments_last_hour": count,
+           "is_new_trip": False, "heartbeat_due": False}
+
+
+def reset_containment_circuit_breaker(reason: str, audit_log_path, store_dir: str = None,
+                                      watermark_ts=None) -> dict:
+    """Administrative reset — same discipline as reset_circuit_breaker(): non-empty
+    reason required, refuses if the count is still at/above threshold, audited
+    either way, never a manual file deletion."""
+    store_dir = store_dir or WORKER_STATE_DIR
+    breaker_file = os.path.join(store_dir, "CONTAINMENT_CIRCUIT_BREAKER_TRIPPED")
+    reason = (reason or "").strip()
+
+    if not reason:
+        orch.audit("l2_worker_containment_circuit_breaker_reset_refused", detail="empty reason provided")
+        return {"reset": False, "error": "a non-empty reason is required",
+               "containments_in_window": None}
+
+    if not os.path.exists(breaker_file):
+        return {"reset": False,
+               "error": "containment circuit breaker is not currently tripped — nothing to reset",
+               "containments_in_window": None}
+
+    status = containment_circuit_breaker_status(audit_log_path, store_dir=store_dir,
+                                                watermark_ts=watermark_ts)
+    if status["containments_in_window"] >= MAX_CONTAINMENTS_PER_HOUR:
+        orch.audit("l2_worker_containment_circuit_breaker_reset_refused",
+                  reason=sanitization.redact_secrets(reason),
+                  containments_in_window=status["containments_in_window"])
+        return {"reset": False,
+               "error": f"rolling count still at/above threshold "
+                        f"({status['containments_in_window']} containment(s), "
+                        f"limit {MAX_CONTAINMENTS_PER_HOUR}) — refusing to override an active trip",
+               "containments_in_window": status["containments_in_window"]}
+
+    os.remove(breaker_file)
+    reset_containment_breaker_runtime_state_for_tests()
+    orch.audit("l2_worker_containment_circuit_breaker_reset", reason=sanitization.redact_secrets(reason),
+              containments_in_window=status["containments_in_window"])
+    return {"reset": True, "error": None, "containments_in_window": status["containments_in_window"]}
+
+
+# ==============================================================================
 # Health reporting
 # ==============================================================================
 
@@ -443,26 +629,45 @@ def write_health(status: str, extra: dict = None, health_file: str = None):
 # Invoking the existing one-shot orchestrator — never reimplemented
 # ==============================================================================
 
-def build_subprocess_env(alert_id: str, base_env: dict = None) -> dict:
+def build_subprocess_env(alert_id: str, base_env: dict = None, action_mode: str = None) -> dict:
     """
     The env for ONE orchestrator subprocess invocation. Starts from a
     COPY of this process's own environment (so THEHIVE_*/ES_*/CORTEX_ID/
     MAILER_RESPONDER_NAME/SOAR_L2_* already present in the worker's own
     env — from its EnvironmentFile — pass through unchanged), then sets
-    the per-alert targeting and demo-allowlist variables, and explicitly
-    ensures no containment-capable variable is present regardless of what
-    the worker's own environment happens to contain (defense in depth on
-    top of the systemd unit never placing them there in the first place).
+    the per-alert targeting variables and, depending on `action_mode`
+    (defaults to the module-level WORKER_ACTION_MODE — pass it explicitly
+    only in tests):
+
+    "l2-only" (the safe default): pins SOAR_DEMO_ACTION_MODE=l2-only, which
+    agent_orchestrator.demo_allowlist.containment_permitted() forbids
+    unconditionally, and strips every containment-capable variable
+    (RESPONDER_NAME/PFSENSE_*) regardless of what the worker's own
+    environment happens to contain — defense in depth on top of the
+    systemd unit never placing them there in the first place.
+
+    "l1-containment": leaves SOAR_DEMO_ACTION_MODE UNSET entirely (so
+    demo_allowlist is a full no-op — see its own module docstring) and
+    does NOT strip RESPONDER_NAME/PFSENSE_* — they pass through from this
+    process's own environment if present there (which requires a
+    DEDICATED EnvironmentFile in the systemd unit; they are never set by
+    this function itself). Authorization for any real containment action
+    in this mode rests entirely on l1_policy.py's own unmodified gates.
     """
+    mode = action_mode or WORKER_ACTION_MODE
     env = dict(base_env if base_env is not None else os.environ)
     env["SOAR_ALERT_ID"] = alert_id
-    env["SOAR_DEMO_ALLOWED_ALERT_ID"] = alert_id
-    env["SOAR_DEMO_ACTION_MODE"] = "l2-only"
-    env.pop("SOAR_DEMO_ALLOWED_IOC", None)  # l2-only never uses/needs one
-    for forbidden in ("RESPONDER_NAME", "PFSENSE_HOST", "PFSENSE_SSH_USER",
-                     "PFSENSE_SSH_PASSWORD", "PFSENSE_SSH_TIMEOUT", "PFSENSE_BLOCK_TABLE"):
-        env.pop(forbidden, None)
-    # armed + l2-only, explicit — never inherited/assumed
+    if mode == "l2-only":
+        env["SOAR_DEMO_ALLOWED_ALERT_ID"] = alert_id
+        env["SOAR_DEMO_ACTION_MODE"] = "l2-only"
+        env.pop("SOAR_DEMO_ALLOWED_IOC", None)  # l2-only never uses/needs one
+        for forbidden in ("RESPONDER_NAME", "PFSENSE_HOST", "PFSENSE_SSH_USER",
+                         "PFSENSE_SSH_PASSWORD", "PFSENSE_SSH_TIMEOUT", "PFSENSE_BLOCK_TABLE"):
+            env.pop(forbidden, None)
+    else:  # "l1-containment" — validated at module load, no other value reaches here
+        for demo_var in ("SOAR_DEMO_ACTION_MODE", "SOAR_DEMO_ALLOWED_ALERT_ID", "SOAR_DEMO_ALLOWED_IOC"):
+            env.pop(demo_var, None)
+    # armed, explicit — never inherited/assumed
     env["SOAR_AGENT_DRY_RUN"] = "0"
     env["SOAR_AGENT_MODE"] = "armed"
     env["SOAR_DRY_RUN"] = "0"
@@ -587,8 +792,11 @@ def run_one_poll_cycle(thehive_url, thehive_api_key, watermark_ts, store_dir=Non
     # Note: the kill switch does not gate the WORKER's own polling/claim
     # loop — it gates CONTAINMENT inside each orchestrator subprocess,
     # freshly re-checked by that subprocess on every single invocation.
-    # l2-only mode never attempts containment regardless, so there is
-    # nothing here for the kill switch to additionally block.
+    # In l2-only mode containment is never attempted regardless, so there
+    # is nothing here for the kill switch to additionally block; in
+    # l1-containment mode the kill switch remains the fastest possible
+    # override (file-presence check, no restart required) on top of
+    # everything else in this file.
 
     breaker = check_circuit_breaker(audit_log_path, store_dir=store_dir, watermark_ts=watermark_ts)
     if breaker["tripped"]:
@@ -598,6 +806,17 @@ def run_one_poll_cycle(thehive_url, thehive_api_key, watermark_ts, store_dir=Non
             orch.audit("l2_worker_circuit_breaker_heartbeat", reason=breaker["reason"])
         write_health("circuit_breaker_tripped", {"reason": breaker["reason"]})
         return {"outcome": "circuit_breaker_tripped", "reason": breaker["reason"]}
+
+    if WORKER_ACTION_MODE == "l1-containment":
+        c_breaker = check_containment_circuit_breaker(audit_log_path, store_dir=store_dir,
+                                                       watermark_ts=watermark_ts)
+        if c_breaker["tripped"]:
+            if c_breaker["is_new_trip"]:
+                orch.audit("l2_worker_containment_circuit_breaker_tripped", reason=c_breaker["reason"])
+            elif c_breaker["heartbeat_due"]:
+                orch.audit("l2_worker_containment_circuit_breaker_heartbeat", reason=c_breaker["reason"])
+            write_health("containment_circuit_breaker_tripped", {"reason": c_breaker["reason"]})
+            return {"outcome": "containment_circuit_breaker_tripped", "reason": c_breaker["reason"]}
 
     try:
         alerts = fetch_candidate_alerts(thehive_url, thehive_api_key, session=session)
@@ -640,12 +859,16 @@ def main():
                 "never silently fall back to processing the entire backlog)")
 
     print("=" * 70)
-    print("  L2-ONLY WORKER (Phase 8G) — permanent action mode: l2-only")
+    print(f"  SOAR WORKER (Phase 8G/8H) — permanent action mode: {WORKER_ACTION_MODE}")
+    if WORKER_ACTION_MODE == "l1-containment":
+        print("  *** CONTAINMENT ENABLED — this worker can autonomously block IPs ***")
     print(f"  Watermark      : {watermark_raw}")
     print(f"  Poll interval  : {POLL_INTERVAL_SECONDS}s")
     print(f"  Trusted sources: {sorted(TRUSTED_SOURCES)}")
     print(f"  Excluded tags  : {EXCLUDED_TAG_SUBSTRINGS}")
     print(f"  Circuit breaker: {MAX_CASES_PER_HOUR} case(s)/hr, {MAX_EMAILS_PER_HOUR} email(s)/hr")
+    if WORKER_ACTION_MODE == "l1-containment":
+        print(f"  Containment breaker: {MAX_CONTAINMENTS_PER_HOUR} action(s)/hr")
     print(f"  Kill switch    : {'ACTIVE' if orch.kill_switch_active() else 'inactive'}")
     print("=" * 70)
 

@@ -606,6 +606,157 @@ check("shutdown flag clears for the next test/run", w.is_shutdown_requested() is
 
 
 # ==============================================================================
+# 19. Phase 8H — SOAR_WORKER_ACTION_MODE validation at import time. An
+# invalid value must refuse to start rather than silently fall back to
+# either mode.
+# ==============================================================================
+
+print("\n=== 19. SOAR_WORKER_ACTION_MODE validation (subprocess, module-load-time check) ===")
+import subprocess as _sp
+_env_bad = dict(os.environ)
+_env_bad["SOAR_WORKER_ACTION_MODE"] = "bogus-mode"
+_r19 = _sp.run([sys.executable, "-c", "import l2_worker"], env=_env_bad,
+              cwd=os.path.dirname(os.path.abspath(__file__)), capture_output=True, text=True, timeout=30)
+check("an invalid SOAR_WORKER_ACTION_MODE refuses to import/start", _r19.returncode != 0, _r19.stderr[-300:])
+check("the refusal names the bad value", "bogus-mode" in (_r19.stderr or ""), _r19.stderr[-300:])
+
+_env_default = dict(os.environ)
+_env_default.pop("SOAR_WORKER_ACTION_MODE", None)
+_r19b = _sp.run([sys.executable, "-c", "import l2_worker as w; print(w.WORKER_ACTION_MODE)"],
+                env=_env_default, cwd=os.path.dirname(os.path.abspath(__file__)),
+                capture_output=True, text=True, timeout=30)
+check("unset SOAR_WORKER_ACTION_MODE defaults to the safe l2-only",
+     _r19b.returncode == 0 and _r19b.stdout.strip() == "l2-only", (_r19b.returncode, _r19b.stdout))
+
+
+# ==============================================================================
+# 20-21. Phase 8H — build_subprocess_env() in l1-containment mode: demo
+# vars are left UNSET (not pinned to l2-only), and containment-capable
+# variables PASS THROUGH from the worker's own env instead of being
+# stripped. l2-only mode (explicit or default) is completely unchanged.
+# ==============================================================================
+
+print("\n=== 20. build_subprocess_env(action_mode='l1-containment'): demo vars unset, PFSENSE_* passes through ===")
+base_with_pfsense = dict(os.environ)
+base_with_pfsense.update({"RESPONDER_NAME": "PfSense_Blocker_1_0", "PFSENSE_HOST": "100.70.145.65",
+                         "PFSENSE_SSH_USER": "admin", "PFSENSE_BLOCK_TABLE": "EasyRuleBlockHostsWAN"})
+built20 = w.build_subprocess_env("~a20", base_env=base_with_pfsense, action_mode="l1-containment")
+check("RESPONDER_NAME passes through in l1-containment mode",
+     built20.get("RESPONDER_NAME") == "PfSense_Blocker_1_0", built20.get("RESPONDER_NAME"))
+check("PFSENSE_HOST passes through in l1-containment mode",
+     built20.get("PFSENSE_HOST") == "100.70.145.65", built20.get("PFSENSE_HOST"))
+check("SOAR_DEMO_ACTION_MODE is left UNSET in l1-containment mode (demo_allowlist becomes a no-op)",
+     "SOAR_DEMO_ACTION_MODE" not in built20, built20.get("SOAR_DEMO_ACTION_MODE"))
+check("SOAR_DEMO_ALLOWED_ALERT_ID is left UNSET in l1-containment mode",
+     "SOAR_DEMO_ALLOWED_ALERT_ID" not in built20)
+check("SOAR_DEMO_ALLOWED_IOC is left UNSET in l1-containment mode",
+     "SOAR_DEMO_ALLOWED_IOC" not in built20)
+check("SOAR_ALERT_ID is still set correctly in l1-containment mode", built20["SOAR_ALERT_ID"] == "~a20")
+check("still explicitly armed in l1-containment mode",
+     built20["SOAR_AGENT_DRY_RUN"] == "0" and built20["SOAR_AGENT_MODE"] == "armed")
+
+print("=== 21. build_subprocess_env(action_mode='l2-only') explicit param: unchanged from the default ===")
+built21 = w.build_subprocess_env("~a21", base_env=poisoned_base_env, action_mode="l2-only")
+check("explicit l2-only strips PFSENSE_* exactly like the default", "PFSENSE_HOST" not in built21)
+check("explicit l2-only still pins SOAR_DEMO_ACTION_MODE=l2-only",
+     built21["SOAR_DEMO_ACTION_MODE"] == "l2-only")
+
+
+# ==============================================================================
+# 22-25. Phase 8H — dedicated containment circuit breaker. Same shape and
+# discipline as the case/email breaker (13/13b/13c/13d/14a-d), but counts
+# ONLY agent_containment_verification events with executed=True — a
+# Cortex-reported "success" that failed independent pfSense verification
+# must NEVER count.
+# ==============================================================================
+
+print("\n=== 22. containment breaker trips at the containment-specific threshold ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": now_iso(), "event": "agent_containment_verification", "executed": True}
+                         for _ in range(w.MAX_CONTAINMENTS_PER_HOUR)])
+cb22 = w.check_containment_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)
+check("containment breaker trips once the per-window limit is reached", cb22["tripped"] is True, cb22)
+check("this IS the new-trip transition", cb22["is_new_trip"] is True, cb22)
+check("containment trip marker file was written",
+     os.path.exists(os.path.join(d, "CONTAINMENT_CIRCUIT_BREAKER_TRIPPED")))
+
+print("=== 23. a Cortex 'success' that failed independent pfSense verification never counts ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": now_iso(), "event": "agent_containment_verification", "executed": False}
+                         for _ in range(w.MAX_CONTAINMENTS_PER_HOUR + 5)])
+cb23 = w.check_containment_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)
+check("executed=False events never count toward the containment breaker",
+     cb23["tripped"] is False and cb23["containments_last_hour"] == 0, cb23)
+
+print("=== 24. containment breaker respects the SAME epoch floor as the case/email breaker ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": iso_at(600), "event": "agent_containment_verification", "executed": True}
+                         for _ in range(w.MAX_CONTAINMENTS_PER_HOUR)])
+cb24 = w.check_containment_circuit_breaker(log, store_dir=d, watermark_ts=fresh_watermark_ts)
+check("a fresh epoch excludes pre-epoch containment history from the count",
+     cb24["tripped"] is False and cb24["containments_last_hour"] == 0, cb24)
+
+print("=== 25. containment breaker admin reset: empty reason / premature / successful ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": now_iso(), "event": "agent_containment_verification", "executed": True}
+                         for _ in range(w.MAX_CONTAINMENTS_PER_HOUR)])
+w.check_containment_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)  # trip it
+r25a = w.reset_containment_circuit_breaker("", log, store_dir=d, watermark_ts=old_watermark_ts)
+check("empty reason is refused for the containment breaker", r25a["reset"] is False, r25a)
+r25b = w.reset_containment_circuit_breaker("trying anyway", log, store_dir=d, watermark_ts=old_watermark_ts)
+check("premature reset (count still high) is refused", r25b["reset"] is False, r25b)
+new_epoch_ts = time.time() + 5
+r25c = w.reset_containment_circuit_breaker("verified below threshold for the new epoch", log,
+                                           store_dir=d, watermark_ts=new_epoch_ts)
+check("reset succeeds once genuinely below threshold", r25c["reset"] is True, r25c)
+check("containment trip marker removed by the admin interface",
+     not os.path.exists(os.path.join(d, "CONTAINMENT_CIRCUIT_BREAKER_TRIPPED")))
+r25d = w.reset_containment_circuit_breaker("no-op", log, store_dir=fresh_dir(), watermark_ts=old_watermark_ts)
+check("reset when not tripped is refused (nothing to reset)", r25d["reset"] is False, r25d)
+
+
+# ==============================================================================
+# 26. Phase 8H — run_one_poll_cycle() checks the containment breaker ONLY
+# in l1-containment mode; l2-only mode never even looks at it (matches
+# "only meaningful in l1-containment mode").
+# ==============================================================================
+
+print("\n=== 26. poll cycle: containment breaker only gates in l1-containment mode ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": now_iso(), "event": "agent_containment_verification", "executed": True}
+                         for _ in range(w.MAX_CONTAINMENTS_PER_HOUR)])
+w.check_containment_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)  # trip it
+
+class _FakeSessionNoAlerts:
+    def post(self, *a, **kw):
+        class R:
+            def raise_for_status(self): pass
+            def json(self): return []
+        return R()
+
+orig_mode = w.WORKER_ACTION_MODE
+try:
+    w.WORKER_ACTION_MODE = "l1-containment"
+    res26a = w.run_one_poll_cycle("http://thehive.example", "fake-key", old_watermark_ts,
+                                  store_dir=d, audit_log_path=log, session=_FakeSessionNoAlerts())
+    check("l1-containment mode halts the poll cycle when the containment breaker is tripped",
+         res26a["outcome"] == "containment_circuit_breaker_tripped", res26a)
+
+    w.WORKER_ACTION_MODE = "l2-only"
+    res26b = w.run_one_poll_cycle("http://thehive.example", "fake-key", old_watermark_ts,
+                                  store_dir=d, audit_log_path=log, session=_FakeSessionNoAlerts())
+    check("l2-only mode ignores a tripped containment breaker entirely (never checked)",
+         res26b["outcome"] != "containment_circuit_breaker_tripped", res26b)
+finally:
+    w.WORKER_ACTION_MODE = orig_mode
+
+
+# ==============================================================================
 # Summary
 # ==============================================================================
 
