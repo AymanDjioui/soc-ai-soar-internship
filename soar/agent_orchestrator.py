@@ -234,6 +234,67 @@ def build_agent_comment(res: dict, disposition: dict) -> str:
 # PROCESS ONE ALERT THROUGH THE AGENT
 # ==============================================================================
 
+def _process_alert_agent_shadow(api, alert: dict) -> None:
+    """
+    SHADOW-MODE alert processing (Phase 8D.1 audit fix).
+
+    The audit found that AGENT_DRY_RUN only ever gated the pfSense-containment
+    call (execute_and_verify_containment). Every other mutation in the armed
+    path below is unconditional: api.alert.promote_to_case(), post_case_comment(),
+    the L2 api.case.update() assignee PATCH (assign_l2_verified() takes
+    execution_mode only to namespace its idempotency key, never as an eligibility
+    gate — checked in l1_policy.evaluate_l2_assignment_eligibility()), and the
+    Cortex Mailer responder (trigger_mailer_responder() / _trigger_mailer_verified(),
+    called unconditionally from 10+ sites across close_l1_idempotent(),
+    close_l1_verified(), and the L2 escalation path). Since Phase 6 disabled
+    automatic benign closure, nearly every alert falls through to L2 escalation
+    today — meaning shadow mode as originally wired would promote a real case,
+    post a real comment, PATCH a real assignee, and fire a real Mailer responder
+    call on essentially every alert it touched.
+
+    Rather than retrofit a dry-run check into each of those call sites
+    individually (error-prone — this audit exists because that already
+    happened once), shadow mode is a single, separately-tested choke point:
+    read the alert and its observables (both read-only), run the LLM
+    investigation with api=None (agent_tools.run_analyzer's own api-is-None
+    branch returns "not_wired" before any Cortex call — verified in
+    Phase 8C), compute the disposition as a pure function, and stop. No
+    TheHive/Cortex/pfSense write of any kind is reachable from this function.
+    """
+    alert_id = alert.get("_id") or alert.get("id")
+
+    try:
+        observables = api.alert.find_observables(alert_id)
+    except Exception as exc:
+        orch.audit("agent_shadow_observables_failed", alert_id=alert_id, error=str(exc))
+        observables = []
+
+    res = soc_agent.investigate(alert, observables, verbose=True, api=None)
+
+    if not res.get("verdict"):
+        print(f"   [SHADOW] agent failed ({res.get('error')}) — no case created, no action taken")
+        orch.audit("agent_shadow_failed", alert_id=alert_id, error=res.get("error"))
+        return
+
+    v = res["verdict"]
+    print(f"\n   [SHADOW] VERDICT: {v['verdict'].upper()} conf={v['confidence']} "
+          f"sev={v['severity']} tech={v['mitre_technique']}")
+    orch.audit("agent_shadow_verdict", alert_id=alert_id, verdict=v["verdict"],
+               confidence=v["confidence"], mitre=v["mitre_technique"],
+               tools=res.get("tools_used"))
+
+    disposition = l1_disposition(v, res.get("containment", {}), alert)
+    print(f"   [SHADOW] would-be TIER: {disposition['tier']} — {disposition['action']} "
+          f"({disposition['reason']})")
+    orch.audit("agent_shadow_disposition", alert_id=alert_id, tier=disposition["tier"],
+               action=disposition["action"], reason=disposition["reason"],
+               reason_codes=disposition.get("reason_codes", []),
+               policy_version=l1_policy.POLICY_VERSION)
+    print(f"   [SHADOW] no case created, no comment posted, no assignment, no mailer, "
+          f"no containment attempt\n{'='*70}\n[AGENT-SHADOW] ALERT {alert_id} COMPLETE "
+          f"(observe-only)\n{'='*70}")
+
+
 def process_alert_agent(api, alert: dict):
     alert_id = alert.get("_id") or alert.get("id")
     title = alert.get("title", "<untitled>")
@@ -243,6 +304,9 @@ def process_alert_agent(api, alert: dict):
     if orch.is_operational_alert(alert):
         print("   operational/watchdog alert — not for the agent")
         return
+
+    if AGENT_DRY_RUN:
+        return _process_alert_agent_shadow(api, alert)
 
     # ---- promote to a case FIRST — the agent needs real case-observable ids for
     # run_analyzer to trigger live Cortex enrichment mid-investigation. (Previously

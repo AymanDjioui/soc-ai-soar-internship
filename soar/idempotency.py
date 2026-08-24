@@ -48,7 +48,12 @@ import os
 from datetime import datetime, timezone
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_STORE_DIR = os.path.join(_HERE, "idempotency_store")
+# SOAR_IDEMPOTENCY_STORE_DIR (Phase 8D.1 hardening): the previous hardcoded
+# release-relative default meant a read-only-deployed release (systemd
+# ProtectSystem=strict) had nowhere writable to put this store. Same
+# env-var-override pattern already used for SOAR_AUDIT_LOG / SOAR_KILL_SWITCH
+# in e2e_soc_orchestrator.py; unset behavior is unchanged.
+DEFAULT_STORE_DIR = os.environ.get("SOAR_IDEMPOTENCY_STORE_DIR") or os.path.join(_HERE, "idempotency_store")
 
 STATUS_INTENDED = "intended"
 STATUS_COMPLETED = "completed"
