@@ -43,6 +43,7 @@ from thehive4py.query.filters import Eq
 
 import soc_agent
 # Reuse the proven orchestrator wholesale — same guard, same Cortex/mailer/audit paths.
+import demo_allowlist
 import e2e_soc_orchestrator as orch
 import idempotency
 import l1_policy
@@ -308,6 +309,23 @@ def process_alert_agent(api, alert: dict):
     if AGENT_DRY_RUN:
         return _process_alert_agent_shadow(api, alert)
 
+    # ---- Phase 8F: deterministic demo allow-list. An ADDITIONAL, opt-in gate
+    # for controlled live demonstrations — a no-op (unrestricted, unchanged
+    # prior behavior) unless SOAR_DEMO_ACTION_MODE is explicitly set for this
+    # process. Refuses BEFORE any mutation (promote_to_case included) if this
+    # exact (alert_id, action_mode) was not pre-registered, or has already
+    # been used once. Does not replace l1_policy/containment_allowed — both
+    # still apply in full below. ----
+    demo_mode = os.environ.get("SOAR_DEMO_ACTION_MODE", "").strip() or None
+    if demo_mode:
+        gate = demo_allowlist.check_run(alert_id, demo_mode)
+        if not gate["allowed"]:
+            print(f"   [DEMO ALLOW-LIST] REFUSED: {gate['reason']}")
+            orch.audit("agent_demo_allowlist_refused", alert_id=alert_id, reason=gate["reason"])
+            return
+        print(f"   [DEMO ALLOW-LIST] claimed: {gate['claim_key']}")
+        orch.audit("agent_demo_allowlist_claimed", alert_id=alert_id, claim_key=gate["claim_key"])
+
     # ---- promote to a case FIRST — the agent needs real case-observable ids for
     # run_analyzer to trigger live Cortex enrichment mid-investigation. (Previously
     # this happened after investigate(), so run_analyzer had nothing real to act on
@@ -392,7 +410,8 @@ def process_alert_agent(api, alert: dict):
                    "target": res.get("containment", {}).get("target"),
                    "reason": res.get("containment", {}).get("reason")}
     cv = None
-    if v["verdict"] == "malicious" and allowed and eligibility and eligibility["eligible"]:
+    demo_containment_ok = demo_allowlist.containment_permitted(containment.get("target"), demo_mode)
+    if v["verdict"] == "malicious" and allowed and eligibility and eligibility["eligible"] and demo_containment_ok:
         containment["attempted"] = True
         cv = execute_and_verify_containment(
             api, alert_id, case_id, containment["target"], v["confidence"],
@@ -403,6 +422,10 @@ def process_alert_agent(api, alert: dict):
         print(f"   CONTAINMENT VERIFICATION: executed={cv['executed']} "
               f"reason={cv['reason_code']} (precheck={cv['audit'].get('precheck_result')}, "
               f"postcheck={cv['audit'].get('postcheck_result')})")
+    elif v["verdict"] == "malicious" and allowed and eligibility and eligibility["eligible"]:
+        print(f"   containment NOT attempted — demo allow-list forbids it in mode {demo_mode!r}")
+        orch.audit("agent_demo_containment_forbidden", alert_id=alert_id, case_id=case_id,
+                   mode=demo_mode, target=containment.get("target"))
     elif v["verdict"] == "malicious" and allowed:
         print(f"   containment NOT attempted — Phase 1 eligibility gate refused it")
 
