@@ -360,28 +360,151 @@ check("(pointer) one case/comment/assignment/email-only + L2 auto-owner correcti
 # 13. Circuit breaker
 # ==============================================================================
 
-print("\n=== 13. circuit breaker trips on case/email volume, requires manual reset ===")
+print("\n=== 13. circuit breaker trips on case/email volume within the current epoch ===")
+import datetime as _dt
+now_iso = lambda: _dt.datetime.now(_dt.timezone.utc).isoformat()
+iso_at = lambda seconds_ago: (_dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(seconds=seconds_ago)).isoformat()
+
 d = fresh_dir()
 log = fresh_audit_log(d)
-now_iso = lambda: __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+old_watermark_ts = time.time() - 7200  # 2h ago — well before these events
 write_audit_events(log, [{"ts": now_iso(), "event": "agent_case_created"} for _ in range(w.MAX_CASES_PER_HOUR)])
-b13 = w.check_circuit_breaker(log, store_dir=d)
-check("breaker trips once the case-per-hour limit is reached", b13["tripped"] is True, b13)
+b13 = w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)
+check("breaker trips once the case-per-window limit is reached", b13["tripped"] is True, b13)
+check("this IS the new-trip transition", b13["is_new_trip"] is True, b13)
 check("trip marker file was written (persists across restart)",
      os.path.exists(os.path.join(d, "CIRCUIT_BREAKER_TRIPPED")))
-b13b = w.check_circuit_breaker(log, store_dir=d)
-check("breaker stays tripped on a subsequent check without a manual reset", b13b["tripped"] is True)
-os.remove(os.path.join(d, "CIRCUIT_BREAKER_TRIPPED"))
-write_audit_events(log, [])
-b13c = w.check_circuit_breaker(log, store_dir=d)
-check("manual reset (deleting the marker) clears the tripped state", b13c["tripped"] is False, b13c)
+b13b = w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)
+check("breaker stays tripped on a subsequent check without an administrative reset", b13b["tripped"] is True)
+check("subsequent check is NOT a new trip", b13b["is_new_trip"] is False, b13b)
 
 d2 = fresh_dir()
 log2 = fresh_audit_log(d2)
 write_audit_events(log2, [{"ts": now_iso(), "event": "agent_notification_mailer_accepted"}
                           for _ in range(w.MAX_EMAILS_PER_HOUR)])
-b13d = w.check_circuit_breaker(log2, store_dir=d2)
-check("breaker also trips on the email-per-hour limit independently", b13d["tripped"] is True, b13d)
+b13d = w.check_circuit_breaker(log2, store_dir=d2, watermark_ts=old_watermark_ts)
+check("breaker also trips on the email-per-window limit independently", b13d["tripped"] is True, b13d)
+
+
+# ==============================================================================
+# 13b. REGRESSION (Phase 8G.1, found live): pre-production soak-test
+# history must NEVER immediately trip a fresh production activation
+# epoch. The counting floor is max(now-1h, watermark_ts) — events
+# strictly before the watermark are excluded from the count entirely,
+# no matter how recent in wall-clock terms.
+# ==============================================================================
+
+print("\n=== 13b. REGRESSION: inherited pre-epoch (soak-test) history does not trip a fresh epoch ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+# 3 "soak-test" cases 10 minutes ago...
+write_audit_events(log, [{"ts": iso_at(600), "event": "agent_case_created"} for _ in range(w.MAX_CASES_PER_HOUR)])
+# ...but the NEW activation watermark is set to 5 minutes ago — AFTER those events.
+fresh_watermark_ts = time.time() - 300
+b13b1 = w.check_circuit_breaker(log, store_dir=d, watermark_ts=fresh_watermark_ts)
+check("a fresh epoch's watermark excludes pre-epoch soak history from the count",
+     b13b1["tripped"] is False, b13b1)
+check("cases_last_hour correctly shows 0 for the new epoch", b13b1["cases_last_hour"] == 0, b13b1)
+
+print("=== 13c. the SAME events DO count once the watermark is old enough to include them ===")
+old_enough_watermark_ts = time.time() - 3600  # 1h ago — now includes the events from 10 min ago
+b13c1 = w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_enough_watermark_ts)
+check("an epoch old enough to include those events trips normally",
+     b13c1["tripped"] is True, b13c1)
+
+
+# ==============================================================================
+# 13d. Restart persistence — a genuine trip surviving a simulated process
+# restart (fresh in-memory heartbeat state, marker file still on disk).
+# ==============================================================================
+
+print("\n=== 13d. restart persistence: a genuine trip survives a simulated restart ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": now_iso(), "event": "agent_case_created"} for _ in range(w.MAX_CASES_PER_HOUR)])
+b13d1 = w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)
+check("genuine trip recorded", b13d1["tripped"] is True and b13d1["is_new_trip"] is True)
+w.reset_breaker_runtime_state_for_tests()  # simulates a fresh process (in-memory state gone)
+b13d2 = w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)
+check("after a simulated restart, still tripped (marker file survived)", b13d2["tripped"] is True, b13d2)
+check("restart does NOT re-announce a new trip", b13d2["is_new_trip"] is False, b13d2)
+
+
+# ==============================================================================
+# 14a-c. Administrative reset interface — invalid, premature, and
+# successful reset. Never requires deleting a state file by hand.
+# ==============================================================================
+
+print("\n=== 14a. reset with an empty/missing reason is refused ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": now_iso(), "event": "agent_case_created"} for _ in range(w.MAX_CASES_PER_HOUR)])
+w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)  # trip it
+r14a = w.reset_circuit_breaker("", log, store_dir=d, watermark_ts=old_watermark_ts)
+check("empty reason is refused", r14a["reset"] is False, r14a)
+check("marker file still present after a refused reset",
+     os.path.exists(os.path.join(d, "CIRCUIT_BREAKER_TRIPPED")))
+
+print("=== 14b. premature reset (count still at/above threshold) is refused ===")
+r14b = w.reset_circuit_breaker("trying anyway", log, store_dir=d, watermark_ts=old_watermark_ts)
+check("premature reset (real high count) is refused", r14b["reset"] is False, r14b)
+check("refusal reports the still-high count", r14b["cases_in_window"] == w.MAX_CASES_PER_HOUR, r14b)
+check("marker file still present after a premature reset attempt",
+     os.path.exists(os.path.join(d, "CIRCUIT_BREAKER_TRIPPED")))
+
+print("=== 14c. successful, audited reset once the epoch genuinely excludes the old count ===")
+new_epoch_watermark_ts = time.time() + 5  # a watermark AFTER the trip-causing events entirely
+r14c = w.reset_circuit_breaker("new production epoch confirmed below threshold", log, store_dir=d,
+                               watermark_ts=new_epoch_watermark_ts)
+check("reset succeeds once the count is genuinely below threshold for the new epoch",
+     r14c["reset"] is True, r14c)
+check("marker file removed by the admin interface itself (not manually)",
+     not os.path.exists(os.path.join(d, "CIRCUIT_BREAKER_TRIPPED")))
+b14c_after = w.check_circuit_breaker(log, store_dir=d, watermark_ts=new_epoch_watermark_ts)
+check("breaker is untripped after a successful reset", b14c_after["tripped"] is False, b14c_after)
+
+print("=== 14d. reset when not currently tripped is refused (nothing to reset) ===")
+r14d = w.reset_circuit_breaker("no-op attempt", log, store_dir=fresh_dir(), watermark_ts=old_watermark_ts)
+check("reset on a never-tripped breaker is refused, not silently accepted", r14d["reset"] is False, r14d)
+
+
+# ==============================================================================
+# 14e. Audit-log deduplication: one l2_worker_circuit_breaker_tripped
+# event per genuine trip, NOT one per poll cycle; a rate-limited
+# heartbeat covers subsequent cycles instead.
+# ==============================================================================
+
+print("\n=== 14e. one trip event per transition; rate-limited heartbeat afterward ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": now_iso(), "event": "agent_case_created"} for _ in range(w.MAX_CASES_PER_HOUR)])
+w.reset_breaker_runtime_state_for_tests()
+orig_interval = w.HEARTBEAT_INTERVAL_SECONDS
+w.HEARTBEAT_INTERVAL_SECONDS = 9999  # effectively "never" within this fast test
+try:
+    results = [w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts) for _ in range(5)]
+finally:
+    w.HEARTBEAT_INTERVAL_SECONDS = orig_interval
+check("exactly one of 5 consecutive checks is a new trip", sum(1 for r in results if r["is_new_trip"]) == 1,
+     [r["is_new_trip"] for r in results])
+check("no heartbeat fires within the (long) interval right after the trip itself",
+     sum(1 for r in results if r["heartbeat_due"]) == 0, [r["heartbeat_due"] for r in results])
+
+print("=== 14f. heartbeat DOES fire once the interval elapses ===")
+d = fresh_dir()
+log = fresh_audit_log(d)
+write_audit_events(log, [{"ts": now_iso(), "event": "agent_case_created"} for _ in range(w.MAX_CASES_PER_HOUR)])
+w.reset_breaker_runtime_state_for_tests()
+orig_interval = w.HEARTBEAT_INTERVAL_SECONDS
+w.HEARTBEAT_INTERVAL_SECONDS = 0  # always due, for a deterministic fast test
+try:
+    r1 = w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)  # the trip itself
+    r2 = w.check_circuit_breaker(log, store_dir=d, watermark_ts=old_watermark_ts)  # heartbeat-eligible
+finally:
+    w.HEARTBEAT_INTERVAL_SECONDS = orig_interval
+check("first check is the new trip, not a heartbeat", r1["is_new_trip"] is True and r1["heartbeat_due"] is False, r1)
+check("second check (interval=0) fires a heartbeat, not another new-trip", r2["heartbeat_due"] is True and
+     r2["is_new_trip"] is False, r2)
 
 
 # ==============================================================================

@@ -230,10 +230,51 @@ def claim_status(alert_id: str, store_dir: str = None):
 
 # ==============================================================================
 # Circuit breaker
+#
+# Phase 8G.1 redesign. Two problems found live in production:
+#   1. The counting window was a bare rolling hour with NO floor at the
+#      current activation watermark — a fresh production epoch could
+#      inherit trip-worthy history from a PRIOR epoch (e.g. a soak test)
+#      that has nothing to do with the new epoch's own behavior.
+#   2. Every poll cycle re-announced "tripped" as its own audit event —
+#      noisy, and made a genuine NEW trip indistinguishable in the log
+#      from "still tripped, nothing changed."
+#
+# Fix: the counting window is now max(now - window, activation_watermark)
+# — never reaches back past the current epoch's own start, so a fresh
+# watermark always starts the breaker's memory at zero. Still fail-closed
+# and sticky: a genuine trip within the CURRENT epoch behaves exactly as
+# before (marker file, manual-reset-only, no silent auto-clear). Exactly
+# one l2_worker_circuit_breaker_tripped event fires on the actual
+# untripped->tripped transition; subsequent cycles emit a rate-limited
+# l2_worker_circuit_breaker_heartbeat instead of repeating the trip event.
 # ==============================================================================
 
-def _count_recent_events(event_names, audit_log_path, window_seconds=3600):
-    cutoff = time.time() - window_seconds
+HEARTBEAT_INTERVAL_SECONDS = int(os.environ.get("SOAR_WORKER_BREAKER_HEARTBEAT_INTERVAL", str(15 * 60)))
+
+_breaker_runtime_state = {"last_heartbeat_ts": 0.0}
+
+
+def reset_breaker_runtime_state_for_tests():
+    _breaker_runtime_state["last_heartbeat_ts"] = 0.0
+
+
+def _heartbeat_due(now: float) -> bool:
+    if now - _breaker_runtime_state["last_heartbeat_ts"] >= HEARTBEAT_INTERVAL_SECONDS:
+        _breaker_runtime_state["last_heartbeat_ts"] = now
+        return True
+    return False
+
+
+def _counting_floor_ts(watermark_ts, window_seconds=3600, now=None):
+    now = now if now is not None else time.time()
+    floor_candidates = [now - window_seconds]
+    if watermark_ts is not None:
+        floor_candidates.append(watermark_ts)
+    return max(floor_candidates)
+
+
+def _count_recent_events(event_names, audit_log_path, since_ts):
     count = 0
     try:
         with open(audit_log_path, encoding="utf-8") as f:
@@ -251,7 +292,7 @@ def _count_recent_events(event_names, audit_log_path, window_seconds=3600):
                     t = datetime.fromisoformat(str(ts).replace("Z", "+00:00")).timestamp()
                 except ValueError:
                     continue
-                if t >= cutoff:
+                if t >= since_ts:
                     count += 1
     except FileNotFoundError:
         return 0
@@ -263,32 +304,121 @@ def circuit_breaker_tripped(store_dir: str = None) -> bool:
     return os.path.exists(os.path.join(store_dir, "CIRCUIT_BREAKER_TRIPPED"))
 
 
-def check_circuit_breaker(audit_log_path, store_dir: str = None) -> dict:
+def _breaker_counts(audit_log_path, watermark_ts) -> dict:
+    since_ts = _counting_floor_ts(watermark_ts)
+    cases = _count_recent_events({"agent_case_created"}, audit_log_path, since_ts)
+    emails = _count_recent_events({"agent_notification_mailer_accepted"}, audit_log_path, since_ts)
+    return {"cases": cases, "emails": emails, "since_ts": since_ts}
+
+
+def circuit_breaker_status(audit_log_path, store_dir: str = None, watermark_ts=None) -> dict:
+    """Read-only. Never mutates state, never audits. Safe to call as often as needed."""
+    store_dir = store_dir or WORKER_STATE_DIR
+    breaker_file = os.path.join(store_dir, "CIRCUIT_BREAKER_TRIPPED")
+    counts = _breaker_counts(audit_log_path, watermark_ts)
+    tripped = os.path.exists(breaker_file)
+    trip_detail = None
+    if tripped:
+        try:
+            with open(breaker_file, encoding="utf-8") as f:
+                trip_detail = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            trip_detail = {"error": "trip marker unreadable"}
+    return {
+        "tripped": tripped, "trip_detail": trip_detail,
+        "cases_in_window": counts["cases"], "emails_in_window": counts["emails"],
+        "max_cases_per_window": MAX_CASES_PER_HOUR, "max_emails_per_window": MAX_EMAILS_PER_HOUR,
+        "counting_since_iso": datetime.fromtimestamp(counts["since_ts"], tz=timezone.utc).isoformat(),
+    }
+
+
+def check_circuit_breaker(audit_log_path, store_dir: str = None, watermark_ts=None) -> dict:
     """
-    Returns {"tripped": bool, "reason": str|None, "cases_last_hour": int,
-    "emails_last_hour": int}. If the limits are exceeded and the breaker
-    was not already tripped, WRITES the trip marker (persistent — survives
-    restart) and requires a manual reset (deleting that file) to resume.
+    Returns {"tripped": bool, "reason": str|None, "cases_last_hour": int|None,
+    "emails_last_hour": int|None, "is_new_trip": bool, "heartbeat_due": bool}.
+
+    Counting window is max(now - 1h, watermark_ts) — never reaches into a
+    prior activation epoch. If the limits are exceeded and the breaker was
+    not already tripped, WRITES the trip marker (persistent — survives
+    restart) and requires an explicit administrative reset (never a
+    manual file deletion) to resume. `is_new_trip` is True ONLY on the
+    exact untripped->tripped transition, so the caller can audit exactly
+    once per genuine trip rather than once per poll cycle.
     """
     store_dir = store_dir or WORKER_STATE_DIR
     breaker_file = os.path.join(store_dir, "CIRCUIT_BREAKER_TRIPPED")
-    if os.path.exists(breaker_file):
-        return {"tripped": True, "reason": "circuit breaker already tripped — manual reset required",
-               "cases_last_hour": None, "emails_last_hour": None}
+    now = time.time()
 
-    cases = _count_recent_events({"agent_case_created"}, audit_log_path)
-    emails = _count_recent_events({"agent_notification_mailer_accepted"}, audit_log_path)
+    if os.path.exists(breaker_file):
+        return {"tripped": True, "reason": "circuit breaker already tripped — administrative reset required",
+               "cases_last_hour": None, "emails_last_hour": None,
+               "is_new_trip": False, "heartbeat_due": _heartbeat_due(now)}
+
+    counts = _breaker_counts(audit_log_path, watermark_ts)
+    cases, emails = counts["cases"], counts["emails"]
 
     if cases >= MAX_CASES_PER_HOUR or emails >= MAX_EMAILS_PER_HOUR:
-        reason = (f"circuit breaker tripped: {cases} case(s)/{emails} email(s) in the last hour "
+        reason = (f"circuit breaker tripped: {cases} case(s)/{emails} email(s) since "
+                 f"{datetime.fromtimestamp(counts['since_ts'], tz=timezone.utc).isoformat()} "
                  f"(limits {MAX_CASES_PER_HOUR}/{MAX_EMAILS_PER_HOUR})")
         os.makedirs(store_dir, exist_ok=True)
         with open(breaker_file, "w", encoding="utf-8") as f:
             f.write(json.dumps({"tripped_at": datetime.now(timezone.utc).isoformat(),
-                               "cases_last_hour": cases, "emails_last_hour": emails}))
-        return {"tripped": True, "reason": reason, "cases_last_hour": cases, "emails_last_hour": emails}
+                               "cases_in_window": cases, "emails_in_window": emails,
+                               "counting_since_iso": datetime.fromtimestamp(
+                                   counts["since_ts"], tz=timezone.utc).isoformat()}))
+        _breaker_runtime_state["last_heartbeat_ts"] = now  # next heartbeat waits a full interval
+        return {"tripped": True, "reason": reason, "cases_last_hour": cases, "emails_last_hour": emails,
+               "is_new_trip": True, "heartbeat_due": False}
 
-    return {"tripped": False, "reason": None, "cases_last_hour": cases, "emails_last_hour": emails}
+    return {"tripped": False, "reason": None, "cases_last_hour": cases, "emails_last_hour": emails,
+           "is_new_trip": False, "heartbeat_due": False}
+
+
+def reset_circuit_breaker(reason: str, audit_log_path, store_dir: str = None,
+                          watermark_ts=None) -> dict:
+    """
+    Administrative reset — the ONLY sanctioned way to clear a trip; never
+    delete the marker file by hand. Requires a non-empty reason, and
+    REFUSES if the current rolling/epoch-bounded count is still at or
+    above threshold (a reset can only ever confirm conditions have
+    genuinely improved, never override an active real trip). Writes a
+    sanitized audit event on both success and refusal.
+
+    Returns {"reset": bool, "error": str|None, "cases_in_window": int,
+    "emails_in_window": int}.
+    """
+    store_dir = store_dir or WORKER_STATE_DIR
+    breaker_file = os.path.join(store_dir, "CIRCUIT_BREAKER_TRIPPED")
+    reason = (reason or "").strip()
+
+    if not reason:
+        orch.audit("l2_worker_circuit_breaker_reset_refused", detail="empty reason provided")
+        return {"reset": False, "error": "a non-empty reason is required",
+               "cases_in_window": None, "emails_in_window": None}
+
+    if not os.path.exists(breaker_file):
+        return {"reset": False, "error": "circuit breaker is not currently tripped — nothing to reset",
+               "cases_in_window": None, "emails_in_window": None}
+
+    status = circuit_breaker_status(audit_log_path, store_dir=store_dir, watermark_ts=watermark_ts)
+    if status["cases_in_window"] >= MAX_CASES_PER_HOUR or status["emails_in_window"] >= MAX_EMAILS_PER_HOUR:
+        orch.audit("l2_worker_circuit_breaker_reset_refused",
+                  reason=sanitization.redact_secrets(reason),
+                  cases_in_window=status["cases_in_window"], emails_in_window=status["emails_in_window"])
+        return {"reset": False,
+               "error": f"rolling count still at/above threshold "
+                        f"({status['cases_in_window']} case(s)/{status['emails_in_window']} email(s), "
+                        f"limits {MAX_CASES_PER_HOUR}/{MAX_EMAILS_PER_HOUR}) — refusing to override an "
+                        f"active trip",
+               "cases_in_window": status["cases_in_window"], "emails_in_window": status["emails_in_window"]}
+
+    os.remove(breaker_file)
+    reset_breaker_runtime_state_for_tests()
+    orch.audit("l2_worker_circuit_breaker_reset", reason=sanitization.redact_secrets(reason),
+              cases_in_window=status["cases_in_window"], emails_in_window=status["emails_in_window"])
+    return {"reset": True, "error": None, "cases_in_window": status["cases_in_window"],
+           "emails_in_window": status["emails_in_window"]}
 
 
 # ==============================================================================
@@ -460,9 +590,12 @@ def run_one_poll_cycle(thehive_url, thehive_api_key, watermark_ts, store_dir=Non
     # l2-only mode never attempts containment regardless, so there is
     # nothing here for the kill switch to additionally block.
 
-    breaker = check_circuit_breaker(audit_log_path, store_dir=store_dir)
+    breaker = check_circuit_breaker(audit_log_path, store_dir=store_dir, watermark_ts=watermark_ts)
     if breaker["tripped"]:
-        orch.audit("l2_worker_circuit_breaker_tripped", reason=breaker["reason"])
+        if breaker["is_new_trip"]:
+            orch.audit("l2_worker_circuit_breaker_tripped", reason=breaker["reason"])
+        elif breaker["heartbeat_due"]:
+            orch.audit("l2_worker_circuit_breaker_heartbeat", reason=breaker["reason"])
         write_health("circuit_breaker_tripped", {"reason": breaker["reason"]})
         return {"outcome": "circuit_breaker_tripped", "reason": breaker["reason"]}
 
