@@ -124,6 +124,54 @@ check("missing/unparseable createdAt fails CLOSED (not eligible), never guessed"
 
 
 # ==============================================================================
+# 1b. REGRESSION (found live during the Phase 8G soak test): a large
+# pre-existing backlog of "New" alerts must never starve a genuinely new,
+# eligible alert out of the fetched window. fetch_candidate_alerts() must
+# sort newest-first; an ascending sort with a capped page would let 25+
+# permanently-unprocessable backlog alerts crowd out every new one
+# forever, since the worker never advances past them (it never marks
+# ineligible-for-watermark alerts as "seen" — they're just always there).
+# ==============================================================================
+
+print("\n=== 1b. REGRESSION: fetch_candidate_alerts sorts newest-first (backlog starvation) ===")
+captured_query = {}
+
+
+class QueryCapturingSession:
+    def post(self, url, headers=None, json=None, timeout=None):
+        captured_query.update(json)
+        return FakeResponse([])
+
+
+w.fetch_candidate_alerts("http://thehive.invalid", "fake-key", session=QueryCapturingSession())
+sort_stanza = next(s for s in captured_query["query"] if s.get("_name") == "sort")
+check("fetch_candidate_alerts requests DESCENDING createdAt order",
+     sort_stanza["_fields"] == [{"_createdAt": "desc"}], sort_stanza)
+
+print("=== 1c. REGRESSION: a new alert is processed even with 25+ older backlog alerts present ===")
+d = fresh_dir()
+backlog = [make_alert(f"~backlog{i}", created_offset=-3600) for i in range(30)]  # all pre-watermark
+fresh_new = make_alert("~genuinely-new", created_offset=120)  # post-watermark
+# Simulate the real symptom: with descending sort the new alert appears
+# FIRST in the fetched page even though 30 older ones exist server-side.
+session_desc = FakeSession(alerts=[fresh_new] + backlog)
+invoked = {"n": 0}
+
+
+def counting_run_fn2(cmd, env=None, capture_output=None, text=None, timeout=None):
+    invoked["n"] += 1
+    return FakeProc(returncode=0, stdout="ok")
+
+
+r1c = w.run_one_poll_cycle("http://thehive.invalid", "fake-key", WATERMARK, store_dir=d,
+                           audit_log_path=fresh_audit_log(d), session=session_desc,
+                           run_fn=counting_run_fn2, sleep_fn=lambda s: None)
+check("the new alert is found and processed despite 30 backlog alerts in the same page",
+     r1c["outcome"] == "processed_one" and r1c["detail"]["alert_id"] == "~genuinely-new", r1c)
+check("orchestrator subprocess was invoked exactly once", invoked["n"] == 1, invoked)
+
+
+# ==============================================================================
 # 2. Source / tag / status filtering
 # ==============================================================================
 

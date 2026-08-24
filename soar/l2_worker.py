@@ -185,16 +185,24 @@ def is_eligible_alert(alert: dict, watermark_ts: float) -> dict:
 # TheHive polling — read-only
 # ==============================================================================
 
-def fetch_candidate_alerts(thehive_url, thehive_api_key, limit=25, session=None):
-    """Read-only. Newest-first is NOT required here — eligibility itself
-    checks the watermark per-alert, so poll order doesn't matter for
-    correctness, only for which alert gets picked up soonest."""
+def fetch_candidate_alerts(thehive_url, thehive_api_key, limit=50, session=None):
+    """
+    Read-only. Sorts NEWEST FIRST (descending createdAt) — REQUIRED, not
+    cosmetic. A live soak test found the bug this guards against: with
+    ascending sort and a backlog of 25+ pre-watermark "New" alerts already
+    sitting unprocessed (they always will be — this worker never touches
+    them, by design), an ascending, capped page NEVER reaches a
+    newly-created alert at all, no matter how long the worker runs. It
+    would starve forever. Descending sort guarantees the newest alerts —
+    the only ones this worker can ever be eligible to process — are
+    always inside the fetched window.
+    """
     s = session or requests
     r = s.post(f"{thehive_url}/api/v1/query",
               headers={"Authorization": f"Bearer {thehive_api_key}", "Content-Type": "application/json"},
               json={"query": [{"_name": "listAlert"},
                               {"_name": "filter", "_field": "status", "_value": "New"},
-                              {"_name": "sort", "_fields": [{"_createdAt": "asc"}]},
+                              {"_name": "sort", "_fields": [{"_createdAt": "desc"}]},
                               {"_name": "page", "from": 0, "to": limit}]},
               timeout=20)
     r.raise_for_status()
@@ -467,7 +475,11 @@ def run_one_poll_cycle(thehive_url, thehive_api_key, watermark_ts, store_dir=Non
 
     orch.audit("l2_worker_poll", candidates=len(alerts))
 
-    for alert in alerts:
+    # Fetched newest-first (see fetch_candidate_alerts) so new alerts are
+    # never starved by backlog; processed oldest-first within that window
+    # so a burst of several new eligible alerts still resolves in FIFO
+    # order rather than newest-always-wins.
+    for alert in sorted(alerts, key=lambda a: _created_at_seconds(a) or 0):
         elig = is_eligible_alert(alert, watermark_ts)
         if not elig["eligible"]:
             continue
