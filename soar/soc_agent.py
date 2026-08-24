@@ -41,6 +41,11 @@ import agent_tools as T
 # the agent invent plausible-but-wrong ids (T1132.007, T1147.003 in the first bench).
 from e2e_soc_orchestrator import (containment_allowed, select_containment_target,
                                   LAB_TECHNIQUES)
+# L1_ALLOWED_RULE_KEYWORDS / REQUIRED_TOOLS_FOR_L1_CONTAIN imported unchanged, not
+# duplicated — the evidence-completeness nudge below (investigate()) must recognize
+# the exact same "C2-shaped alert" and "exact two tools" the real gate checks
+# afterward, or the two could silently drift apart.
+import l1_policy
 
 OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://100.90.228.58:11434")
 OLLAMA_CHAT_URL = OLLAMA_BASE_URL.rstrip("/") + "/api/chat"
@@ -169,6 +174,18 @@ def investigate(alert: dict, observables: list, verbose: bool = True, api=None) 
     seen_calls = set()      # (action, arg) already run — kill repeated/wasteful calls
     repeats = 0
     empty_failures = 0      # consecutive empty-arg calls — kill flailing separately
+    reminded_missing_evidence = False   # the nudge below fires at most once per run
+
+    # Same title/tag keyword test l1_policy's rule_allowlisted gate applies — if this
+    # alert is C2-beacon-shaped, l1_policy will require BOTH search_past_cases and
+    # run_analyzer in tools_used before containment is even eligible (see
+    # REQUIRED_TOOLS_FOR_L1_CONTAIN). Left alone, a small model tends to conclude the
+    # moment ONE of the two looks decisive. This does not change what the agent
+    # concludes — only whether "conclude" is accepted with incomplete evidence on
+    # exactly this alert shape, once.
+    _title_l = str(alert.get("title") or "").lower()
+    _tags_l = " ".join(str(t) for t in (alert.get("tags") or [])).lower()
+    is_l1_candidate = any(k in _title_l or k in _tags_l for k in l1_policy.L1_ALLOWED_RULE_KEYWORDS)
 
     REQUIRED_FIELD = {
         "search_elasticsearch": "query", "search_past_cases": "value",
@@ -199,6 +216,23 @@ def investigate(alert: dict, observables: list, verbose: bool = True, api=None) 
         messages.append({"role": "assistant", "content": raw})
 
         if action == "conclude":
+            if is_l1_candidate and not reminded_missing_evidence:
+                missing = [t for t in l1_policy.REQUIRED_TOOLS_FOR_L1_CONTAIN
+                          if t not in tools_used]
+                if missing:
+                    reminded_missing_evidence = True
+                    messages.append({"role": "user", "content":
+                        f"Before concluding on this C2-beacon-style alert: the "
+                        f"automated-response policy requires evidence from BOTH "
+                        f"search_past_cases AND run_analyzer on the IP observable, "
+                        f"not just one. You have not yet called: {', '.join(missing)}. "
+                        f"Call it now, then conclude."})
+                    trace.append({"step": i + 1, "action": "conclude", "thought": thought,
+                                  "result": {"deferred": "missing required evidence",
+                                             "missing_tools": missing}})
+                    if verbose:
+                        print(f"   [{i+1}] conclude -> deferred, missing: {missing}")
+                    continue
             concluded = True
             trace.append({"step": i + 1, "action": "conclude", "thought": thought})
             if verbose:
