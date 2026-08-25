@@ -47,7 +47,7 @@ pfSense (WAN/LAN/DMZ) --Suricata IDS--> Redis --> Logstash --> Elasticsearch
   containment action is even considered.
 - **Offense**: `redteam-mcp/` — a custom MCP server that drives a lab-scoped
   Kali box, used to generate real, honest attack traffic to validate what
-  the pipeline actually detects (see `PENTEST-PLAN.md`, `demo/attack-scenarios.md`).
+  the pipeline actually detects (see `demo/attack-scenarios.md`).
 
 See `Architecture.jpeg` for the full network diagram and
 `docs/REPOSITORY-MAP.md` for what every directory in this repo is.
@@ -62,7 +62,6 @@ configs/          Real ELK/pfSense config mirrors (gitignored) + sanitized .exam
 report/           LaTeX report source + compiled PDF
 demo/             Demo attack-scenario script
 screenshots/      Detection evidence, organized by source and scenario
-notes/            Session-by-session working log
 docs/             This documentation set (repository map, setup, security)
 ```
 
@@ -71,15 +70,15 @@ and why: `docs/REPOSITORY-MAP.md`.
 
 ## Current phase status
 
-As of 2026-08-22 (deadline 2026-08-31): the agentic AI layer
-(`soar/soc_agent.py` + `agent_tools.py` + `agent_orchestrator.py`) is built,
-benchmarked, and has a verified live armed L1 capture (real C2 IOC blocked +
-case auto-closed, pfctl-confirmed) alongside a verified correct L2 refusal.
+The agentic AI layer (`soar/soc_agent.py` + `agent_tools.py` +
+`agent_orchestrator.py`) is built, benchmarked, and deployed as a standing
+production service: verified live armed L1 auto-containment (real,
+independently-confirmed-malicious IOC blocked + case auto-closed,
+pfctl-verified — not just Cortex's self-reported success) alongside verified
+correct L2 escalation and fail-closed refusal on unconfirmed IOCs.
 Dataset B (real, historical TheHive cases, dual-reviewed and adjudicated)
 is **locked** at 60 cases — see `soar/review_overlays/DATASET_B_LOCK_v1.json`.
-**Phase 8 (live deployment/demo) has not started.** See `PROJECT-STATE.md`
-for the authoritative, continuously-updated state and `AGENT-ROADMAP.md` /
-`FINAL-ROADMAP.md` for the task-level plan.
+Full verification history and every live-capture test run: `soar/L1-L2-SAFETY-AUDIT.md`.
 
 ## Safety model: L1 vs L2
 
@@ -106,14 +105,14 @@ cd soar
 for f in test_*.py; do ./.venv/bin/python3 "$f"; done
 ```
 
-**632 checks, 0 failures** (verified 2026-08-22 — see
-`REPO-CLEANUP-REPORT.md`). None touch live infrastructure.
+**632 checks, 0 failures.** None touch live infrastructure.
 
 ## Shadow-mode / dry-run deployment
 
 Every orchestrator entry point defaults to (or can be forced into) dry-run:
 
 ```bash
+cd soar
 SOAR_DRY_RUN=1 SOAR_ALERT_ID="~<id>" ./.venv/bin/python3 e2e_soc_orchestrator.py
 ```
 
@@ -146,4 +145,3 @@ private remote.
   used for the safety-metric numbers in the report. **Do not modify.**
 - `soar/L1-L2-SAFETY-AUDIT.md` — the full verification trail, including
   every live-capture test run and its output.
-- `LOCAL-ARTIFACTS-MANIFEST.md` — what stays local-only and why.

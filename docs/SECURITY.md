@@ -6,6 +6,13 @@ credential-hygiene status of this repository, which is an operational
 concern for anyone about to push this project anywhere. Read section 2
 before pushing to GitHub, even a private one.
 
+> Some incident entries below cite files (`PROJECT-STATE.md`,
+> `REPO-CLEANUP-REPORT.md`, `notes/*.md`, etc.) that were later consolidated
+> into `PROJECT-ARCHIVE-LOCAL.md` during the 2026-08-25 scope cut and are no
+> longer tracked in this repo. Left as-is — these are historical incident
+> records, not live pointers. The archive is gitignored (local only); ask
+> the project owner if you need to see it.
+
 ## 1. L1 vs L2 safety model
 
 The orchestrator (`soar/agent_orchestrator.py`, `soar/e2e_soc_orchestrator.py`)

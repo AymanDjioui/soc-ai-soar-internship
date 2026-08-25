@@ -3,8 +3,21 @@
 # soar-internal exclusions (idempotency store, live-checkpoint stores, venv).
 #
 # Extended 2026-08-22 during the repository-hygiene / private-GitHub-prep pass.
-# See REPO-CLEANUP-REPORT.md and docs/SECURITY.md for the reasoning behind
-# each block below.
+# See docs/SECURITY.md for the reasoning behind each block below.
+
+# ---------------------------------------------------------------------------
+# Local-only project archive (2026-08-25 scope-cut pass)
+# ---------------------------------------------------------------------------
+# Raw session notes, superseded roadmap drafts, and the old PROJECT-STATE.md,
+# moved into one local folder so nothing is lost even though they were
+# removed from the tracked repo (scope cut down to just the SOAR pipeline,
+# TheHive/Cortex integration, the AI agent, and the red-team MCP server).
+# Never pushed.
+PROJECT-NOTES-LOCAL/
+
+# Single-file consolidated project reference (same content, one file, for
+# quick lookup) — also never pushed.
+PROJECT-ARCHIVE-LOCAL.md
 
 # ---------------------------------------------------------------------------
 # Python environments / caches (any depth)

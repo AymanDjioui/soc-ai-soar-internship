@@ -2,8 +2,10 @@
 
 Audit only. No code changed, nothing deployed, nothing activated. Read in full:
 `soar/agent_orchestrator.py`, `soar/soc_agent.py`, `soar/agent_tools.py`,
-`soar/agent_bench.py`, `MY-NOTES.md`, `PROJECT-STATE.md`, `AGENT-ROADMAP.md`,
-`TOMORROW-TODO.md`.
+`soar/agent_bench.py`, and the working notes/roadmap docs of the time
+(`MY-NOTES.md`, `PROJECT-STATE.md`, `AGENT-ROADMAP.md`, `TOMORROW-TODO.md` —
+since consolidated into the local-only `PROJECT-ARCHIVE-LOCAL.md`, see
+`docs/SECURITY.md`).
 
 Goal being audited against: **zero observed unsafe auto-closures on the locked
 evaluation dataset, adversarial tests, integration tests, and shadow-mode run.**

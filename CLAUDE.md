@@ -17,7 +17,7 @@
   device tailscale0), but not needed given DMZ coverage. **The lan (em1) instance went
   undocumented until 2026-08-12** — found while debugging a suppress-list change that
   had no effect on alert volume because all the traffic was actually on em1, not
-  wan/DMZ. See `notes/18.md` and `PROJECT-STATE.md`.
+  wan/DMZ. (Working-notes detail archived locally in `PROJECT-ARCHIVE-LOCAL.md`, not pushed.)
 - MIGRATED 2026-07-16: Suricata EVE delivery moved from `tail|nc` file forwarder to
   **native Redis output** (Suricata → Redis list `suricata` on pfSense:6379 → Logstash
   `redis` input). More reliable (no dropped events on TCP hiccup, no PID-watching cron
@@ -46,9 +46,9 @@
   sessions for cost control, no auto-start, public IP changes on each stop/start so
   always connect via the Tailscale IP, not the public one. Model choice + prompt
   (few-shot, enum-constrained MITRE schema, 90% on a 7-case golden set) benchmarked
-  against 4 other models — see `ai/results/model-benchmark.md`,
-  `ai/results/deployment-latency.md`, `notes/13.md`. Workflow layer (Shuffle vs. a
-  small Python service, TheHive integration) not yet built — ROADMAP Track B2+.
+  against 4 other models — see `ai/results/model-benchmark.md` and
+  `ai/results/deployment-latency.md`. Workflow layer (Shuffle vs. a
+  small Python service, TheHive integration): built as `soar/` — see below.
 - **MIGRATED to GPU 2026-08-10: the AI layer now runs on `ollama-l4-server`** (my own
   GCP account, `g2-standard-4` + **NVIDIA L4 24 GB**, europe-west4-c), Tailscale
   `100.90.228.58`. Ollama bound `0.0.0.0:11434`, model 100% GPU-resident. Orchestrator

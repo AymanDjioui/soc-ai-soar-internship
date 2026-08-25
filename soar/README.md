@@ -4,8 +4,7 @@ End-to-end pipeline: **TheHive alert → AI triage → case → Cortex enrichmen
 → policy guard → containment**, with the AI's reasoning written back onto the case.
 
 Original pipeline architecture: **Badr**. Hardening, guardrails, and prompt integration:
-**Ayman**. See `notes/13.md`, `notes/15.md` and `ai/results/` for the evidence behind the
-design decisions.
+**Ayman**. See `ai/results/` for the evidence behind the design decisions.
 
 ---
 

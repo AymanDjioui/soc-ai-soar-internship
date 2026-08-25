@@ -3,7 +3,7 @@
 This covers getting the offline pieces of this project running (tests,
 dataset tooling, AI benchmark replay). It does **not** cover standing up the
 live pfSense/ELK/TheHive/Cortex/GPU infrastructure — that's a full lab build
-described narratively in `PROJECT-STATE.md` and `notes/`, not a scripted
+described narratively in `CLAUDE.md`'s architecture history, not a scripted
 install.
 
 ## Prerequisites
@@ -26,8 +26,8 @@ python3 -m venv .venv
 
 > The repo's own `soar/.venv/` (if present locally) already has a working
 > environment — `soar/.venv/bin/python3` — used throughout this project's own
-> test runs rather than a system Python. See
-> `LOCAL-ARTIFACTS-MANIFEST.md` for why the venv itself is not committed.
+> test runs rather than a system Python. The venv itself is gitignored
+> (regenerable, not source) — see `soar/.gitignore`.
 
 ## Running the test suite
 
@@ -42,8 +42,7 @@ for f in test_*.py; do
 done
 ```
 
-Expected result (verified 2026-08-22, see `REPO-CLEANUP-REPORT.md`):
-**632 checks passed, 0 failed**, across 12 files. None of these tests touch
+Expected result: **632 checks passed, 0 failed**, across 12 files. None of these tests touch
 live infrastructure — they exercise the L1/L2 policy gate, idempotency
 store, sanitization, and dataset/review pipeline against synthetic and
 locked fixture data only.
@@ -81,7 +80,7 @@ tracked source of truth for what settings are required.
 two scripts) pulled from the live box for documentation purposes, kept
 unredacted locally per a standing project decision and never pushed (the
 whole directory is gitignored). There is no scripted pfSense install here —
-consult `PROJECT-STATE.md` and `notes/` for the actual lab network layout
+consult `CLAUDE.md`'s architecture section for the actual lab network layout
 (WAN/LAN/DMZ, Suricata interface placement, the Redis-based EVE delivery
 pipeline).
 
@@ -91,6 +90,7 @@ Before any orchestrator run that could touch the firewall, confirm dry-run
 is active:
 
 ```bash
+cd soar
 SOAR_DRY_RUN=1 SOAR_ALERT_ID="~<alert-id>" ./.venv/bin/python3 e2e_soc_orchestrator.py
 ```
 

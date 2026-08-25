@@ -88,7 +88,7 @@ Burp's own tools (`send_http1_request`, `send_http2_request`, `create_repeater_t
 `send_to_intruder`, `url_encode`/`decode`, `base64_encode`/`decode`, etc.) — the
 precise, raw-HTTP-crafting complement to this server's CLI-tool wrappers. Built
 specifically to handle JSON-API login testing (Juice Shop-style) that `hydra`'s
-`http-post-form` module can't parse cleanly (see PROJECT-STATE.md, 2026-08-18).
+`http-post-form` module can't parse cleanly (found 2026-08-18).
 
 **Must run on a real desktop, not headless Xvfb** — confirmed by direct testing:
 under Xvfb the extension's own Ktor server silently failed to bind (no error
