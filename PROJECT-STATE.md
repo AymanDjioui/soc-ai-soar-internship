@@ -28,25 +28,30 @@ UNTOUCHED. Local backup of the original orchestrator: `soar/backups/`. Demo acco
 the teacher: `soc-l2@thehive.local` / `${SOC_L2_DEMO_PASSWORD}` (password redacted
 2026-08-22, see docs/SECURITY.md; the login itself is not a credential).
 
-**NEW 2026-08-24 — Phase 8G: permanent L2-only worker + Phase 8G.2 armed L1 test
-closed.** `soar/l2_worker.py` is now a permanent systemd service
+**NEW 2026-08-24/25 — Phase 8G/8H: permanent worker, now WITH standing L1
+auto-containment enabled.** `soar/l2_worker.py` is a permanent systemd service
 (`soar-agent-l2-worker.service`, enabled/active, identity
 `soc-l1-ai-agent@thehive.local`), polling TheHive and running the unchanged
-`agent_orchestrator.py` per alert, hardcoded `l2-only` in code — containment is
-structurally impossible from this path. See `ai/results/phase8g1-*.md` for the
-circuit-breaker redesign and identity rotation, and
-`ai/results/phase8g2-part-b-l1-containment-test.md` for the one controlled armed
-L1-containment test series: 6 real attempts against a live GPU-hosted mistral:7b
-all correctly refused containment (`MISSING_EVIDENCE`) rather than fire on
-incomplete evidence — the gate is proven safe under real load, but no new armed
-block was captured in this series (the test IOC turned out not to be
-independently confirmed malicious by live threat intel — see that file for the
-full honest account). The project's positive containment proof remains the
-2026-08-20 capture referenced above (`202.61.130.163` / case `~328003784`,
-ThreatFox-confirmed, pfctl-verified) — re-verified still live and unchanged as
-part of this closure. Permanent autonomous IP containment remains **disabled**;
-the kill switch is active; no pfSense credentials exist in any permanent
-unit/env file.
+`agent_orchestrator.py` per alert. As of Phase 8H it runs with
+`SOAR_WORKER_ACTION_MODE=l1-containment`: real, autonomous, human-free IP
+blocking is possible for any alert that clears `l1_policy.py`'s unmodified
+gates — still narrowly scoped to `T1071.001` (C2 beacon) only. A dedicated
+containment circuit breaker (3/hour) caps real block actions independently of
+the case/email breaker (raised to 25/hour for real production volume). See
+`ai/results/phase8g1-*.md` for the circuit-breaker redesign and identity
+rotation, `ai/results/phase8g2-part-b-l1-containment-test.md` for the honest
+six-attempt demo-mode test series (all correctly refused — no block captured,
+IOC-vetting lesson learned), and `ai/results/phase8h-standing-l1-containment.md`
+for the production cutover and the **first real, fully independently-verified
+autonomous capture** under the new standing capability (`1.212.225.99`,
+AbuseIPDB-100%-confidence, blocked/verified/closed with zero human
+intervention). Permanent autonomous IP containment is now **enabled**; the
+kill switch has been deliberately removed (this is the standing production
+configuration, not a temporary test window — `touch
+/var/lib/soc-ai-soar-shadow/KILL_SWITCH` on the VM is still the fastest
+override, no restart required); a dedicated, permanent pfSense credential file
+now exists (`/etc/soc-ai-soar/l1-production-pfsense.env`, root:root 600),
+referenced only by this one unit.
 
 ## Who is who
 
