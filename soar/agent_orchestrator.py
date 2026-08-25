@@ -726,8 +726,15 @@ def _post_l2_comment_and_tags(api, case_id: str, res: dict, disposition: dict,
 
 
 def _apply_l2_assignment(api, case_id: str, user_id: str) -> bool:
+    """Sets both assignee and stage in one PATCH. stage="InProgress" signals
+    the case has been triaged and queued for L2 review — not that a human
+    has started working it (that distinction stays in the assignee field
+    and the escalation comment); TheHive's stage default of "New" otherwise
+    never advances until a human closes the case, which reads as "nothing
+    has happened yet" even for cases the agent has fully investigated and
+    handed off."""
     try:
-        api.case.update(case_id, {"assignee": user_id})
+        api.case.update(case_id, {"assignee": user_id, "stage": "InProgress"})
         return True
     except Exception as exc:
         print(f"   [l2-assign] assignment PATCH failed: {exc}")
