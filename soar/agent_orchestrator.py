@@ -180,7 +180,7 @@ def close_case_l1(api, case_id: str, status: str, summary: str) -> bool:
             f"{orch.THEHIVE_URL}/api/v1/case/{case_id}",
             headers={"Authorization": f"Bearer {orch.THEHIVE_API_KEY}",
                      "Content-Type": "application/json"},
-            json={"status": status, "stage": "Closed", "summary": summary},
+            json={"status": status, "summary": summary},
             timeout=20)
         resp.raise_for_status()
         print(f"   [L1-close] case {case_id} closed as {status}")
@@ -726,15 +726,19 @@ def _post_l2_comment_and_tags(api, case_id: str, res: dict, disposition: dict,
 
 
 def _apply_l2_assignment(api, case_id: str, user_id: str) -> bool:
-    """Sets both assignee and stage in one PATCH. stage="InProgress" signals
-    the case has been triaged and queued for L2 review — not that a human
-    has started working it (that distinction stays in the assignee field
-    and the escalation comment); TheHive's stage default of "New" otherwise
-    never advances until a human closes the case, which reads as "nothing
-    has happened yet" even for cases the agent has fully investigated and
-    handed off."""
+    """Sets both assignee and status in one PATCH. status="InProgress" (a
+    real, writable CaseStatusValue — see thehive4py.types.case) signals the
+    case has been triaged and queued for L2 review — not that a human has
+    started working it (that distinction stays in the assignee field and
+    the escalation comment); TheHive's default "New" otherwise never
+    advances until a human closes the case, which reads as "nothing has
+    happened yet" even for cases the agent has fully investigated and
+    handed off. NOTE: the case's displayed "stage" field is a read-only
+    value TheHive computes FROM status — it is not itself a writable field
+    on the update endpoint (confirmed live: a direct PATCH of stage alone
+    returns 200 and silently changes nothing)."""
     try:
-        api.case.update(case_id, {"assignee": user_id, "stage": "InProgress"})
+        api.case.update(case_id, {"assignee": user_id, "status": "InProgress"})
         return True
     except Exception as exc:
         print(f"   [l2-assign] assignment PATCH failed: {exc}")

@@ -97,6 +97,25 @@ class RaisingCaseState:
         raise RuntimeError("simulated TheHive query failure")
 
 
+_TERMINAL_STATUSES = {"TruePositive", "FalsePositive", "Indeterminate", "Other", "Duplicated"}
+
+
+def _derived_stage_for_status(status: str) -> str:
+    """CONFIRMED LIVE (2026-08-25): TheHive's "stage" field on a case is
+    READ-ONLY, computed from "status" — a direct PATCH of {"stage": ...}
+    returns 200 and silently changes nothing (thehive4py's InputUpdateCase
+    has no "stage" field at all; only OutputCase does). The real, writable
+    field is "status" (New/InProgress/<terminal dispositions>), and "stage"
+    is TheHive's own derived New/InProgress/Closed summary of it."""
+    if status == "New":
+        return "New"
+    if status == "InProgress":
+        return "InProgress"
+    if status in _TERMINAL_STATUSES:
+        return "Closed"
+    return status
+
+
 class FakeApiCase:
     """api.case.update() side effect: mutates the paired FakeCaseState so a
     subsequent query observes the change — models a real PATCH landing."""
@@ -118,8 +137,13 @@ class FakeApiCase:
             for t in fields["addTags"]:
                 if t not in self.case_state.tags:
                     self.case_state.tags.append(t)
-        if "stage" in fields:
-            self.case_state.stage = fields["stage"]
+        if "status" in fields:
+            self.case_state.status = fields["status"]
+            self.case_state.stage = _derived_stage_for_status(fields["status"])
+        # A direct "stage" field in the PATCH is deliberately NOT applied —
+        # matching real TheHive, which silently ignores it. A test that
+        # tries to drive stage this way would incorrectly pass against a
+        # fake that honored it, exactly the bug this fix exists to catch.
 
 
 class FakeApiUser:
@@ -203,10 +227,12 @@ check("tags include ai-escalated-l2", "ai-escalated-l2" in cs1.tags, cs1.tags)
 check("tags include the policy-version tag", f"ai-policy-{l1_policy.POLICY_VERSION}" in cs1.tags, cs1.tags)
 check("tags include a reason-category tag", any(t.startswith("ai-reason-") for t in cs1.tags), cs1.tags)
 check("case.update called for assignee", any("assignee" in c for c in api1.case.update_calls))
-check("the SAME PATCH also sets stage=InProgress (not a separate call)",
-     any(c.get("assignee") and c.get("stage") == "InProgress" for c in api1.case.update_calls),
+check("the SAME PATCH also sets status=InProgress (not a separate call) — "
+     "NOT stage, which TheHive silently ignores on write (confirmed live)",
+     any(c.get("assignee") and c.get("status") == "InProgress" for c in api1.case.update_calls),
      api1.case.update_calls)
-check("live case now shows stage=InProgress", cs1.stage == "InProgress", cs1.stage)
+check("live case now shows status=InProgress", cs1.status == "InProgress", cs1.status)
+check("live case's derived stage now reads InProgress too", cs1.stage == "InProgress", cs1.stage)
 assign_key1 = idempotency.assignment_action_key("~a1", "~c1", L2_LOGIN, "armed")
 rec1 = idempotency.get_status(assign_key1, store_dir=d)
 check("idempotency store shows COMPLETED", rec1["status"] == idempotency.STATUS_COMPLETED, rec1)
