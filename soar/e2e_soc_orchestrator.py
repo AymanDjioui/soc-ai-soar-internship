@@ -531,29 +531,34 @@ def post_case_comment(case_id: str, body: str):
 
 
 def build_ai_comment(triage: dict, verdict: dict, containment: dict) -> str:
-    """Render the AI assessment as a labelled markdown comment."""
+    """Render the AI assessment as a labelled comment.
+
+    Plain text, not Markdown — TheHive's case-comment widget (as opposed to
+    the case description field) renders comment bodies as literal text, so
+    Markdown syntax here would show up as literal #/**/` characters instead
+    of being formatted. Confirmed live 2026-08-25."""
     lines = [
-        "## 🤖 AI Triage Draft",
-        "_Generated automatically by the SOAR pipeline. **Not** a human analyst note._",
+        "AI TRIAGE DRAFT",
+        "Generated automatically by the SOAR pipeline. NOT a human analyst note.",
         "",
-        "### Initial triage",
-        f"- **Summary:** {triage.get('summary', 'n/a')}",
-        f"- **Severity:** `{triage.get('severity', 'n/a')}`",
-        f"- **False positive:** `{triage.get('is_false_positive')}`",
-        f"- **Confidence:** `{triage.get('confidence', 0):.2f}`",
-        f"- **MITRE technique:** `{triage.get('mitre_technique', 'n/a')}` — "
+        "INITIAL TRIAGE",
+        f"Summary: {triage.get('summary', 'n/a')}",
+        f"Severity: {triage.get('severity', 'n/a')}",
+        f"False positive: {triage.get('is_false_positive')}",
+        f"Confidence: {triage.get('confidence', 0):.2f}",
+        f"MITRE technique: {triage.get('mitre_technique', 'n/a')} -- "
         f"{triage.get('technique_reasoning', '')}",
-        f"- **Recommended action:** {triage.get('recommended_action', 'n/a')}",
+        f"Recommended action: {triage.get('recommended_action', 'n/a')}",
     ]
 
     if verdict:
         lines += [
             "",
-            "### Post-enrichment assessment",
-            f"- **Verdict:** `{verdict.get('verdict', 'n/a').upper()}`",
-            f"- **Confidence:** `{verdict.get('confidence', 0):.2f}`",
-            f"- **Reason:** {verdict.get('reason', 'n/a')}",
-            f"- **Key evidence:** {verdict.get('key_evidence', 'n/a')}",
+            "POST-ENRICHMENT ASSESSMENT",
+            f"Verdict: {verdict.get('verdict', 'n/a').upper()}",
+            f"Confidence: {verdict.get('confidence', 0):.2f}",
+            f"Reason: {verdict.get('reason', 'n/a')}",
+            f"Key evidence: {verdict.get('key_evidence', 'n/a')}",
         ]
 
         # The two phases can disagree: triage reads the alert alone, the verdict
@@ -566,37 +571,36 @@ def build_ai_comment(triage: dict, verdict: dict, containment: dict) -> str:
         if triage_says_bad and verdict_says_ok:
             lines += [
                 "",
-                f"> ⚠️ **The two phases disagree.** Initial triage rated this "
-                f"`{triage.get('severity', 'n/a')}` and not a false positive; "
+                f"NOTE -- the two phases disagree. Initial triage rated this "
+                f"{triage.get('severity', 'n/a')} and not a false positive; "
                 f"threat-intelligence enrichment then returned "
-                f"`{verdict.get('verdict', 'n/a').upper()}`. "
+                f"{verdict.get('verdict', 'n/a').upper()}. "
                 f"The enrichment assessment is based on more evidence and takes "
                 f"precedence, which is why no action was taken.",
             ]
         elif triage.get("is_false_positive") is True and verdict.get("verdict") == "malicious":
             lines += [
                 "",
-                "> ⚠️ **The two phases disagree.** Initial triage called this a false "
-                "positive, but enrichment rated it `MALICIOUS`. Treat the initial "
+                "NOTE -- the two phases disagree. Initial triage called this a false "
+                "positive, but enrichment rated it MALICIOUS. Treat the initial "
                 "triage as unreliable for this alert and review manually.",
             ]
 
-    lines += ["", "### Automated containment"]
+    lines += ["", "AUTOMATED CONTAINMENT"]
     if containment.get("executed"):
-        lines.append(f"- ✅ **EXECUTED** against `{containment.get('target')}`")
-        lines.append(f"- Guardrails: {containment.get('reason')}")
+        lines.append(f"EXECUTED against {containment.get('target')}")
+        lines.append(f"Guardrails: {containment.get('reason')}")
     elif containment.get("attempted"):
-        lines.append(f"- ❌ **REFUSED** — no action taken against `{containment.get('target')}`")
-        lines.append(f"- **Reason:** {containment.get('reason')}")
-        lines.append("- Escalated for human review.")
+        lines.append(f"REFUSED -- no action taken against {containment.get('target')}")
+        lines.append(f"Reason: {containment.get('reason')}")
+        lines.append("Escalated for human review.")
     else:
-        lines.append(f"- ➖ Not applicable — {containment.get('reason', 'no containment considered')}")
+        lines.append(f"Not applicable -- {containment.get('reason', 'no containment considered')}")
 
     lines += [
         "",
-        "---",
-        f"_Model `{OLLAMA_MODEL}` @ `{OLLAMA_BASE_URL}` · prompt v4 (few-shot + enum schema) · "
-        f"{datetime.now(timezone.utc).isoformat()}_",
+        f"Model {OLLAMA_MODEL} @ {OLLAMA_BASE_URL} -- prompt v4 (few-shot + enum schema) -- "
+        f"{datetime.now(timezone.utc).isoformat()}",
     ]
     return "\n".join(lines)
 
