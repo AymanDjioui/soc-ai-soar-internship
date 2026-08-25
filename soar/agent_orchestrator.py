@@ -32,6 +32,7 @@ SAFETY:
 Env: THEHIVE_API_KEY (req), ES_PASSWORD, SOAR_AGENT_DRY_RUN (default 1),
      SOAR_ALERT_ID (target one alert), plus the usual orchestrator/agent env.
 """
+import html
 import json
 import os
 import sys
@@ -372,9 +373,9 @@ def process_alert_agent(api, alert: dict):
         print(f"   agent failed ({res.get('error')}) — leaving for human (L2)")
         orch.audit("agent_failed", alert_id=alert_id, case_id=case_id, error=res.get("error"))
         orch.post_case_comment(case_id,
-            "## SOC Agent — investigation failed\n"
-            "_Generated automatically. **Not** a human analyst note._\n\n"
-            f"The agent could not complete its investigation: `{res.get('error')}`\n\n"
+            "SOC AGENT — INVESTIGATION FAILED\n"
+            "Generated automatically. NOT a human analyst note.\n\n"
+            f"The agent could not complete its investigation: {res.get('error')}\n\n"
             "No verdict was produced and no automated action was taken. "
             "Escalated to L2 for manual review.")
         return
@@ -1883,10 +1884,10 @@ def send_l1_contained_notification(api, dkey: str, alert_id: str, case_id: str, 
     email = build_l1_contained_email(res, disposition, containment_result, case_state, case_id,
                                      case_link, execution_mode, nkey, observables=observables)
     orch.post_case_comment(case_id,
-        "## 📧 SOC Agent — L1 containment notification (audit record)\n\n"
-        "_NOT the literal received email — Mailer_1_0 composes the actual email from this "
-        "case's own title/description/status/tags. This is the deterministic audit trail._\n\n"
-        f"**Reference subject:** {email['subject']}\n\n```\n{email['body']}\n```")
+        "SOC AGENT — L1 CONTAINMENT NOTIFICATION (AUDIT RECORD)\n\n"
+        "NOT the literal received email -- Mailer_1_0 composes the actual email from this "
+        "case's own title/description/status/tags. This is the deterministic audit trail.\n\n"
+        f"Reference subject: {html.unescape(email['subject'])}\n\n{html.unescape(email['body'])}")
     routing_tags = _l1_contained_routing_tags(disposition)
     result = mailer_fn(api, case_id, recipients, routing_tags,
                        idempotency_key=nkey, store_dir=store_dir)
@@ -1972,12 +1973,12 @@ def send_l2_escalation_notification(api, dkey: str, alert_id: str, case_id: str,
     email = build_l2_escalation_email(res, disposition, containment, assignment_result, case_state,
                                       case_id, case_link, execution_mode, nkey, observables=observables)
     orch.post_case_comment(case_id,
-        "## 📧 SOC Agent — L2 escalation notification (audit record)\n\n"
-        "_NOT the literal received email — Mailer_1_0 composes the actual email from this "
+        "SOC AGENT — L2 ESCALATION NOTIFICATION (AUDIT RECORD)\n\n"
+        "NOT the literal received email -- Mailer_1_0 composes the actual email from this "
         "case's own title/description/status/tags. This is the deterministic audit trail, "
         "including the assignment result so a human never mistakes an unverified assignment "
-        "for a successful one._\n\n"
-        f"**Reference subject:** {email['subject']}\n\n```\n{email['body']}\n```")
+        "for a successful one.\n\n"
+        f"Reference subject: {html.unescape(email['subject'])}\n\n{html.unescape(email['body'])}")
     routing_tags = _l2_escalated_routing_tags(disposition)
     result = mailer_fn(api, case_id, recipients, routing_tags,
                        idempotency_key=nkey, store_dir=store_dir)
